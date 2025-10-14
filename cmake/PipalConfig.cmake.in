@@ -1,0 +1,19 @@
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+# Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
+#                                                                                                 #
+# The Pipal project is distributed under the MIT License.                                         #
+#                                                                                                 #
+# Davide Stocco                                                                 Enrico Bertolazzi #
+# University of Trento                                                       University of Trento #
+# e-mail: davide.stocco@unitn.it                               e-mail: enrico.bertolazzi@unitn.it #
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+
+# List dependencies
+find_dependency(Eigen3 REQUIRED)
+
+# Provide the target
+include("${CMAKE_CURRENT_LIST_DIR}/PipalTargets.cmake")

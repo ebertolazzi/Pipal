@@ -1,0 +1,1488 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>Pipal: Pipal::Solver&lt; Real, N, M &gt; Class Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/StoccoDavide/Pipal" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Pipal
+   &#160;<span id="projectnumber">0.0.0</span>
+   </div>
+   <div id="projectbrief">Penalty Interior-Point ALgorithm</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('class_pipal_1_1_solver.html','','class_pipal_1_1_solver-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Pipal::Solver&lt; Real, N, M &gt; Class Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p><a class="el" href="class_pipal_1_1_solver.html" title="Solver class for the Pipal library.">Solver</a> class for the <a class="el" href="namespace_pipal.html" title="Namespace for the Pipal library.">Pipal</a> library.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_solver_8hh_source.html">Solver.hh</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:Counter" id="r_Counter"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_pipal_1_1_solver_1_1_counter.html">Counter</a></td></tr>
+<tr class="memitem:Parameter" id="r_Parameter"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_pipal_1_1_solver_1_1_parameter.html">Parameter</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
+Public Types</h2></td></tr>
+<tr class="memitem:aefec415188e59f54778240b2e4536168" id="r_aefec415188e59f54778240b2e4536168"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aefec415188e59f54778240b2e4536168">VectorN</a> = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::VectorN</td></tr>
+<tr class="memitem:a704ed0f46f86dec28ac5b22d0a1654b1" id="r_a704ed0f46f86dec28ac5b22d0a1654b1"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a704ed0f46f86dec28ac5b22d0a1654b1">VectorM</a> = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::VectorM</td></tr>
+<tr class="memitem:ab1891a028771f09af04f297b51e78e26" id="r_ab1891a028771f09af04f297b51e78e26"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1891a028771f09af04f297b51e78e26">MatrixJ</a> = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::MatrixJ</td></tr>
+<tr class="memitem:ac6e154e7ad00307ed187a1d094e9c19b" id="r_ac6e154e7ad00307ed187a1d094e9c19b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac6e154e7ad00307ed187a1d094e9c19b">MatrixH</a> = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::MatrixH</td></tr>
+<tr class="memitem:a06882d59796846deb982ec889eed4b14" id="r_a06882d59796846deb982ec889eed4b14"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a06882d59796846deb982ec889eed4b14">ObjectiveFunc</a> = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::ObjectiveFunc</td></tr>
+<tr class="memitem:af9cea5b6442c38454d6d50478c640b24" id="r_af9cea5b6442c38454d6d50478c640b24"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9cea5b6442c38454d6d50478c640b24">ObjectiveGradientFunc</a> = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::ObjectiveGradientFunc</td></tr>
+<tr class="memitem:ac0ebfb6f3b707602dcffa229d04dfed8" id="r_ac0ebfb6f3b707602dcffa229d04dfed8"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac0ebfb6f3b707602dcffa229d04dfed8">ObjectiveHessianFunc</a> = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::ObjectiveHessianFunc</td></tr>
+<tr class="memitem:a598f04a146d9d87aec339246279a7daf" id="r_a598f04a146d9d87aec339246279a7daf"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a598f04a146d9d87aec339246279a7daf">ConstraintsFunc</a> = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::ConstraintsFunc</td></tr>
+<tr class="memitem:ab31547d60d3dfb5ad60fc5f0ae226112" id="r_ab31547d60d3dfb5ad60fc5f0ae226112"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab31547d60d3dfb5ad60fc5f0ae226112">ConstraintsJacobianFunc</a> = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::ConstraintsJacobianFunc</td></tr>
+<tr class="memitem:abde0fc76359f81b82385235388d253c5" id="r_abde0fc76359f81b82385235388d253c5"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abde0fc76359f81b82385235388d253c5">LagrangianHessianFunc</a> = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::LagrangianHessianFunc</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a8bbde3312f4484e8703b32be38b7019e" id="r_a8bbde3312f4484e8703b32be38b7019e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8bbde3312f4484e8703b32be38b7019e">Solver</a> ()</td></tr>
+<tr class="memdesc:a8bbde3312f4484e8703b32be38b7019e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor for the IPSolver class.  <br /></td></tr>
+<tr class="memitem:af40b84903b0d911c49dcf659eb7507fe" id="r_af40b84903b0d911c49dcf659eb7507fe"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af40b84903b0d911c49dcf659eb7507fe">Solver</a> (<a class="el" href="#a06882d59796846deb982ec889eed4b14">ObjectiveFunc</a> const &amp;objective, <a class="el" href="#af9cea5b6442c38454d6d50478c640b24">ObjectiveGradientFunc</a> const &amp;objective_gradient, <a class="el" href="#a598f04a146d9d87aec339246279a7daf">ConstraintsFunc</a> const &amp;constraints, <a class="el" href="#ab31547d60d3dfb5ad60fc5f0ae226112">ConstraintsJacobianFunc</a> const &amp;constraints_jacobian, <a class="el" href="#abde0fc76359f81b82385235388d253c5">LagrangianHessianFunc</a> const &amp;lagrangian_hessian)</td></tr>
+<tr class="memdesc:af40b84903b0d911c49dcf659eb7507fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the IPSolver class.  <br /></td></tr>
+<tr class="memitem:a48f65cd9cc7a933c57aecc62674d4ba8" id="r_a48f65cd9cc7a933c57aecc62674d4ba8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a48f65cd9cc7a933c57aecc62674d4ba8">Solver</a> (<a class="el" href="#a06882d59796846deb982ec889eed4b14">ObjectiveFunc</a> const &amp;objective, <a class="el" href="#af9cea5b6442c38454d6d50478c640b24">ObjectiveGradientFunc</a> const &amp;objective_gradient, <a class="el" href="#ac0ebfb6f3b707602dcffa229d04dfed8">ObjectiveHessianFunc</a> const &amp;objective_hessian, <a class="el" href="#a598f04a146d9d87aec339246279a7daf">ConstraintsFunc</a> const &amp;constraints, <a class="el" href="#ab31547d60d3dfb5ad60fc5f0ae226112">ConstraintsJacobianFunc</a> const &amp;constraints_jacobian, <a class="el" href="#abde0fc76359f81b82385235388d253c5">LagrangianHessianFunc</a> const &amp;lagrangian_hessian)</td></tr>
+<tr class="memdesc:a48f65cd9cc7a933c57aecc62674d4ba8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the IPSolver class (with Hessian).  <br /></td></tr>
+<tr class="memitem:a8cf9c71e6f53ae526faf092934bca725" id="r_a8cf9c71e6f53ae526faf092934bca725"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8cf9c71e6f53ae526faf092934bca725">Solver</a> (std::unique_ptr&lt; <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt; Real, N, M &gt; &gt; &amp;&amp;<a class="el" href="#a5e37d1af0e079d91c7dc57c7fa6f51d5">problem</a>)</td></tr>
+<tr class="memdesc:a8cf9c71e6f53ae526faf092934bca725"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the IPSolver class (with a unique pointer to a <a class="el" href="class_pipal_1_1_problem.html" title="Problem class for the Pipal library.">Problem</a> object).  <br /></td></tr>
+<tr class="memitem:ab92b936c0c474bc05341f82d7e6ac3de" id="r_ab92b936c0c474bc05341f82d7e6ac3de"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab92b936c0c474bc05341f82d7e6ac3de">Solver</a> (<a class="el" href="class_pipal_1_1_solver.html">Solver</a> const &amp;)=delete</td></tr>
+<tr class="memdesc:ab92b936c0c474bc05341f82d7e6ac3de"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleted copy constructor.  <br /></td></tr>
+<tr class="memitem:aaad39366b37d164362558bbbbdad64e1" id="r_aaad39366b37d164362558bbbbdad64e1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_pipal_1_1_solver.html">Solver</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaad39366b37d164362558bbbbdad64e1">operator=</a> (<a class="el" href="class_pipal_1_1_solver.html">Solver</a> const &amp;)=delete</td></tr>
+<tr class="memdesc:aaad39366b37d164362558bbbbdad64e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleted assignment operator.  <br /></td></tr>
+<tr class="memitem:a197fec97d5b8104ee3376287235960d1" id="r_a197fec97d5b8104ee3376287235960d1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a197fec97d5b8104ee3376287235960d1">Solver</a> (<a class="el" href="class_pipal_1_1_solver.html">Solver</a> &amp;&amp;)=delete</td></tr>
+<tr class="memdesc:a197fec97d5b8104ee3376287235960d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleted move constructor.  <br /></td></tr>
+<tr class="memitem:aa91603ed8d65c0ba43ac41b3f122b1c7" id="r_aa91603ed8d65c0ba43ac41b3f122b1c7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_pipal_1_1_solver.html">Solver</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa91603ed8d65c0ba43ac41b3f122b1c7">operator=</a> (<a class="el" href="class_pipal_1_1_solver.html">Solver</a> &amp;&amp;)=delete</td></tr>
+<tr class="memdesc:aa91603ed8d65c0ba43ac41b3f122b1c7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleted move assignment operator.  <br /></td></tr>
+<tr class="memitem:ab3b1f8f20adbbb3cb49598e5c0393b2d" id="r_ab3b1f8f20adbbb3cb49598e5c0393b2d"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3b1f8f20adbbb3cb49598e5c0393b2d">~Solver</a> ()=default</td></tr>
+<tr class="memdesc:ab3b1f8f20adbbb3cb49598e5c0393b2d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Destructor for the IPSolver class.  <br /></td></tr>
+<tr class="memitem:a5e37d1af0e079d91c7dc57c7fa6f51d5" id="r_a5e37d1af0e079d91c7dc57c7fa6f51d5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5e37d1af0e079d91c7dc57c7fa6f51d5">problem</a> (<a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt; Real, N, M &gt; const &amp;problem)</td></tr>
+<tr class="memdesc:a5e37d1af0e079d91c7dc57c7fa6f51d5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the problem to be solved.  <br /></td></tr>
+<tr class="memitem:a6ab72ff7f2db4fe32026d7ea78b898e4" id="r_a6ab72ff7f2db4fe32026d7ea78b898e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ab72ff7f2db4fe32026d7ea78b898e4">problem</a> (std::unique_ptr&lt; <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt; Real, N, M &gt; &gt; &amp;&amp;problem)</td></tr>
+<tr class="memdesc:a6ab72ff7f2db4fe32026d7ea78b898e4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the problem to be solved using a unique pointer.  <br /></td></tr>
+<tr class="memitem:a3b3c614c1ce590e783d1dae676bd07e6" id="r_a3b3c614c1ce590e783d1dae676bd07e6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt; Real, N, M &gt; const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3b3c614c1ce590e783d1dae676bd07e6">problem</a> () const</td></tr>
+<tr class="memdesc:a3b3c614c1ce590e783d1dae676bd07e6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the problem being solved.  <br /></td></tr>
+<tr class="memitem:a2524fb809691e3e46b1bcd1564703ea9" id="r_a2524fb809691e3e46b1bcd1564703ea9"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2524fb809691e3e46b1bcd1564703ea9">verbose_mode</a> ()</td></tr>
+<tr class="memitem:af9182b967309639aa596c4e4a237161b" id="r_af9182b967309639aa596c4e4a237161b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9182b967309639aa596c4e4a237161b">verbose_mode</a> (bool const t_verbose)</td></tr>
+<tr class="memitem:a47dbf0c99f317e36f48057e5bc77c043" id="r_a47dbf0c99f317e36f48057e5bc77c043"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47dbf0c99f317e36f48057e5bc77c043">enable_verbose_mode</a> ()</td></tr>
+<tr class="memitem:ab167a14161a186231a3dea8389273c73" id="r_ab167a14161a186231a3dea8389273c73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab167a14161a186231a3dea8389273c73">disable_verbose_mode</a> ()</td></tr>
+<tr class="memitem:aadce2f1bbae0808f6c09d781d4f9462f" id="r_aadce2f1bbae0808f6c09d781d4f9462f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aadce2f1bbae0808f6c09d781d4f9462f">aggressive_mode</a> ()</td></tr>
+<tr class="memitem:ac10cb13202fef145a227783af723beb3" id="r_ac10cb13202fef145a227783af723beb3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac10cb13202fef145a227783af723beb3">aggressive_mode</a> (bool const t_aggressive)</td></tr>
+<tr class="memitem:ad40d9867b448f91df379b55b577fa643" id="r_ad40d9867b448f91df379b55b577fa643"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad40d9867b448f91df379b55b577fa643">enable_aggressive_mode</a> ()</td></tr>
+<tr class="memitem:a0db8d0ac45bdce7045404e9ba81bf159" id="r_a0db8d0ac45bdce7045404e9ba81bf159"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0db8d0ac45bdce7045404e9ba81bf159">disable_aggressive_mode</a> ()</td></tr>
+<tr class="memitem:a2ad4696fe696b5109e78087a1c6249ab" id="r_a2ad4696fe696b5109e78087a1c6249ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2ad4696fe696b5109e78087a1c6249ab">tolerance</a> (Real const t_tolerance)</td></tr>
+<tr class="memdesc:a2ad4696fe696b5109e78087a1c6249ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the convergence tolerance for the solver.  <br /></td></tr>
+<tr class="memitem:aff245fe2222133b0181afc908153c152" id="r_aff245fe2222133b0181afc908153c152"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aff245fe2222133b0181afc908153c152">tolerance</a> () const</td></tr>
+<tr class="memdesc:aff245fe2222133b0181afc908153c152"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the tolerance for convergence.  <br /></td></tr>
+<tr class="memitem:a54e02d2fc528b7d90b888e468753fbaa" id="r_a54e02d2fc528b7d90b888e468753fbaa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a54e02d2fc528b7d90b888e468753fbaa">max_iterations</a> (<a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> const t_max_iterations)</td></tr>
+<tr class="memdesc:a54e02d2fc528b7d90b888e468753fbaa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the maximum number of iterations for the solver.  <br /></td></tr>
+<tr class="memitem:a9f631fca3928b34d7cc89d996cae4b13" id="r_a9f631fca3928b34d7cc89d996cae4b13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f631fca3928b34d7cc89d996cae4b13">max_iterations</a> () const</td></tr>
+<tr class="memdesc:a9f631fca3928b34d7cc89d996cae4b13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the maximum number of iterations.  <br /></td></tr>
+<tr class="memitem:aeeb9d4765a9b31adcac438bd67588b98" id="r_aeeb9d4765a9b31adcac438bd67588b98"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeeb9d4765a9b31adcac438bd67588b98">mu_max_exp</a> (Real const t_mu_max_exp)</td></tr>
+<tr class="memdesc:aeeb9d4765a9b31adcac438bd67588b98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the interior-point parameter maximum exponent in increases.  <br /></td></tr>
+<tr class="memitem:a6ae82c3334305ca1d024b6569fda7ccd" id="r_a6ae82c3334305ca1d024b6569fda7ccd"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6ae82c3334305ca1d024b6569fda7ccd">mu_max_exp</a> () const</td></tr>
+<tr class="memdesc:a6ae82c3334305ca1d024b6569fda7ccd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the interior-point parameter maximum exponent in increases.  <br /></td></tr>
+<tr class="memitem:aad10f0689259a96f28cd5427f6ec8d47" id="r_aad10f0689259a96f28cd5427f6ec8d47"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aad10f0689259a96f28cd5427f6ec8d47">solve</a> (<a class="el" href="#aefec415188e59f54778240b2e4536168">VectorN</a> const &amp;x_guess, <a class="el" href="#aefec415188e59f54778240b2e4536168">VectorN</a> &amp;x_sol)</td></tr>
+<tr class="memdesc:aad10f0689259a96f28cd5427f6ec8d47"><td class="mdescLeft">&#160;</td><td class="mdescRight">Solves the optimization problem using the interior-point method.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:af96f8dd4b044547ff18558a58fcfbdc5" id="r_af96f8dd4b044547ff18558a58fcfbdc5"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="struct_pipal_1_1_solver_1_1_counter.html">Pipal::Solver::Counter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af96f8dd4b044547ff18558a58fcfbdc5">m_counters</a></td></tr>
+<tr class="memitem:a53f6463cf9c98f144ccbf29def8d05df" id="r_a53f6463cf9c98f144ccbf29def8d05df"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="struct_pipal_1_1_solver_1_1_parameter.html">Pipal::Solver::Parameter</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a53f6463cf9c98f144ccbf29def8d05df">m_params</a></td></tr>
+<tr class="memitem:a8011f730df457eb8bf4fb6983db4561e" id="r_a8011f730df457eb8bf4fb6983db4561e"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt; Real, N, M &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8011f730df457eb8bf4fb6983db4561e">m_problem</a></td></tr>
+<tr class="memitem:a1fa2d17da988fe8d857e81aff1a91307" id="r_a1fa2d17da988fe8d857e81aff1a91307"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1fa2d17da988fe8d857e81aff1a91307">m_verbose</a> {false}</td></tr>
+<tr class="memitem:a5a00558aa4d9c263d631bd1a67d7bb8c" id="r_a5a00558aa4d9c263d631bd1a67d7bb8c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a00558aa4d9c263d631bd1a67d7bb8c">m_aggressive</a> {false}</td></tr>
+<tr class="memitem:a20fffe280c060b65320690cfbbac7e13" id="r_a20fffe280c060b65320690cfbbac7e13"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a20fffe280c060b65320690cfbbac7e13">m_max_iterations</a> {100}</td></tr>
+<tr class="memitem:a6c155e6ff0fba9876938f7cfa749a86c" id="r_a6c155e6ff0fba9876938f7cfa749a86c"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c155e6ff0fba9876938f7cfa749a86c">m_tolerance</a> {1.0e-10}</td></tr>
+<tr class="memitem:a2d2bfb64fb709f87f9f554b2e00067df" id="r_a2d2bfb64fb709f87f9f554b2e00067df"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2d2bfb64fb709f87f9f554b2e00067df">m_mu_max_exp</a> {0.0}</td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt;<br />
+class Pipal::Solver&lt; Real, N, M &gt;</div><p>The <a class="el" href="class_pipal_1_1_solver.html" title="Solver class for the Pipal library.">Solver</a> class provides an interface for solving the optimization problems using Frank E. Curtis <a class="el" href="namespace_pipal.html" title="Namespace for the Pipal library.">Pipal</a> algorithm. It utilizes the <a class="el" href="class_pipal_1_1_problem.html" title="Problem class for the Pipal library.">Problem</a> class to define the optimization problem and implements various methods for solving it. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Real</td><td>The floating-point type. </td></tr>
+    <tr><td class="paramname">N</td><td>The size of the primal variable vector. </td></tr>
+    <tr><td class="paramname">M</td><td>The size of the dual variable vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
+<a id="a598f04a146d9d87aec339246279a7daf" name="a598f04a146d9d87aec339246279a7daf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a598f04a146d9d87aec339246279a7daf">&#9670;&#160;</a></span>ConstraintsFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::ConstraintsFunc = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::ConstraintsFunc</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab31547d60d3dfb5ad60fc5f0ae226112" name="ab31547d60d3dfb5ad60fc5f0ae226112"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab31547d60d3dfb5ad60fc5f0ae226112">&#9670;&#160;</a></span>ConstraintsJacobianFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::ConstraintsJacobianFunc = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::ConstraintsJacobianFunc</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="abde0fc76359f81b82385235388d253c5" name="abde0fc76359f81b82385235388d253c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abde0fc76359f81b82385235388d253c5">&#9670;&#160;</a></span>LagrangianHessianFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::LagrangianHessianFunc = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::LagrangianHessianFunc</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac6e154e7ad00307ed187a1d094e9c19b" name="ac6e154e7ad00307ed187a1d094e9c19b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6e154e7ad00307ed187a1d094e9c19b">&#9670;&#160;</a></span>MatrixH</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::MatrixH = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::MatrixH</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab1891a028771f09af04f297b51e78e26" name="ab1891a028771f09af04f297b51e78e26"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1891a028771f09af04f297b51e78e26">&#9670;&#160;</a></span>MatrixJ</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::MatrixJ = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::MatrixJ</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a06882d59796846deb982ec889eed4b14" name="a06882d59796846deb982ec889eed4b14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06882d59796846deb982ec889eed4b14">&#9670;&#160;</a></span>ObjectiveFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::ObjectiveFunc = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::ObjectiveFunc</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af9cea5b6442c38454d6d50478c640b24" name="af9cea5b6442c38454d6d50478c640b24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9cea5b6442c38454d6d50478c640b24">&#9670;&#160;</a></span>ObjectiveGradientFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::ObjectiveGradientFunc = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::ObjectiveGradientFunc</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac0ebfb6f3b707602dcffa229d04dfed8" name="ac0ebfb6f3b707602dcffa229d04dfed8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac0ebfb6f3b707602dcffa229d04dfed8">&#9670;&#160;</a></span>ObjectiveHessianFunc</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::ObjectiveHessianFunc = typename <a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a>&lt;Real, N, M&gt;::ObjectiveHessianFunc</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a704ed0f46f86dec28ac5b22d0a1654b1" name="a704ed0f46f86dec28ac5b22d0a1654b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a704ed0f46f86dec28ac5b22d0a1654b1">&#9670;&#160;</a></span>VectorM</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::VectorM = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::VectorM</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aefec415188e59f54778240b2e4536168" name="aefec415188e59f54778240b2e4536168"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aefec415188e59f54778240b2e4536168">&#9670;&#160;</a></span>VectorN</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::VectorN = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::VectorN</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a8bbde3312f4484e8703b32be38b7019e" name="a8bbde3312f4484e8703b32be38b7019e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bbde3312f4484e8703b32be38b7019e">&#9670;&#160;</a></span>Solver() <span class="overload">[1/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::Solver </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Initializes the solver with default values for the objective, gradient, constraints, and Jacobian functions. </p>
+
+</div>
+</div>
+<a id="af40b84903b0d911c49dcf659eb7507fe" name="af40b84903b0d911c49dcf659eb7507fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af40b84903b0d911c49dcf659eb7507fe">&#9670;&#160;</a></span>Solver() <span class="overload">[2/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::Solver </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a06882d59796846deb982ec889eed4b14">ObjectiveFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#af9cea5b6442c38454d6d50478c640b24">ObjectiveGradientFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective_gradient</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a598f04a146d9d87aec339246279a7daf">ConstraintsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#ab31547d60d3dfb5ad60fc5f0ae226112">ConstraintsJacobianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints_jacobian</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#abde0fc76359f81b82385235388d253c5">LagrangianHessianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>lagrangian_hessian</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Initializes the solver with the provided objective, gradient, constraints, and Jacobian functions. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">objective</td><td>Objective function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">objective_gradient</td><td>Gradient of the objective function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">constraints</td><td>Constraints function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">constraints_jacobian</td><td>Jacobian of the constraints function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lagrangian_hessian</td><td>Hessian of the Lagrangian function handle. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a48f65cd9cc7a933c57aecc62674d4ba8" name="a48f65cd9cc7a933c57aecc62674d4ba8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a48f65cd9cc7a933c57aecc62674d4ba8">&#9670;&#160;</a></span>Solver() <span class="overload">[3/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::Solver </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a06882d59796846deb982ec889eed4b14">ObjectiveFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#af9cea5b6442c38454d6d50478c640b24">ObjectiveGradientFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective_gradient</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#ac0ebfb6f3b707602dcffa229d04dfed8">ObjectiveHessianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective_hessian</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a598f04a146d9d87aec339246279a7daf">ConstraintsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#ab31547d60d3dfb5ad60fc5f0ae226112">ConstraintsJacobianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints_jacobian</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#abde0fc76359f81b82385235388d253c5">LagrangianHessianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>lagrangian_hessian</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Initializes the solver with the provided objective, gradient, constraints, Jacobian, and Hessian functions. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">objective</td><td>Objective function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">objective_gradient</td><td>Gradient of the objective function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">objective_hessian</td><td>Hessian of the objective function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">constraints</td><td>Constraints function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">constraints_jacobian</td><td>Jacobian of the constraints function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">lagrangian_hessian</td><td>Hessian of the Lagrangian function handle. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a8cf9c71e6f53ae526faf092934bca725" name="a8cf9c71e6f53ae526faf092934bca725"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8cf9c71e6f53ae526faf092934bca725">&#9670;&#160;</a></span>Solver() <span class="overload">[4/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::Solver </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt; Real, N, M &gt; &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>problem</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Initializes the solver with the provided unique pointer to a <a class="el" href="class_pipal_1_1_problem.html" title="Problem class for the Pipal library.">Problem</a> object. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">problem</td><td>The unique pointer to the <a class="el" href="class_pipal_1_1_problem.html" title="Problem class for the Pipal library.">Problem</a> object to use. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section warning"><dt>Warning</dt><dd>The pointer is moved into the solver, so it should not be used after this call. </dd></dl>
+
+</div>
+</div>
+<a id="ab92b936c0c474bc05341f82d7e6ac3de" name="ab92b936c0c474bc05341f82d7e6ac3de"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab92b936c0c474bc05341f82d7e6ac3de">&#9670;&#160;</a></span>Solver() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::Solver </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_pipal_1_1_solver.html">Solver</a>&lt; Real, N, M &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel delete">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This class is not copyable. </p>
+
+</div>
+</div>
+<a id="a197fec97d5b8104ee3376287235960d1" name="a197fec97d5b8104ee3376287235960d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a197fec97d5b8104ee3376287235960d1">&#9670;&#160;</a></span>Solver() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::Solver </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_pipal_1_1_solver.html">Solver</a>&lt; Real, N, M &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel delete">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This class is not movable. </p>
+
+</div>
+</div>
+<a id="ab3b1f8f20adbbb3cb49598e5c0393b2d" name="ab3b1f8f20adbbb3cb49598e5c0393b2d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3b1f8f20adbbb3cb49598e5c0393b2d">&#9670;&#160;</a></span>~Solver()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::~<a class="el" href="class_pipal_1_1_solver.html">Solver</a> </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel default">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Cleans up resources used by the solver. </p>
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="aadce2f1bbae0808f6c09d781d4f9462f" name="aadce2f1bbae0808f6c09d781d4f9462f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadce2f1bbae0808f6c09d781d4f9462f">&#9670;&#160;</a></span>aggressive_mode() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::aggressive_mode </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the aggressive mode. </p><dl class="section return"><dt>Returns</dt><dd>The aggressive mode. </dd></dl>
+
+</div>
+</div>
+<a id="ac10cb13202fef145a227783af723beb3" name="ac10cb13202fef145a227783af723beb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac10cb13202fef145a227783af723beb3">&#9670;&#160;</a></span>aggressive_mode() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::aggressive_mode </td>
+          <td>(</td>
+          <td class="paramtype">bool const</td>          <td class="paramname"><span class="paramname"><em>t_aggressive</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the aggressive mode. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_aggressive</td><td>The aggressive mode. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0db8d0ac45bdce7045404e9ba81bf159" name="a0db8d0ac45bdce7045404e9ba81bf159"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0db8d0ac45bdce7045404e9ba81bf159">&#9670;&#160;</a></span>disable_aggressive_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::disable_aggressive_mode </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Disable the aggressive mode. </p>
+
+</div>
+</div>
+<a id="ab167a14161a186231a3dea8389273c73" name="ab167a14161a186231a3dea8389273c73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab167a14161a186231a3dea8389273c73">&#9670;&#160;</a></span>disable_verbose_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::disable_verbose_mode </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Disable the verbose mode. </p>
+
+</div>
+</div>
+<a id="ad40d9867b448f91df379b55b577fa643" name="ad40d9867b448f91df379b55b577fa643"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad40d9867b448f91df379b55b577fa643">&#9670;&#160;</a></span>enable_aggressive_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::enable_aggressive_mode </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Enable the aggressive mode. </p>
+
+</div>
+</div>
+<a id="a47dbf0c99f317e36f48057e5bc77c043" name="a47dbf0c99f317e36f48057e5bc77c043"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47dbf0c99f317e36f48057e5bc77c043">&#9670;&#160;</a></span>enable_verbose_mode()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::enable_verbose_mode </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Enable the verbose mode. </p>
+
+</div>
+</div>
+<a id="a9f631fca3928b34d7cc89d996cae4b13" name="a9f631fca3928b34d7cc89d996cae4b13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f631fca3928b34d7cc89d996cae4b13">&#9670;&#160;</a></span>max_iterations() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::max_iterations </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The maximum number of iterations. </dd></dl>
+
+</div>
+</div>
+<a id="a54e02d2fc528b7d90b888e468753fbaa" name="a54e02d2fc528b7d90b888e468753fbaa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54e02d2fc528b7d90b888e468753fbaa">&#9670;&#160;</a></span>max_iterations() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::max_iterations </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> const</td>          <td class="paramname"><span class="paramname"><em>t_max_iterations</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This method allows the user to specify the maximum number of iterations the solver will perform before stopping.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_max_iterations</td><td>The maximum number of iterations. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6ae82c3334305ca1d024b6569fda7ccd" name="a6ae82c3334305ca1d024b6569fda7ccd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ae82c3334305ca1d024b6569fda7ccd">&#9670;&#160;</a></span>mu_max_exp() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::mu_max_exp </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The interior-point parameter maximum exponent in increases value. </dd></dl>
+
+</div>
+</div>
+<a id="aeeb9d4765a9b31adcac438bd67588b98" name="aeeb9d4765a9b31adcac438bd67588b98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeeb9d4765a9b31adcac438bd67588b98">&#9670;&#160;</a></span>mu_max_exp() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::mu_max_exp </td>
+          <td>(</td>
+          <td class="paramtype">Real const</td>          <td class="paramname"><span class="paramname"><em>t_mu_max_exp</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_mu_max_exp</td><td>The interior-point parameter maximum exponent in increases (must be positive). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aa91603ed8d65c0ba43ac41b3f122b1c7" name="aa91603ed8d65c0ba43ac41b3f122b1c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa91603ed8d65c0ba43ac41b3f122b1c7">&#9670;&#160;</a></span>operator=() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_pipal_1_1_solver.html">Solver</a> &amp; <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_pipal_1_1_solver.html">Solver</a>&lt; Real, N, M &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel delete">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This class is not movable. </p>
+
+</div>
+</div>
+<a id="aaad39366b37d164362558bbbbdad64e1" name="aaad39366b37d164362558bbbbdad64e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaad39366b37d164362558bbbbdad64e1">&#9670;&#160;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_pipal_1_1_solver.html">Solver</a> &amp; <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::operator= </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_pipal_1_1_solver.html">Solver</a>&lt; Real, N, M &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel delete">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This class is not assignable. </p>
+
+</div>
+</div>
+<a id="a3b3c614c1ce590e783d1dae676bd07e6" name="a3b3c614c1ce590e783d1dae676bd07e6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3b3c614c1ce590e783d1dae676bd07e6">&#9670;&#160;</a></span>problem() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt; Real, N, M &gt; const  &amp; <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::problem </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>A reference to the problem. </dd></dl>
+
+</div>
+</div>
+<a id="a5e37d1af0e079d91c7dc57c7fa6f51d5" name="a5e37d1af0e079d91c7dc57c7fa6f51d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e37d1af0e079d91c7dc57c7fa6f51d5">&#9670;&#160;</a></span>problem() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::problem </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt; Real, N, M &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em>problem</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This method allows the user to specify the problem to be solved. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">problem</td><td>The problem to set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a6ab72ff7f2db4fe32026d7ea78b898e4" name="a6ab72ff7f2db4fe32026d7ea78b898e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ab72ff7f2db4fe32026d7ea78b898e4">&#9670;&#160;</a></span>problem() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::problem </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt; Real, N, M &gt; &gt; &amp;&amp;</td>          <td class="paramname"><span class="paramname"><em>problem</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This method allows the user to specify the problem to be solved using a unique pointer. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">problem</td><td>The unique pointer to the problem to set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="aad10f0689259a96f28cd5427f6ec8d47" name="aad10f0689259a96f28cd5427f6ec8d47"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad10f0689259a96f28cd5427f6ec8d47">&#9670;&#160;</a></span>solve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::solve </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#aefec415188e59f54778240b2e4536168">VectorN</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x_guess</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#aefec415188e59f54778240b2e4536168">VectorN</a> &amp;</td>          <td class="paramname"><span class="paramname"><em>x_sol</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This method implements the interior-point algorithm to solve the optimization problem defined by the objective function, constraints, and their respective gradients and Jacobians. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">x_guess</td><td>Initial guess for the optimization variables. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">x_sol</td><td>Solution vector. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the optimization was successful, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="aff245fe2222133b0181afc908153c152" name="aff245fe2222133b0181afc908153c152"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff245fe2222133b0181afc908153c152">&#9670;&#160;</a></span>tolerance() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::tolerance </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The tolerance for convergence. </dd></dl>
+
+</div>
+</div>
+<a id="a2ad4696fe696b5109e78087a1c6249ab" name="a2ad4696fe696b5109e78087a1c6249ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2ad4696fe696b5109e78087a1c6249ab">&#9670;&#160;</a></span>tolerance() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::tolerance </td>
+          <td>(</td>
+          <td class="paramtype">Real const</td>          <td class="paramname"><span class="paramname"><em>t_tolerance</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>This method allows the user to specify the tolerance for convergence. The solver will stop when the residuals are below this tolerance.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_tolerance</td><td>The convergence tolerance. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a2524fb809691e3e46b1bcd1564703ea9" name="a2524fb809691e3e46b1bcd1564703ea9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2524fb809691e3e46b1bcd1564703ea9">&#9670;&#160;</a></span>verbose_mode() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::verbose_mode </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Get the verbose mode. </p><dl class="section return"><dt>Returns</dt><dd>The verbose mode. </dd></dl>
+
+</div>
+</div>
+<a id="af9182b967309639aa596c4e4a237161b" name="af9182b967309639aa596c4e4a237161b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9182b967309639aa596c4e4a237161b">&#9670;&#160;</a></span>verbose_mode() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::verbose_mode </td>
+          <td>(</td>
+          <td class="paramtype">bool const</td>          <td class="paramname"><span class="paramname"><em>t_verbose</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the verbose mode. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_verbose</td><td>The verbose mode. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a5a00558aa4d9c263d631bd1a67d7bb8c" name="a5a00558aa4d9c263d631bd1a67d7bb8c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a00558aa4d9c263d631bd1a67d7bb8c">&#9670;&#160;</a></span>m_aggressive</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::m_aggressive {false}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Aggressive algorithm boolean. </p>
+
+</div>
+</div>
+<a id="af96f8dd4b044547ff18558a58fcfbdc5" name="af96f8dd4b044547ff18558a58fcfbdc5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af96f8dd4b044547ff18558a58fcfbdc5">&#9670;&#160;</a></span>m_counters</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="struct_pipal_1_1_solver_1_1_counter.html">Pipal::Solver::Counter</a> <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::m_counters</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Internal counters for statistics. </p>
+
+</div>
+</div>
+<a id="a20fffe280c060b65320690cfbbac7e13" name="a20fffe280c060b65320690cfbbac7e13"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a20fffe280c060b65320690cfbbac7e13">&#9670;&#160;</a></span>m_max_iterations</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::m_max_iterations {100}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Maximum number of iterations. </p>
+
+</div>
+</div>
+<a id="a2d2bfb64fb709f87f9f554b2e00067df" name="a2d2bfb64fb709f87f9f554b2e00067df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2d2bfb64fb709f87f9f554b2e00067df">&#9670;&#160;</a></span>m_mu_max_exp</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::m_mu_max_exp {0.0}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Interior-point parameter maximum exponent in increases. </p>
+
+</div>
+</div>
+<a id="a53f6463cf9c98f144ccbf29def8d05df" name="a53f6463cf9c98f144ccbf29def8d05df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a53f6463cf9c98f144ccbf29def8d05df">&#9670;&#160;</a></span>m_params</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">struct <a class="el" href="struct_pipal_1_1_solver_1_1_parameter.html">Pipal::Solver::Parameter</a> <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::m_params</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Internal parameters with default values. </p>
+
+</div>
+</div>
+<a id="a8011f730df457eb8bf4fb6983db4561e" name="a8011f730df457eb8bf4fb6983db4561e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8011f730df457eb8bf4fb6983db4561e">&#9670;&#160;</a></span>m_problem</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt; &gt; <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::m_problem</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p><a class="el" href="class_pipal_1_1_problem.html" title="Problem class for the Pipal library.">Problem</a> object </p>
+
+</div>
+</div>
+<a id="a6c155e6ff0fba9876938f7cfa749a86c" name="a6c155e6ff0fba9876938f7cfa749a86c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c155e6ff0fba9876938f7cfa749a86c">&#9670;&#160;</a></span>m_tolerance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::m_tolerance {1.0e-10}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Optimality tolerance. </p>
+
+</div>
+</div>
+<a id="a1fa2d17da988fe8d857e81aff1a91307" name="a1fa2d17da988fe8d857e81aff1a91307"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1fa2d17da988fe8d857e81aff1a91307">&#9670;&#160;</a></span>m_verbose</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_solver.html">Pipal::Solver</a>&lt; Real, N, M &gt;::m_verbose {false}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Verbosity flag. </p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
+<li>include/Pipal/<a class="el" href="_solver_8hh_source.html">Solver.hh</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespace_pipal.html">Pipal</a></li><li class="navelem"><a href="class_pipal_1_1_solver.html">Solver</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

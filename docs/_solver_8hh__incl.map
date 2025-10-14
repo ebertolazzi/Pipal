@@ -1,0 +1,19 @@
+<map id="include/Pipal/Solver.hh" name="include/Pipal/Solver.hh">
+<area shape="rect" id="Node000001" title=" " alt="" coords="207,5,360,31"/>
+<area shape="rect" id="Node000002" href="$_problem_8hh.html" title=" " alt="" coords="90,79,211,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="262,34,188,74,185,69,260,29"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="5,153,88,178"/>
+<area shape="poly" id="edge8_Node000001_Node000004" title=" " alt="" coords="207,28,174,34,141,45,109,60,80,81,62,108,53,139,48,137,57,106,77,77,106,56,139,40,173,29,206,23"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="213,153,309,178"/>
+<area shape="poly" id="edge9_Node000001_Node000005" title=" " alt="" coords="284,32,276,79,267,138,262,137,271,79,279,31"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="286,79,357,105"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="292,30,310,64,305,66,288,32"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="381,79,448,105"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="307,29,381,69,378,74,305,34"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="472,79,546,105"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="323,29,458,72,456,77,321,34"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="112,153,189,178"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="153,105,153,137,148,137,148,105"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="134,107,78,146,75,141,131,103"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="171,103,231,142,228,146,168,107"/>
+</map>
