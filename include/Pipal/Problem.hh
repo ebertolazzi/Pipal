@@ -20,8 +20,11 @@
 // Eigen library
 #include <Eigen/Dense>
 
-namespace Pipal {
+// Pipal includes
+#include "Pipal.hh"
 
+namespace Pipal
+{
   /**
    * \brief Problem class for the Pipal library.
    *
@@ -39,6 +42,7 @@ namespace Pipal {
   public:
     using Vector = Eigen::Vector<Real, Eigen::Dynamic>;
     using Matrix = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
+    using UniquePtr = std::unique_ptr<Problem<Real>>;
 
     /**
      * \brief Default constructor.

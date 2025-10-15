@@ -84,7 +84,6 @@
  */
 namespace Pipal
 {
-
   /**
    * \brief The Integer type as used for the API.
    *
@@ -94,7 +93,5 @@ namespace Pipal
   using Integer = PIPAL_DEFAULT_INTEGER_TYPE;
 
 } // namespace Pipal
-
-#include "Pipal/Solver.hh"
 
 #endif // INCLUDE_PIPAL_HH
