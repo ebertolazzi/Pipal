@@ -40,8 +40,9 @@
 # debug information files
 *.dwo
 
-# Directories
+# Mac OS files
 .DS_Store
+
+# Directories
 build/
 third_party/
-matlab/

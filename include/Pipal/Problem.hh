@@ -29,24 +29,16 @@ namespace Pipal {
    * It provides a structure for encapsulating the problem's objective function, constraints, and
    * other necessary components.
    * \tparam Real The floating-point type.
-   * \tparam N The size of the primal variable vector.
-   * \tparam M The size of the dual variable vector.
    */
-  template<typename Real, Integer N, Integer M>
+  template<typename Real>
   class Problem
   {
     static_assert(std::is_floating_point<Real>::value,
       "Pipal::Problem: template argument 'Real' must be a floating-point type.");
-    static_assert(N > 0,
-      "Pipal::Problem: template argument 'N' must be positive.");
-    static_assert(M > 0,
-      "Pipal::Problem: template argument 'M' must be positive.");
 
   public:
-    using VectorN = Eigen::Vector<Real, N>;
-    using VectorM = Eigen::Vector<Real, M>;
-    using MatrixH = Eigen::Matrix<Real, N, N>;
-    using MatrixJ = Eigen::Matrix<Real, M, N>;
+    using Vector = Eigen::Vector<Real, Eigen::Dynamic>;
+    using Matrix = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
 
     /**
      * \brief Default constructor.
@@ -57,14 +49,28 @@ namespace Pipal {
     Problem() {};
 
     /**
-     * \brief Default copy constructor.
+     * \brief Deleted copy constructor.
+     * \note This class is not copyable.
      */
-    Problem(const Problem &) = default;
+    Problem(Problem const &) = delete;
 
     /**
-     * \brief Default move constructor.
+     * \brief Deleted assignment operator.
+     * \note This class is not assignable.
      */
-    Problem(Problem &&) = default;
+    Problem & operator=(Problem const &) = delete;
+
+    /**
+     * \brief Deleted move constructor.
+     * \note This class is not movable.
+     */
+    Problem(Problem &&) = delete;
+
+    /**
+     * \brief Deleted move assignment operator.
+     * \note This class is not movable.
+     */
+    Problem & operator=(Problem &&) = delete;
 
     /**
      * \brief Default destructor.
@@ -73,47 +79,81 @@ namespace Pipal {
 
     /**
      * \brief Evaluate the objective function.
-     * \param[in] x Primal variable vector.
-     * \return The objective function.
+     * \param[in] x Primal variables.
+     * \param[out] out The objective function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    virtual Real objective(VectorN const & x) const = 0;
+    virtual bool objective(Vector const & x, Real & out) const = 0;
 
     /**
      * \brief Evaluate the gradient of the objective function.
-     * \param[in] x Primal variable vector.
-     * \return The gradient of the objective function.
+     * \param[in] x Primal variables.
+     * \param[out] out The gradient of the objective function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    virtual VectorN objective_gradient(VectorN const & x) const = 0;
+    virtual bool objective_gradient(Vector const & x, Vector & out) const = 0;
 
     /**
      * \brief Evaluate the Hessian of the objective function.
-     * \param[in] x Primal variable vector.
-     * \return The Hessian matrix of the objective function.
+     * \param[in] x Primal variables.
+     * \param[out] out The Hessian matrix of the objective function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    virtual MatrixH objective_hessian(VectorN const & x) const = 0;
+    virtual bool objective_hessian(Vector const & x, Matrix & out) const = 0;
 
     /**
      * \brief Evaluate the constraints function.
-     * \param[in] x Primal variable vector.
-     * \return The value of the constraints function.
+     * \param[in] x Primal variables.
+     * \param[out] out The value of the constraints function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    virtual VectorM constraints(VectorN const & x) const = 0;
+    virtual bool constraints(Vector const & x, Vector & out) const = 0;
 
     /**
      * \brief Evaluate the Jacobian of the constraints function with respect to the primal variables.
-     * \param[in] x Primal variable vector.
-     * \param[in] z Dual variable vector.
-     * \return The Jacobian matrix of the constraints function.
+     * \param[in] x Primal variables.
+     * \param[in] z Dual variables.
+     * \param[out] out The Jacobian matrix of the constraints function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    virtual MatrixJ constraints_jacobian(VectorN const & x, VectorM const & z) const = 0;
+    virtual bool constraints_jacobian(Vector const & x, Vector const & z, Matrix & out) const = 0;
 
     /**
      * \brief Evaluate the Hessian of the Lagrangian function with respect to the primal variables.
-     * \param[in] x Primal variable vector.
-     * \param[in] z Dual variable vector.
-     * \return The Hessian matrix of the Lagrangian function.
+     * \param[in] x Primal variables.
+     * \param[in] z Dual variables.
+     * \param[out] out The Hessian matrix of the Lagrangian function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    virtual MatrixH lagrangian_hessian(VectorN const & x, VectorM const & z) const = 0;
+    virtual bool lagrangian_hessian(Vector const & x, Vector const & z, Matrix & out) const = 0;
+
+    /**
+     * \brief Lower bounds on the primal variables.
+     * \param[out] out The lower bounds on the primal variables.
+     * \return True if the evaluation was successful, false otherwise.
+     */
+    virtual bool primal_lower_bounds(Vector & out) const = 0;
+
+    /**
+     * \brief Upper bounds on the primal variables.
+     * \param[out] out The upper bounds on the primal variables.
+     * \return True if the evaluation was successful, false otherwise.
+     */
+    virtual bool primal_upper_bounds(Vector & out) const = 0;
+
+    /**
+     * \brief Lower bounds on the constraints.
+     * \param[out] out The lower bounds on the constraints.
+     * \return True if the evaluation was successful, false otherwise.
+     */
+    virtual bool constraints_lower_bounds(Vector & out) const = 0;
+
+    /**
+     * \brief Upper bounds on the constraints.
+     * \param[out] out The upper bounds on the constraints.
+     * \return True if the evaluation was successful, false otherwise.
+     */
+    virtual bool constraints_upper_bounds(Vector & out) const = 0;
 
   }; // class Problem
 
@@ -124,32 +164,36 @@ namespace Pipal {
   * The ProblemWrapper class is a simple wrapper around the Problem class. It inherits from the
   * Problem class and can be used to define optimization problems through function handles.
   * \tparam Real The floating-point type.
-  * \tparam N The size of the primal variable vector.
-  * \tparam M The size of the dual variable vector.
   */
-  template<typename Real, Integer N, Integer M>
-  class ProblemWrapper : public Problem<Real, N, M>
+  template<typename Real>
+  class ProblemWrapper : public Problem<Real>
   {
   public:
-    using VectorN = typename Problem<Real, N, M>::VectorN;
-    using VectorM = typename Problem<Real, N, M>::VectorM;
-    using MatrixH = typename Problem<Real, N, M>::MatrixH;
-    using MatrixJ = typename Problem<Real, N, M>::MatrixJ;
+    using Vector = typename Problem<Real>::Vector;
+    using Matrix = typename Problem<Real>::Matrix;
 
-    using ObjectiveFunc           = std::function<Real(VectorN const &)>;
-    using ObjectiveGradientFunc   = std::function<VectorN(VectorN const &)>;
-    using ObjectiveHessianFunc    = std::function<MatrixH(VectorN const &)>;
-    using ConstraintsFunc         = std::function<VectorM(VectorN const &)>;
-    using ConstraintsJacobianFunc = std::function<MatrixJ(VectorN const &, VectorM const &)>;
-    using LagrangianHessianFunc   = std::function<MatrixH(VectorN const &, VectorM const &)>;
+    using ObjectiveFunc           = std::function<bool(Vector const &, Real &)>;
+    using ObjectiveGradientFunc   = std::function<bool(Vector const &, Vector &)>;
+    using ObjectiveHessianFunc    = std::function<bool(Vector const &, Matrix &)>;
+    using ConstraintsFunc         = std::function<bool(Vector const &, Vector &)>;
+    using ConstraintsJacobianFunc = std::function<bool(Vector const &, Vector const &, Matrix &)>;
+    using LagrangianHessianFunc   = std::function<bool(Vector const &, Vector const &, Matrix &)>;
+    using BoundsFunc              = std::function<bool(Vector &)>;
 
   private:
-    ObjectiveFunc           m_objective{nullptr};            /*!< Objective function \f$ f(\mathbf{x}) \f$ */
-    ObjectiveGradientFunc   m_objective_gradient{nullptr};   /*!< Gradient of the objective function \f$ \nabla f(\mathbf{x}) \f$ */
-    ObjectiveHessianFunc    m_objective_hessian{nullptr};    /*!< Hessian of the objective function \f$ \nabla^2 f(\mathbf{x}) \f$ */
-    ConstraintsFunc         m_constraints{nullptr};          /*!< Constraints function \f$ g(\mathbf{x}) \f$ */
-    ConstraintsJacobianFunc m_constraints_jacobian{nullptr}; /*!< Jacobian of the constraints \f$ J(\mathbf{x}) \f$ */
-    LagrangianHessianFunc   m_lagrangian_hessian{nullptr};   /*!< Hessian of the Lagrangian \f$ W(\mathbf{x}, \mathbf{z}) \f$ */
+    // Problem functions
+    ObjectiveFunc           m_objective{nullptr};            /*!< Objective function. */
+    ObjectiveGradientFunc   m_objective_gradient{nullptr};   /*!< Gradient of the objective function. */
+    ObjectiveHessianFunc    m_objective_hessian{nullptr};    /*!< Hessian of the objective function. */
+    ConstraintsFunc         m_constraints{nullptr};          /*!< Constraints function. */
+    ConstraintsJacobianFunc m_constraints_jacobian{nullptr}; /*!< Jacobian of the constraints. */
+    LagrangianHessianFunc   m_lagrangian_hessian{nullptr};   /*!< Hessian of the Lagrangian. */
+
+    // Bounds functions
+    BoundsFunc m_primal_lower_bounds{nullptr};      /*!< Lower bounds on the primal variables. */
+    BoundsFunc m_primal_upper_bounds{nullptr};      /*!< Upper bounds on the primal variables. */
+    BoundsFunc m_constraints_lower_bounds{nullptr}; /*!< Lower bounds on the constraints. */
+    BoundsFunc m_constraints_upper_bounds{nullptr}; /*!< Upper bounds on the constraints. */
 
   public:
     /**
@@ -162,12 +206,20 @@ namespace Pipal {
      * \param[in] constraints Constraints function handle.
      * \param[in] constraints_jacobian Jacobian of the constraints function handle.
      * \param[in] lagrangian_hessian Hessian of the Lagrangian function handle.
+     * \param[in] primal_lower_bounds Lower bounds on the primal variables function handle.
+     * \param[in] primal_upper_bounds Upper bounds on the primal variables function handle.
+     * \param[in] constraints_lower_bounds Lower bounds on the constraints function handle.
+     * \param[in] constraints_upper_bounds Upper bounds on the constraints function handle.
      */
     ProblemWrapper(ObjectiveFunc const & objective, ObjectiveGradientFunc const & objective_gradient,
       ConstraintsFunc const & constraints, ConstraintsJacobianFunc const & constraints_jacobian,
-      LagrangianHessianFunc const & lagrangian_hessian)
+      LagrangianHessianFunc const & lagrangian_hessian, BoundsFunc const & primal_lower_bounds,
+      BoundsFunc const & primal_upper_bounds, BoundsFunc const & constraints_lower_bounds,
+      BoundsFunc const & constraints_upper_bounds)
       : m_objective(objective), m_objective_gradient(objective_gradient), m_constraints(constraints),
-        m_constraints_jacobian(constraints_jacobian), m_lagrangian_hessian(lagrangian_hessian) {}
+        m_constraints_jacobian(constraints_jacobian), m_lagrangian_hessian(lagrangian_hessian),
+        m_primal_lower_bounds(primal_lower_bounds), m_primal_upper_bounds(primal_upper_bounds),
+        m_constraints_lower_bounds(constraints_lower_bounds), m_constraints_upper_bounds(constraints_upper_bounds) {}
 
     /**
      * \brief Constructor for the ProblemWrapper class (with the Hessian of the Lagrangian).
@@ -180,13 +232,21 @@ namespace Pipal {
      * \param[in] constraints Constraints function handle.
      * \param[in] constraints_jacobian Jacobian of the constraints function handle.
      * \param[in] lagrangian_hessian Hessian of the Lagrangian function handle.
+     * \param[in] lower_bounds Lower bounds on the primal variables function handle.
+     * \param[in] upper_bounds Upper bounds on the primal variables function handle.
+     * \param[in] constraints_lower_bounds Lower bounds on the constraints function handle.
+     * \param[in] constraints_upper_bounds Upper bounds on the constraints function handle.
      */
     ProblemWrapper(ObjectiveFunc const & objective, ObjectiveGradientFunc const & objective_gradient,
       ObjectiveHessianFunc const & objective_hessian, ConstraintsFunc const & constraints,
-      ConstraintsJacobianFunc const & constraints_jacobian, LagrangianHessianFunc const & lagrangian_hessian)
+      ConstraintsJacobianFunc const & constraints_jacobian, LagrangianHessianFunc const & lagrangian_hessian,
+      BoundsFunc const & primal_lower_bounds, BoundsFunc const & primal_upper_bounds,
+      BoundsFunc const & constraints_lower_bounds, BoundsFunc const & constraints_upper_bounds)
       : m_objective(objective), m_objective_gradient(objective_gradient),
         m_objective_hessian(objective_hessian), m_constraints(constraints),
-        m_constraints_jacobian(constraints_jacobian), m_lagrangian_hessian(lagrangian_hessian) {}
+        m_constraints_jacobian(constraints_jacobian), m_lagrangian_hessian(lagrangian_hessian),
+        m_primal_lower_bounds(primal_lower_bounds), m_primal_upper_bounds(primal_upper_bounds),
+        m_constraints_lower_bounds(constraints_lower_bounds), m_constraints_upper_bounds(constraints_upper_bounds) {}
 
     /**
      * \brief Default destructor for the ProblemWrapper class.
@@ -197,7 +257,7 @@ namespace Pipal {
      * \brief Get the objective function.
      * \return The objective function.
      */
-    ObjectiveFunc objective() const
+    ObjectiveFunc & objective()
     {
       return this->m_objective;
     }
@@ -215,7 +275,7 @@ namespace Pipal {
      * \brief Get the gradient of the objective function.
      * \return The gradient of the objective function.
      */
-    ObjectiveGradientFunc objective_gradient() const
+    ObjectiveGradientFunc & objective_gradient()
     {
       return this->m_objective_gradient;
     }
@@ -233,7 +293,7 @@ namespace Pipal {
      * \brief Get the Hessian of the objective function.
      * \return The Hessian of the objective function.
      */
-    ObjectiveHessianFunc objective_hessian() const
+    ObjectiveHessianFunc & objective_hessian()
     {
       return this->m_objective_hessian;
     }
@@ -251,7 +311,7 @@ namespace Pipal {
      * \brief Get the constraints function.
      * \return The constraints function.
      */
-    ConstraintsFunc constraints() const
+    ConstraintsFunc & constraints()
     {
       return this->m_constraints;
     }
@@ -269,7 +329,7 @@ namespace Pipal {
      * \brief Get the Jacobian of the constraints function.
      * \return The Jacobian of the constraints function.
      */
-    ConstraintsJacobianFunc constraints_jacobian() const
+    ConstraintsJacobianFunc & constraints_jacobian()
     {
       return this->m_constraints_jacobian;
     }
@@ -284,10 +344,83 @@ namespace Pipal {
     }
 
     /**
-     * \brief Get the Hessian of the Lagrangian function.
-     * \return The Hessian of the Lagrangian function.
+     * \brief Get the lower bounds on the primal variables function.
+     * \return The lower bounds on the primal variables function.
      */
-    LagrangianHessianFunc lagrangian_hessian() const
+    BoundsFunc & primal_lower_bounds()
+    {
+      return this->m_primal_lower_bounds;
+    }
+
+    /**
+     * \brief Set the lower bounds on the primal variables function.
+     * \param[in] primal_lower_bounds The lower bounds on the primal variables function to set.
+     */
+    void primal_lower_bounds(BoundsFunc const & primal_lower_bounds)
+    {
+      this->m_primal_lower_bounds = primal_lower_bounds;
+    }
+
+    /**
+     * \brief Get the upper bounds on the primal variables function.
+     * \return The upper bounds on the primal variables function.
+     */
+    BoundsFunc & primal_upper_bounds()
+    {
+      return this->m_primal_upper_bounds;
+    }
+
+    /**
+     * \brief Set the upper bounds on the primal variables function.
+     * \param[in] primal_upper_bounds The upper bounds on the primal variables function to set.
+     */
+    void primal_upper_bounds(BoundsFunc const & primal_upper_bounds)
+    {
+      this->m_primal_upper_bounds = primal_upper_bounds;
+    }
+
+    /**
+     * \brief Get the lower bounds on the constraints function.
+     * \return The lower bounds on the constraints function.
+     */
+    BoundsFunc & constraints_lower_bounds()
+    {
+      return this->m_constraints_lower_bounds;
+    }
+
+    /**
+     * \brief Set the lower bounds on the constraints function.
+     * \param[in] constraints_lower_bounds The lower bounds on the constraints function to set.
+     */
+    void constraints_lower_bounds(BoundsFunc const & constraints_lower_bounds)
+    {
+      this->m_constraints_lower_bounds = constraints_lower_bounds;
+    }
+
+    /**
+     * \brief Get the upper bounds on the constraints function.
+     * \return The upper bounds on the constraints function.
+     */
+    BoundsFunc & constraints_upper_bounds()
+    {
+      return this->m_constraints_upper_bounds;
+    }
+
+    /**
+     * \brief Set the upper bounds on the constraints function.
+     * \param[in] constraints_upper_bounds The upper bounds on the constraints function to set.
+     */
+    void constraints_upper_bounds(BoundsFunc const & constraints_upper_bounds)
+    {
+      this->m_constraints_upper_bounds = constraints_upper_bounds;
+    }
+
+    /**
+     * \brief Get the Hessian of the Lagrangian function.
+     * \param[out] out The Hessian of the Lagrangian function.
+     * \return True if the evaluation was successful, false otherwise.
+     */
+    LagrangianHessianFunc & lagrangian_hessian()
     {
       return this->m_lagrangian_hessian;
     }
@@ -303,64 +436,110 @@ namespace Pipal {
 
     /**
      * \brief Evaluate the objective function.
-     * \param[in] x Primal variable vector.
-     * \return The objective function.
+     * \param[in] x Primal variables.
+     * \param[out] out The objective function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    Real objective(VectorN const & x) const override
+    bool objective(Vector const & x, Real & out) const override
     {
-      return this->m_objective(x);
+      return this->m_objective(x, out);
     }
 
     /**
      * \brief Evaluate the gradient of the objective function.
-     * \param[in] x Primal variable vector.
-     * \return The gradient of the objective function.
+     * \param[in] x Primal variables.
+     * \param[out] out The gradient of the objective function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    VectorN objective_gradient(VectorN const & x) const override
+    bool objective_gradient(Vector const & x, Vector & out) const override
     {
-      return this->m_objective_gradient(x);
+      return this->m_objective_gradient(x, out);
     }
 
     /**
      * \brief Evaluate the Hessian of the objective function.
-     * \param[in] x Primal variable vector.
-     * \return The Hessian matrix of the objective function.
+     * \param[in] x Primal variables.
+     * \param[out] out The Hessian matrix of the objective function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    MatrixH objective_hessian(VectorN const & x) const override
+    bool objective_hessian(Vector const & x, Matrix & out) const override
     {
-      return this->m_objective_hessian(x);
+      return this->m_objective_hessian(x, out);
     }
 
     /**
      * \brief Evaluate the constraints function.
-     * \param[in] x Primal variable vector.
-     * \return The value of the constraints function.
+     * \param[in] x Primal variables.
+     * \param[out] out The value of the constraints function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    VectorM constraints(VectorN const & x) const override
+    bool constraints(Vector const & x, Vector & out) const override
     {
-      return this->m_constraints(x);
+      return this->m_constraints(x, out);
     }
 
     /**
      * \brief Evaluate the Jacobian of the constraints function.
-     * \param[in] x Primal variable vector.
-     * \param[in] z Dual variable vector.
-     * \return The Jacobian matrix of the constraints function.
+     * \param[in] x Primal variables.
+     * \param[in] z Dual variables.
+     * \param[out] out The Jacobian matrix of the constraints function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    MatrixJ constraints_jacobian(VectorN const & x, VectorM const & z) const override
+    bool constraints_jacobian(Vector const & x, Vector const & z, Matrix & out) const override
     {
-      return this->m_constraints_jacobian(x, z);
+      return this->m_constraints_jacobian(x, z, out);
     }
 
     /**
      * \brief Evaluate the Hessian of the Lagrangian function.
-     * \param[in] x Primal variable vector.
-     * \param[in] z Dual variable vector.
-     * \return The Hessian matrix of the Lagrangian function.
+     * \param[in] x Primal variables.
+     * \param[in] z Dual variables.
+     * \param[out] out The Hessian matrix of the Lagrangian function.
+     * \return True if the evaluation was successful, false otherwise.
      */
-    MatrixH lagrangian_hessian(VectorN const & x, VectorM const & z) const override
+    bool lagrangian_hessian(Vector const & x, Vector const & z, Matrix & out) const override
     {
-      return this->m_lagrangian_hessian(x, z);
+      return this->m_lagrangian_hessian(x, z, out);
+    }
+
+    /**
+     * \brief Lower bounds on the primal variables.
+     * \param[out] out The lower bounds on the primal variables.
+     * \return True if the evaluation was successful, false otherwise.
+     */
+    bool primal_lower_bounds(Vector & out) const override
+    {
+      return this->m_primal_lower_bounds(out);
+    }
+
+    /**
+     * \brief Upper bounds on the primal variables.
+     * \param[out] out The upper bounds on the primal variables.
+     * \return True if the evaluation was successful, false otherwise.
+     */
+    bool primal_upper_bounds(Vector & out) const override
+    {
+      return this->m_primal_upper_bounds(out);
+    }
+
+    /**
+     * \brief Lower bounds on the constraints.
+     * \param[out] out The lower bounds on the constraints.
+     * \return True if the evaluation was successful, false otherwise.
+     */
+    bool constraints_lower_bounds(Vector & out) const override
+    {
+      return this->m_constraints_lower_bounds(out);
+    }
+
+    /**
+     * \brief Upper bounds on the constraints.
+     * \param[out] out The upper bounds on the constraints.
+     * \return True if the evaluation was successful, false otherwise.
+     */
+    bool constraints_upper_bounds(Vector & out) const override
+    {
+      return this->m_constraints_upper_bounds(out);
     }
 
   }; // class ProblemWrapper
