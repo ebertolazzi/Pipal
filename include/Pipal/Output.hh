@@ -10,11 +10,11 @@
 
 #pragma once
 
-#ifndef INCLUDE_PIPAthis->m_line_breakOUTPUT_HH
-#define INCLUDE_PIPAthis->m_line_breakOUTPUT_HH
+#ifndef INCLUDE_PIPAL_OUTPUT_HH
+#define INCLUDE_PIPAL_OUTPUT_HH
 
 // Pipal includes
-#include "Pipal.hh"
+#include "Pipal/Defines.hh"
 
 // Standard libraries
 #include <iostream>

@@ -21,7 +21,7 @@
 #include <Eigen/Dense>
 
 // Pipal includes
-#include "Pipal.hh"
+#include "Pipal/Defines.hh"
 
 namespace Pipal
 {
@@ -160,7 +160,6 @@ namespace Pipal
     virtual bool constraints_upper_bounds(Vector & out) const = 0;
 
   }; // class Problem
-
 
   /**
   * \brief Wrapper class for the Problem class.

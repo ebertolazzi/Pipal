@@ -23,7 +23,7 @@
 #include <Eigen/Dense>
 
 // Pipal includes
-#include "Pipal.hh"
+#include "Pipal/Defines.hh"
 #include "Pipal/Counter.hh"
 #include "Pipal/Input.hh"
 #include "Pipal/Parameter.hh"
@@ -68,12 +68,12 @@ namespace Pipal
     Input<Real, Integer>  m_input;  /*!< Input structure for the solver. */
     //Output<Real, Integer> m_output;  /*!< Output class for managing solver output. */
     Parameter<Real>       m_parameter;   /*!< Internal parameters for the solver algorithm. */
-    ProblemPtr            m_problem; /**< Problem object pointer. */
+    ProblemPtr            m_problem; /*!< Problem object pointer. */
 
 
     // Some options for the solver
     Algorithm m_algorithm{Algorithm::ADAPTIVE}; /*!< Algorithm choice. */
-    bool      m_verbose{false};      /**< Verbosity flag. */
+    bool      m_verbose{false};      /*!< Verbosity flag. */
     Integer   m_max_iterations{100}; /*!< Maximum number of iterations. */
     Real      m_tolerance{1.0e-10};  /*!< Optimality tolerance. */
 

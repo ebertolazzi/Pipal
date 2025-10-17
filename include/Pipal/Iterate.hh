@@ -14,7 +14,7 @@
 #define INCLUDE_PIPAL_ITERATE_HH
 
 // Pipal includes
-#include "Pipal.hh"
+#include "Pipal/Defines.hh"
 #include "Pipal/Problem.hh"
 #include "Pipal/Parameter.hh"
 #include "Pipal/Input.hh"
@@ -116,21 +116,21 @@ namespace Pipal
       this->evalScalings(problem, input, counter);
       this->evalFunctions(input, counter);
       this->eval_gradients(input, counter);
-      this->evalDependent(problem, input);
+      this->eval_dependent(problem, input);
       this->v0 = 1;
-      this->evalInfeasibility(input);
+      this->eval_infeasibility(input);
       this->v0 = this->v;
-      this->evalInfeasibility(input);
+      this->eval_infeasibility(input);
       this->v_ = this->v;
       this->shift = 0;
       this->kkt_ = inf*ones(parameter.opt_err_mem, 1);
       this->cut_ = 0;
-      this->evalHessian(input, counter);
+      this->eval_hessian(input, counter);
       this->Hnnz = nnz(this->H);
       this->JEnnz = nnz(this->JE);
       this->JInnz = nnz(this->JI);
       this->initNewtonMatrix(input);
-      this->evalNewtonMatrix(problem, input, counter);
+      this->eval_newton_matrix(problem, input, counter);
 
       #undef CMD
     }
@@ -320,204 +320,224 @@ namespace Pipal
       #undef CMD
     }
 
-//            // Hessian evaluator
-//            function evalHessian(z,i,c)
-//
-//              // Evaluate lambda in original space
-//              l_orig = this->evalLambdaOriginal(i);
-//              x_orig = this->eval_x_original(i);
-//
-//              // Initialize/Reset evaluation flag
-//              this->err = 0;
-//
-//              // Increment Hessian evaluation counter
-//              counter.incrementHessianCount;
-//
-//              // Try AMPL Hessian evaluation
-//              try
-//
-//                // Evaluate H_orig
-//                if (input.nE+input.n7+input.n8+input.n9 == 0), H_orig = input.H_orig(x_orig, []);
-//                else                           H_orig = input.H_orig(x_orig, l_orig); end;
-//
-//              catch
-//
-//                // Set evaluation flag, default values, and return
-//                this->err = 1; this->H = sparse(input.nV,input.nV); return;
-//
-//              end
-//
-//              // Set Hessian of the Lagrangian
-//              this->H = [H_orig(input.i1,input.i1) H_orig(input.i1,input.i3) H_orig(input.i1,input.i4) H_orig(input.i1,input.i5);
-//                     H_orig(input.i3,input.i1) H_orig(input.i3,input.i3) H_orig(input.i3,input.i4) H_orig(input.i3,input.i5);
-//                     H_orig(input.i4,input.i1) H_orig(input.i4,input.i3) H_orig(input.i4,input.i4) H_orig(input.i4,input.i5);
-//                     H_orig(input.i5,input.i1) H_orig(input.i5,input.i3) H_orig(input.i5,input.i4) H_orig(input.i5,input.i5);];
-//
-//              // Rescale H
-//              this->H = this->rho*this->fs*this->H;
-//
-//            end
-//
-//            // Infeasibility evaluator
-//            function evalInfeasibility(z,i)
-//
-//              // Evaluate scaled and unscaled feasibility violations
-//              this->v  = this->evalViolation(i,this->cE ,this->cI )/max(1,this->v0);
-//              this->vu = this->evalViolation(i,this->cEu,this->cIu);
-//
-//            end
-//
-//            // KKT error evaluator
-//            function v = evalKKTError(z,i,rho,mu)
-//
-//              // Initialize optimality vector
-//              kkt = zeros(input.nV+2*input.nE+2*input.nI,1);
-//
-//              // Set gradient of penalty objective
-//              kkt(1:input.nV) = rho*this->g;
-//
-//              // Set gradient of Lagrangian for constraints
-//              if input.nE > 0, kkt(1:input.nV) = kkt(1:input.nV) + (this->lE'*this->JE)'; end;
-//              if input.nI > 0, kkt(1:input.nV) = kkt(1:input.nV) + (this->lI'*this->JI)'; end;
-//
-//              // Set complementarity for constraint slacks
-//              if input.nE > 0, kkt(1+input.nV       :input.nV+2*input.nE       ) = [this->r1.*(1 + this->lE) - mu; this->r2.*(1 - this->lE) - mu]; end;
-//              if input.nI > 0, kkt(1+input.nV+2*input.nE:input.nV+2*input.nE+2*input.nI) = [this->s1.*(0 + this->lI) - mu; this->s2.*(1 - this->lI) - mu]; end;
-//
-//              // Scale complementarity
-//              if rho > 0, kkt = (1/max(1,norm(rho*this->g,inf)))*kkt; end;
-//
-//              // Evaluate optimality error
-//              v = norm(kkt,inf);
-//
-//            end
-//
-//            // KKT errors evaluator
-//            function evalKKTErrors(z,i)
-//
-//              // Loop to compute optimality errors
-//              this->kkt(1) = this->evalKKTError(i,0    ,0   );
-//              this->kkt(2) = this->evalKKTError(i,this->rho,0   );
-//              this->kkt(3) = this->evalKKTError(i,this->rho,this->mu);
-//
-//            end
-//
-//            // Evaluator of lambda in original space
-//            function l = evalLambdaOriginal(z,i)
-//
-//              // Initialize multipliers in original space
-//              l = zeros(input.nE+input.n7+input.n8+input.n9,1);
-//
-//              // Scale equality constraint multipliers
-//              if input.nE > 0, lE = this->lE.*(this->cEs/(this->rho*this->fs)); end;
-//
-//              // Set equality constraint multipliers in original space
-//              if input.nE > 0, l(input.i6) = lE; end;
-//
-//              // Scale inequality constraint multipliers
-//              if input.n7+input.n8+input.n9 > 0, lI = this->lInput.*(this->cIs/(this->rho*this->fs)); end;
-//
-//              // Set inequality constraint multipliers in original space
-//              if input.n7 > 0, l(input.i7) = -lI(1+input.n3+input.n4+input.n5+input.n5               :input.n3+input.n4+input.n5+input.n5+input.n7               ); end;
-//              if input.n8 > 0, l(input.i8) = +lI(1+input.n3+input.n4+input.n5+input.n5+input.n7          :input.n3+input.n4+input.n5+input.n5+input.n7+input.n8          ); end;
-//              if input.n9 > 0, l(input.i9) = -lI(1+input.n3+input.n4+input.n5+input.n5+input.n7+input.n8     :input.n3+input.n4+input.n5+input.n5+input.n7+input.n8+input.n9     )...
-//                                     +lI(1+input.n3+input.n4+input.n5+input.n5+input.n7+input.n8+input.n9:input.n3+input.n4+input.n5+input.n5+input.n7+input.n8+input.n9+input.n9); end;
-//
-//            end
-//
-//            // Matrices evaluator
-//            function evalMatrices(z,p,i,c)
-//
-//              // Evaluate Hessian and Newton matrices
-//              this->evalHessian     (  i,c);
-//              this->evalNewtonMatrix(p,i,c);
-//
-//            end
-//
-//            // Merit evaluator
-//            function evalMerit(z,i)
-//
-//              // Initialize merit for objective
-//              this->phi = this->rho*this->f;
-//
-//              // Update merit for slacks
-//              if input.nE > 0, this->phi = this->phi - this->mu*sum(log([this->r1;this->r2])) + sum([this->r1;this->r2]); end;
-//              if input.nI > 0, this->phi = this->phi - this->mu*sum(log([this->s1;this->s2])) + sum(      this->s2 ); end;
-//
-//            end
-//
-//            // Newton matrix evaluator
-//            function evalNewtonMatrix(z,p,i,c)
-//
-//              // Check for equality constraints
-//              if input.nE > 0
-//
-//                // Set diagonal terms
-//                for j = 1:input.nE, this->A(input.nV+     j,input.nV+     j) = (1+this->lE(j))/this->r1(j);
-//                                this->A(input.nV+input.nE+j,input.nV+input.nE+j) = (1-this->lE(j))/this->r2(j); end;
-//
-//                // Set constraint Jacobian
-//                this->A(1+input.nV+2*input.nE+2*input.nI:input.nV+3*input.nE+2*input.nI,1:input.nV) = this->JE;
-//
-//              end
-//
-//              // Check for inequality constraints
-//              if input.nI > 0
-//
-//                // Set diagonal terms
-//                for j = 1:input.nI, this->A(input.nV+2*input.nE+     j,input.nV+2*input.nE+     j) = (0+this->lI(j))/this->s1(j);
-//                                this->A(input.nV+2*input.nE+input.nI+j,input.nV+2*input.nE+input.nI+j) = (1-this->lI(j))/this->s2(j); end;
-//
-//                // Set constraint Jacobian
-//                this->A(1+input.nV+3*input.nE+2*input.nI:input.nV+3*input.nE+3*input.nI,1:input.nV) = this->JI;
-//
-//              end
-//
-//              // Set minimum potential shift
-//              min_shift = max(p.shift_min,p.shift_factor1*this->shift);
-//
-//              // Initialize Hessian modification
-//              if this->cut_ == 1, this->shift = min(p.shift_max,min_shift/p.shift_factor2); else this->shift = 0; end;
-//
-//              // Initialize inertia correction loop
-//              done = 0; this->shift22 = 0;
-//
-//              // Loop until inertia is correct
-//              while ~done && this->shift < p.shift_max
-//
-//                // Set Hessian of Lagrangian
-//                this->A(1:input.nV,1:input.nV) = this->H+this->shift*speye(input.nV);
-//
-//                // Set diagonal terms
-//                for j = 1:input.nE, this->A(input.nV+2*input.nE+2*input.nI+j,input.nV+2*input.nE+2*input.nI+j) = -this->shift22; end;
-//
-//                // Set diagonal terms
-//                for j = 1:input.nI, this->A(input.nV+3*input.nE+2*input.nI+j,input.nV+3*input.nE+2*input.nI+j) = -this->shift22; end;
-//
-//                // Set number of nonzeros in (upper triangle of) Newton matrix
-//                this->Annz = nnz(tril(this->A));
-//
-//                // Factor primal-dual matrix
-//                [this->AL,this->AD,this->AP,this->AS,neig] = ldl(tril(this->A),p.pivot_thresh,'vector');
-//
-//                // Increment factorization counter
-//                counter.incrementFactorizationCount;
-//
-//                // Set number of nonnegative eigenvalues
-//                peig = input.nA - neig;
-//
-//                // Check inertia
-//                if     peig < input.nV+2*input.nE+2*input.nI        , this->shift   = max(min_shift,this->shift/p.shift_factor2);
-//                elseif neig < input.nE+input.nI & this->shift22 == 0, this->shift22 = p.shift_min;
-//                else                                      done      = 1; end;
-//
-//              end
-//
-//              // Update Hessian
-//              this->H = this->H+this->shift*speye(input.nV);
-//
-//            end
-//
+    // Hessian evaluator
+    bool eval_hessian(Input<Real, Integer> const & input, Counter<Integer> & counter)
+    {
+      #define CMD "Pipal::Iterate::eval_hessian(...): "
+
+      // Evaluate lambda in original space
+      l_orig = this->eval_lambda_original(i);
+      x_orig = this->eval_x_original(i);
+
+      // Initialize/Reset evaluation flag
+      this->err = 0;
+
+      // Try AMPL Hessian evaluation
+      ++counter.hessian_evaluations;
+
+      try
+      {
+        // Evaluate H_orig
+        if (input.nE+input.n7+input.n8+input.n9 == 0), H_orig = input.H_orig(x_orig, []);
+        else                           H_orig = input.H_orig(x_orig, l_orig); end;
+      }
+      catch
+      {
+        // Set evaluation flag, default values, and return
+        this->err = 1;
+        this->H = sparse(input.nV,input.nV);
+        return false;
+      }
+
+      // Set Hessian of the Lagrangian
+      this->H = [
+        H_orig(input.i1,input.i1) H_orig(input.i1,input.i3) H_orig(input.i1,input.i4) H_orig(input.i1,input.i5);
+        H_orig(input.i3,input.i1) H_orig(input.i3,input.i3) H_orig(input.i3,input.i4) H_orig(input.i3,input.i5);
+        H_orig(input.i4,input.i1) H_orig(input.i4,input.i3) H_orig(input.i4,input.i4) H_orig(input.i4,input.i5);
+        H_orig(input.i5,input.i1) H_orig(input.i5,input.i3) H_orig(input.i5,input.i4) H_orig(input.i5,input.i5);
+      ];
+
+      // Rescale H
+      this->H = this->rho * this->fs * this->H;
+
+      return true;
+    }
+
+
+    // Evaluate scaled and unscaled feasibility violations
+    void eval_infeasibility(Input<Real, Integer> const & input)
+    {
+      this->v  = this->eval_violation(input, this->cE, this->cI) / std::max(1, this->v0);
+      this->vu = this->eval_violation(input, this->cEu, this->cIu);
+    }
+
+    // KKT error evaluator
+    Real eval_kkt_error(Input<Real, Integer> const & input, Real const rho, Real const mu)
+    {
+      // Initialize optimality vector
+      this->kkt.setZero(input.nV + 2*input.nE + 2*input.nI);
+
+      // Set gradient of penalty objective
+      this->kkt(1:input.nV) = rho*this->g;
+
+      // Set gradient of Lagrangian for constraints
+      if (input.nE > 0) {this->kkt(1:input.nV) = this->kkt(1:input.nV) + (this->lE.transpose()*this->JE).transpose();}
+      if (input.nI > 0) {this->kkt(1:input.nV) = this->kkt(1:input.nV) + (this->lI.transpose()*this->JI).transpose();}
+
+      // Set complementarity for constraint slacks
+      if (input.nE > 0) {
+        this->kkt(1+input.nV:input.nV+2*input.nE) = [this->r1.*(1 + this->lE) - mu; this->r2.*(1 - this->lE) - mu];
+      }
+       if (input.nI > 0) {
+        this->kkt(1+input.nV+2*input.nE:input.nV+2*input.nE+2*input.nI) = [this->s1.*(0 + this->lI) - mu; this->s2.*(1 - this->lI) - mu];
+      }
+
+      // Scale complementarity
+      if (rho > 0) {this->kkt = (1.0 / std::max(1,norm(rho*this->g, inf))) * this->kkt;} //FIXME
+
+      // Evaluate optimality error
+      return norm(this->kkt,inf);
+    }
+
+    // KKT errors evaluator
+    void eval_kkt_errors(Input<Real, Integer> const & input) const
+    {
+      // Loop to compute optimality errors
+      this->kkt(1) = this->eval_kkt_error(input, 0, 0);
+      this->kkt(2) = this->eval_kkt_error(input, this->rho, 0);
+      this->kkt(3) = this->eval_kkt_error(input, this->rho, this->mu);
+    }
+
+    // Evaluator of lambda in original space
+    Vector eval_lambda_original(Input<Real, Integer> const & input)
+
+      // Initialize multipliers in original space
+      Vector l(input.nE+input.n7+input.n8+input.n9);
+      l.setZero();
+
+      // Scale equality constraint multipliers
+      if (input.nE > 0) {
+        l(input.i6) = this->lE.*(this->cEs/(this->rho*this->fs));
+      }
+
+      // Scale inequality constraint multipliers
+      if (input.n7 + input.n8 + input.n9 > 0) {
+        Vector lI((this->lInput.array() * (this->cIs/(this->rho*this->fs)).array()).matrix());
+        Integer idx_c_ini{+input.n3+input.n4+input.n5+input.n5}, idx_c_end{nput.n3+input.n4+input.n5+input.n5+input.n7-1};
+        if (input.n7 > 0) {
+          l(input.i7) = -lI(Eigen::seq(idx_c_ini, idx_c_end));
+        }
+        idx_c_ini += input.n7; idx_c_end += input.n8;
+        if (input.n8 > 0) {
+          l(input.i8) = +lI(Eigen::seq(idx_c_ini, idx_c_end));
+        }
+        idx_c_ini += input.n8; idx_c_end += input.n9;
+        if (input.n9 > 0) {
+          l(input.i9) = -lI(Eigen::seq(idx_c_ini, idx_c_end)) + lI(Eigen::seq(idx_c_ini+input.n9, idx_c_end+input.n9));
+        }
+      }
+    }
+
+    // Evaluate Hessian and Newton matrices
+    void eval_matrices(Parameter<Real> const & parameter, Input<Real, Integer> const & input, Counter<Integer> & counter)
+    {
+      this->eval_hessian(input, counter);
+      this->eval_newton_matrix(parameter, input, counter);
+    }
+
+    // Merit evaluator
+    void evalMerit(Integer> const & input)
+    {
+      // Initialize merit for objective
+      this->phi = this->rho * this->f;
+
+      // Update merit for slacks
+      if (input.nE > 0) {
+        this->phi = this->phi - this->mu*sum(log([this->r1; this->r2])) + sum([this->r1;this->r2]);
+      }
+      if (input.nI > 0) {
+        this->phi = this->phi - this->mu*sum(log([this->s1; this->s2])) + sum(          this->s2 );
+      }
+    }
+
+    // Newton matrix evaluator
+    void eval_newton_matrix(z,p,i,c)
+    {
+      // Check for equality constraints
+      if (input.nE > 0)
+      {
+        // Set diagonal terms
+        for (j = 1:input.nE)
+        {
+          this->A(input.nV+     j,input.nV+     j) = (1+this->lE(j))/this->r1(j);
+          this->A(input.nV+input.nE+j,input.nV+input.nE+j) = (1-this->lE(j))/this->r2(j);
+        }
+
+        // Set constraint Jacobian
+        this->A(1+input.nV+2*input.nE+2*input.nI:input.nV+3*input.nE+2*input.nI,1:input.nV) = this->JE;
+      }
+
+      // Check for inequality constraints
+      if (input.nI > 0)
+      {
+        // Set diagonal terms
+        for (j = 1:input.nI)
+          this->A(input.nV+2*input.nE+j,input.nV+2*input.nE+j) = (0+this->lI(j))/this->s1(j);
+          this->A(input.nV+2*input.nE+input.nI+j,input.nV+2*input.nE+input.nI+j) = (1-this->lI(j))/this->s2(j);
+
+        // Set constraint Jacobian
+        this->A(1+input.nV+3*input.nE+2*input.nI:input.nV+3*input.nE+3*input.nI,1:input.nV) = this->JI;
+      }
+
+      // Set minimum potential shift
+      min_shift = std::max(p.shift_min, p.shift_factor1*this->shift);
+
+      // Initialize Hessian modification
+      if (this->cut_ == 1) {
+        this->shift = std::min(p.shift_max,min_shift / p.shift_factor2);
+      } else {
+        this->shift = 0;
+      }
+
+      // Initialize inertia correction loop
+      done = 0; this->shift22 = 0;
+
+      // Loop until inertia is correct
+      while ~done && this->shift < p.shift_max
+
+        // Set Hessian of Lagrangian
+        this->A(Eigen::seq(0, input.nV-1), Eigen::seq(0, input.nV-1)) = this->H+this->shift*speye(input.nV);
+
+        // Set diagonal terms
+        for j = 1:input.nE, this->A(input.nV+2*input.nE+2*input.nI+j,input.nV+2*input.nE+2*input.nI+j) = -this->shift22; end;
+
+        // Set diagonal terms
+        for j = 1:input.nI, this->A(input.nV+3*input.nE+2*input.nI+j,input.nV+3*input.nE+2*input.nI+j) = -this->shift22; end;
+
+        // Set number of nonzeros in (upper triangle of) Newton matrix
+        this->Annz = nnz(tril(this->A));
+
+        // Factor primal-dual matrix
+        [this->AL,this->AD,this->AP,this->AS,neig] = ldl(tril(this->A),p.pivot_thresh,'vector');
+
+        // Increment factorization counter
+        counter.incrementFactorizationCount;
+
+        // Set number of nonnegative eigenvalues
+        peig = input.nA - neig;
+
+        // Check inertia
+        if     peig < input.nV+2*input.nE+2*input.nI        , this->shift   = max(min_shift,this->shift/p.shift_factor2);
+        elseif neig < input.nE+input.nI & this->shift22 == 0, this->shift22 = p.shift_min;
+        else                                      done      = 1; end;
+
+      end
+
+      // Update Hessian
+      this->H = this->H + this->shift * speye(input.nV);
+
+    }
+
 //            // Newton right-hand side evaluator
 //            function evalNewtonRhs(z,i)
 //
@@ -631,7 +651,7 @@ namespace Pipal
 //            // Gets primal-dual point
 //            function sol = getSolution(z,i)
 //              sol.x = this->eval_x_original(i);
-//              sol.l = this->evalLambdaOriginal(i);
+//              sol.l = this->eval_lambda_original(i);
 //            end
 //
 //            // Initializes Newton matrix
@@ -663,128 +683,111 @@ namespace Pipal
 //              end
 //
 //            end
-//
-//            // Set interior-point parameter
-//            function setMu(z,mu)
-//              this->mu = mu;
-//            end
-//
-//            // Set primal variables
-//            function setPrimals(z,i,x,r1,r2,s1,s2,lE,lI,f,cE,cI,phi)
-//
-//              // Set primal variables
-//              this->x = x; this->f = f;
-//              if input.nE > 0, this->cE = cE; this->r1 = r1; this->r2 = r2; this->lE = lE; end;
-//              if input.nI > 0, this->cI = cI; this->s1 = s1; this->s2 = s2; this->lI = lI; end;
-//              this->phi = phi;
-//
-//            end
-//
-//            // Set penalty parameter
-//            function setRho(z,rho)
-//              this->rho = rho;
-//            end
-//
-//            // Set last penalty parameter
-//            function setRhoLast(z,rho)
-//              this->rho_ = rho;
-//            end
-//
-//            // Iterate updater
-//            function updateIterate(z,p,i,c,d,a)
-//
-//              // Update last quantities
-//              this->v_   = this->v;
-//              this->cut_ = (a.p < a.p0);
-//
-//              // Update iterate quantities
-//              this->updatePoint      (  i,  d,a);
-//              this->evalInfeasibility(  i      );
-//              this->eval_gradients    (  i,c    );
-//              this->evalDependent    (p,i      );
-//
-//              // Update last KKT errors
-//              this->kkt_ = [this->kkt(2); this->kkt_(1:p.opt_err_mem-1)];
-//
-//            end
-//
-//            // Parameter updater
-//            function updateParameters(z,p,i)
-//
-//              // Check for interior-point parameter update based on optimality error
-//              while this->mu > p.mu_min && this->kkt(3) <= max([this->mu;p.opt_err_tol-this->mu])
-//
-//                // Restrict interior-point parameter increase
-//                p.setMuMaxExpZero;
-//
-//                // Update interior-point parameter
-//                if this->mu > p.mu_min
-//
-//                  // Decrease interior-point
-//                  this->mu = max(p.mu_min,min(p.mu_factor*this->mu,this->mu^p.mu_factor_exp));
-//
-//                  // Evaluate penalty and interior-point parameter dependent quantities
-//                  this->evalDependent(p,i);
-//
-//                end
-//
-//              end
-//
-//              // Check for penalty parameter update based on optimality error
-//              if (this->kkt(2) <= p.opt_err_tol && this->v > p.opt_err_tol) || this->v > max([1;this->v_;p.infeas_max])
-//
-//                // Update penalty parameter
-//                if this->rho > p.rho_min
-//
-//                  // Decrease penalty parameter
-//                  this->rho = max(p.rho_min,p.rho_factor*this->rho);
-//
-//                  // Evaluate penalty and interior-point parameter dependent quantities
-//                  this->evalDependent(p,i);
-//
-//                end
-//
-//              end
-//
-//            end
-//
-//            // Primal point updater
-//            function updatePoint(z,i,d,a)
-//
-//              // Update primal and dual variables
-//                           this->x  = this->x  + a.p*d.x ;
-//              if input.nE > 0, this->r1 = this->r1 + a.p*d.r1;
-//                           this->r2 = this->r2 + a.p*d.r2; end;
-//              if input.nI > 0, this->s1 = this->s1 + a.p*d.s1;
-//                           this->s2 = this->s2 + a.p*d.s2; end;
-//              if input.nE > 0, this->lE = this->lE + a.d*d.lE; end;
-//              if input.nI > 0, this->lI = this->lI + a.d*d.lI; end;
-//
-//            end
-//
-//          end
-//
-//          // Class methods (static)
-//          methods (Static)
-//
-//            // Feasibility violation evaluator
-//            function v = evalViolation(i,cE,cI)
-//
-//              // Initialize violation vector
-//              vec = [];
-//
-//              // Update vector for constraint values
-//              if input.nE > 0, vec = cE;               end;
-//              if input.nI > 0, vec = [vec; max(cI,0)]; end;
-//
-//              // Evaluate vector norm
-//              v = norm(vec,1);
-//
-//            end
-//
-//          end
-//
-//        end
+
+      // Set interior-point parameter
+      void set_mu(mu) {this->mu = mu;}
+
+      // Set primal variables
+      void set_primals(z,i,x,r1,r2,s1,s2,lE,lI,f,cE,cI,phi)
+      {
+        this->x = x; this->f = f;
+        if (input.nE > 0) {this->cE = cE; this->r1 = r1; this->r2 = r2; this->lE = lE;}
+        if (input.nI > 0) {this->cI = cI; this->s1 = s1; this->s2 = s2; this->lI = lI;}
+        this->phi = phi;
+      }
+
+      // Set penalty parameter
+      void set_rho(rho) {this->rho = rho;}
+
+      // Set last penalty parameter
+      void set_rho_last(rho) {this->rho_ = rho;}
+
+     // Iterate updater
+     void updateIterate(z,p,i,c,d,a)
+
+      // Update last quantities
+      this->v_   = this->v;
+      this->cut_ = (a.p < a.p0);
+
+      // Update iterate quantities
+      this->update_point      (  i,  d,a);
+      this->eval_infeasibility(  i      );
+      this->eval_gradients    (  i,c    );
+      this->eval_dependent    (p,i      );
+
+      // Update last KKT errors
+      this->kkt_ = [this->kkt(2); this->kkt_(1:p.opt_err_mem-1)];
+    }
+
+    // Parameter updater
+    void update_parameters(Parameter<Real> & parameter, Input<Real, Integer> const & input)
+    {
+      // Check for interior-point parameter update based on optimality error
+      while (this->mu > parameter.mu_min && this->kkt(3) <= max([this->mu;parameter.opt_err_tol-this->mu]))
+      {
+        // Restrict interior-point parameter increase
+        parameter.set_mu_max_exp(0.0);
+
+        // Update interior-point parameter
+        if (this->mu > parameter.mu_min)
+        {
+          // Decrease interior-point
+          this->mu = std::max(parameter.mu_min, std::min(parameter.mu_factor*this->mu, this->mu^parameter.mu_factor_exp));
+
+          // Evaluate penalty and interior-point parameter dependent quantities
+          this->eval_dependent(parameter, input);
+        }
+      }
+
+      // Check for penalty parameter update based on optimality error
+      if (this->kkt(2) <= parameter.opt_err_tol && this->v > parameter.opt_err_tol) || this->v > max([1;this->v_;parameter.infeas_max])
+      {
+        // Update penalty parameter
+        if (this->rho > parameter.rho_min)
+        {
+          // Decrease penalty parameter
+          this->rho = std::max(parameter.rho_min, parameter.rho_factor*this->rho);
+
+          // Evaluate penalty and interior-point parameter dependent quantities
+          this->eval_dependent(parameter, input);
+        }
+      }
+    }
+
+    // Update primal and dual variables
+    void update_point(Input<Real, Integer> const & input, Iterate<Real, Integer> const & direction,
+      Acceptance<Real> const & acceptance)
+    {
+      this->x  = this->x + acceptance.p * direction.x;
+      if (input.nE > 0) {
+        this->r1 = this->r1 + acceptance.p * direction.r1; // FIXME
+        this->r2 = this->r2 + acceptance.p * direction.r2; // FIXME
+      }
+      if (input.nI > 0) {
+        this->s1 = this->s1 + acceptance.p * direction.s1; // FIXME
+        this->s2 = this->s2 + acceptance.p * direction.s2; // FIXME
+      }
+      if (input.nE > 0) {
+        this->lE = this->lE + acceptance.d * direction.lE; // FIXME
+      }
+      if (input.nI > 0) {
+        this->lI = this->lI + acceptance.d * direction.lI; // FIXME
+      }
+    }
+
+      // Feasibility violation evaluator
+    static Real eval_violation(cE, cI)
+    {
+      // Initialize violation vector
+      vec = [];
+
+      // Update vector for constraint values
+      if (input.nE > 0) {vec = cE;}
+      if (input.nI > 0) {vec = [vec; std::max(cI, 0)];}
+
+      // Evaluate vector norm
+      return norm(vec, 1);
+    }
 
   }; // struct Iterate
 

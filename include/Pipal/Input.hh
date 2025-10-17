@@ -14,7 +14,7 @@
 #define INCLUDE_PIPAL_INPUT_HH
 
 // Pipal includes
-#include "Pipal.hh"
+#include "Pipal/Defines.hh"
 #include "Pipal/Problem.hh"
 #include "Pipal/Parameter.hh"
 

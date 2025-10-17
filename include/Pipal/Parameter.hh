@@ -14,7 +14,7 @@
 #define INCLUDE_PIPAL_PARAMETER_HH
 
 // Pipal includes
-#include "Pipal.hh"
+#include "Pipal/Defines.hh"
 
 // Standard libraries
 #include <type_traits>
