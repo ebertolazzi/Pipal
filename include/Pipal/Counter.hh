@@ -31,49 +31,38 @@ namespace Pipal
     static_assert(std::is_integral<Integer>::value,
       "Pipal::Counter: template argument 'Integer' must be an integer type.");
 
-    Integer f{0}; % Function evaluation counter
-    Integer g{0}; % Gradient evaluation counter
-    Integer H{0}; % Hessian evaluation counter
-    Integer k{0}; % Iteration counter
-    Integer M{0}; % Matrix factorization counter
+    Integer f{0}; // Function evaluation counter
+    Integer g{0}; // Gradient evaluation counter
+    Integer H{0}; // Hessian evaluation counter
+    Integer k{0}; // Iteration counter
+    Integer M{0}; // Matrix factorization counter
 
     /**
      * \brief Reset all internal counters to zero.
      */
     void reset()
     {
-      this->iterations           = 0;
-      this->function_evaluations = 0;
-      this->gradient_evaluations = 0;
-      this->hessian_evaluations  = 0;
-      this->jacobian_evaluations = 0;
-      this->linear_solves        = 0;
+      this->f = 0
+      this->g = 0
+      this->H = 0
+      this->k = 0
+      this->M = 0
     }
 
     // Matrix factorization counter incrementor
-    function incrementFactorizationCount(c)
-      c.M = c.M + 1;
-    end
+    void incrementFactorizationCount() {++this->M;}
 
     // Function evaluation counter incrementor
-    function incrementFunctionCount(c)
-      c.f = c.f + 1;
-    end
+    void incrementFunctionCount() {++this->f;}
 
     // Gradient evaluation counter incrementor
-    function incrementGradientCount(c)
-      c.g = c.g + 1;
-    end
+    void incrementGradientCount() {++this->g;}
 
     // Hessian evaluation counter incrementor
-    function incrementHessianCount(c)
-      c.H = c.H + 1;
-    end
+    void incrementHessianCount() {++this->H;}
 
     // Iteration counter incrementor
-    function incrementIterationCount(c)
-      c.k = c.k + 1;
-    end
+    void incrementIterationCount() {++this->k;}
 
   }; // struct Counter
 

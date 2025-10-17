@@ -92,6 +92,60 @@ namespace Pipal
    */
   using Integer = PIPAL_DEFAULT_INTEGER_TYPE;
 
+  /**
+   * \brief Select elements from a vector based on a boolean mask.
+   * \tparam Indices The type of the output indices.
+   * \tparam Mask The type of the boolean mask.
+   * \param[in] vector The input vector.
+   * \param[in] mask The boolean mask.
+   * \return The selected elements from the input vector.
+   */
+  template<typename Indices, typename Mask>
+  static Indices find(Mask const & mask)
+  {
+    Indices out(mask.count());
+    for (Integer i{0}, j{0}; i < mask.size(); ++i) {
+      if (mask[i]) {out[j++] = i;}
+    }
+    return out;
+  }
+
+  /**
+   * \brief Enumeration for matrix view types.
+   */
+  using MatrixView = enum class MatrixView : Integer {
+    FULL = 0, /*!< Full matrix view. */
+    TRIL = 1, /*!< Lower triangular matrix view. */
+    TRIU = 2  /*!< Upper triangular matrix view. */
+  };
+
+  /**
+   * \brief Count the number of non-zero elements in a matrix.
+   * \tparam Real The floating-point type.
+   * \tparam Matrix The matrix type.
+   * \tparam View The matrix view type (FULL, TRIL, TRIU).
+   * \param[in] mat The input matrix.
+   * \param[in] tol The tolerance for considering an element as non-zero.
+   * \return The number of non-zero elements in the matrix.
+   */
+  template<typename Real, typename Matrix, MatrixView View = MatrixView::FULL>
+  static Integer nnz(Matrix const & mat, Integer Real const tol = Eigen::NumTraits<Real>::epsilon())
+  {
+    Integer count{0};
+    const Integer rows{static_cast<Integer>(mat.rows())};
+    const Integer cols{static_cast<Integer>(mat.cols())};
+    for (Integer j{0}; j < cols; ++j) {
+      const Integer i_start{(View == MatrixView::TRIU) ? j : 0};
+      const Integer i_end{(View == MatrixView::TRIL) ? std::min(j + 1, rows) : rows};
+      for (Integer i{i_start}; i < i_end; ++i) {
+        if (std::abs(mat(i, j)) > tol) {++count;}
+      }
+    }
+    return count;
+
+  }
+
+
 } // namespace Pipal
 
 #endif // INCLUDE_PIPAL_DEFINES_HH

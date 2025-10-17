@@ -44,140 +44,124 @@ namespace Pipal
     using chrono::duration_cast;
     using chrono::seconds;
 
-    ofstream   m_out;      // Output stream
-    string     m_line_break;        // Line break string
-    string     m_quantities;        // Quantities header
-    string     m_footer;        // Footer line
-    time_point m_start; // Timer
+    ofstream   s; // Output stream
+    string     l; // Line break string
+    string     q; // Quantities header
+    string     n; // Footer line
+    time_point t; // Timer
 
   public:
     // Constructor
     Output(string const & id, string const & outfile)
     {
-      this->m_start = chrono::steady_clock::now();
-      this->m_out.open(outfile);
-      assert(this->m_out.ithis->m_out.open() && "PIPAL: Failed to open output file.");
+      this->t = chrono::steady_clock::now();
+      this->s.open(outfile);
+      assert(this->s.ithis->s.open() && "PIPAL: Failed to open output file.");
 
-      this->m_line_break = "======+=========================+====================================+=========================+===========================================================================+=======================";
-      this->m_quantities = "Iter. |  Objective     Infeas.  |  Pen. Par.   I.P. Par.  Opt. Error |    Merit     P.I.P. Err.|    Shift    ||P.Step||  ||D.Step||   Lin. Red.    Quad. Red.    Quality   | Pri. Step.  Dual Step.";
-      this->m_footer     = "-----------  ---------- | ----------  ----------  ----------  -----------  -----------  ----------- | ----------  ----------";
+      this->l = "======+=========================+====================================+=========================+===========================================================================+=======================";
+      this->q = "Iter. |  Objective     Infeas.  |  Pen. Par.   I.P. Par.  Opt. Error |    Merit     P.I.P. Err.|    Shift    ||P.Step||  ||D.Step||   Lin. Red.    Quad. Red.    Quality   | Pri. Step.  Dual Step.";
+      this->n = "-----------  ---------- | ----------  ----------  ----------  -----------  -----------  ----------- | ----------  ----------";
     }
 
     // Destructor closes stream
     ~Output() {this->terminate();}
 
-    // ------------------------------------------------------------------------
     // Header printing
-    // ------------------------------------------------------------------------
     template<typename Info, typename Z>
-    void printHeader(Info const & i, Z const & z)
+    void printHeader(Info const & i, Iterate<Real> const & z)
     {
-      this->m_out << "Problem name\n============\n  " << i.id << "\n\n";
-      this->m_out << "Problem size\n============\n";
-      this->m_out << "  Number of variables....................... : " << setw(8) << i.nV << "\n";
-      this->m_out << "  Number of equality constraints............ : " << setw(8) << i.nE << "\n";
-      this->m_out << "  Number of inequality constraints.......... : " << setw(8) << i.nI << "\n\n";
+      this->s << "Problem name\n============\n  " << i.id << "\n\n";
+      this->s << "Problem size\n============\n";
+      this->s << "  Number of variables....................... : " << setw(8) << i.nV << "\n";
+      this->s << "  Number of equality constraints............ : " << setw(8) << i.nE << "\n";
+      this->s << "  Number of inequality constraints.......... : " << setw(8) << i.nI << "\n\n";
 
-      this->m_out << "Problem sparsity\n================\n";
-      this->m_out << "  Nonzeros in Hessian of Lagrangian......... : " << setw(8) << z.Hnnz << "\n";
-      this->m_out << "  Nonzeros in equality constraint Jacobian.. : " << setw(8) << z.JEnnz << "\n";
-      this->m_out << "  Nonzeros in inequality constraint Jacobian : " << setw(8) << z.JInnz << "\n\n";
+      this->s << "Problem sparsity\n================\n";
+      this->s << "  Nonzeros in Hessian of Lagrangian......... : " << setw(8) << z.Hnnz << "\n";
+      this->s << "  Nonzeros in equality constraint Jacobian.. : " << setw(8) << z.JEnnz << "\n";
+      this->s << "  Nonzeros in inequality constraint Jacobian : " << setw(8) << z.JInnz << "\n\n";
     }
 
-    // ------------------------------------------------------------------------
     // Break printing (every 20 iterations)
-    // ------------------------------------------------------------------------
-    void print_break(Counter<Real> const & c)
+    void printBreak(Counter const & c)
     {
-      if (c.k % 20 == 0)
-        this->m_out << this->m_line_break << "\n" << this->m_quantities << "\n" << this->m_line_break << "\n";
+      if (c.k % 20 == 0) {
+        this->s << this->l << "\n" << this->q << "\n" << this->l << "\n";
+      }
     }
 
-    // ------------------------------------------------------------------------
     // Direction info
-    // ------------------------------------------------------------------------
-    template<typename Z, typename D>
-    void print_direction(Z const & z, D const & d)
+    void printDirection(Iterate<Real> const & z, Direction<Real> const & d)
     {
-      this->m_out << showpos << scientific << setprecision(4)
+      this->s << showpos << scientific << setprecision(4)
         << z.phi << "  " << z.kkt[2] << " | "
         << z.shift << "  " << d.x_norm << "  " << d.this->m_line_breaknorm << "  "
         << d.ltred << "  " << d.qtred << "  " << d.m << " | ";
     }
 
-    // ------------------------------------------------------------------------
     // Iterate info
-    // ------------------------------------------------------------------------
-    template<typename Counters, typename Z>
-    void print_iterate(Counters const & c, Z const & z)
+    void printIterate(Counter const & c, Iterate<Real> const & z)
     {
-      this->m_out << setw(5) << c.k << " | "
+      this->s << setw(5) << c.k << " | "
         << showpos << scientific << setprecision(4)
         << z.f << "  " << z.v << " | "
         << z.rho << "  " << z.mu << "  " << z.kkt[1] << " | ";
     }
 
-    // ------------------------------------------------------------------------
     // Acceptance info
-    // ------------------------------------------------------------------------
-    template<typename A>
-    void print_acceptance(A const & a)
+    void printAcceptance(Acceptance<Real> const & a)
     {
-      this->m_out << scientific << setprecision(4)
+      this->s << scientific << setprecision(4)
         << a.p << "  " << a.d;
-      if (a.s == 1) this->m_out << " SOC";
-      this->m_out << "\n";
+      if (a.s == 1) this->s << " SOC";
+      this->s << "\n";
     }
 
-    // ------------------------------------------------------------------------
     // Footer printing
-    // ------------------------------------------------------------------------
-    template<typename P, typename I, typename C, typename Z>
-    void print_footer(P const & p, I const & i, C const & c, Z const & z)
+    void printFooter(Parameter<Real> const & p, Input<Real> const & i, Counter const & c, Iterate<Real> const & z)
     {
-      print_iterate(c, z);
-      this->m_out << this->m_footer << "\n" << this->m_line_break << "\n\n";
+      this->printIterate(c, z);
+      this->s << this->n << "\n" << this->l << "\n\n";
 
-      int b = z.check_termination(p, i, c);
+      int b = z.checkTermination(p, i, c);
 
-      this->m_out << "Final result\n============\n";
+      this->s << "Final result\n============\n";
       switch (b) {
-        case 0: this->m_out << "  EXIT: No termination message set\n"; break;
-        case 1: this->m_out << "  EXIT: Optimal solution found\n"; break;
-        case 2: this->m_out << "  EXIT: Infeasible stationary point found\n"; break;
-        case 3: this->m_out << "  EXIT: Iteration limit reached\n"; break;
-        case 4: this->m_out << "  EXIT: Invalid bounds\n"; break;
-        case 5: this->m_out << "  EXIT: Function evaluation error\n"; break;
-        default: this->m_out << "  EXIT: Unknown termination\n"; break;
+        case 0: this->s << "  EXIT: No termination message set\n"; break;
+        case 1: this->s << "  EXIT: Optimal solution found\n"; break;
+        case 2: this->s << "  EXIT: Infeasible stationary point found\n"; break;
+        case 3: this->s << "  EXIT: Iteration limit reached\n"; break;
+        case 4: this->s << "  EXIT: Invalid bounds\n"; break;
+        case 5: this->s << "  EXIT: Function evaluation error\n"; break;
+        default: this->s << "  EXIT: Unknown termination\n"; break;
       }
 
-      this->m_out << "\nFinal values\n============\n";
-      this->m_out << "  Objective function........................ : " << z.fu << "\n";
-      this->m_out << "  Feasibility violation..................... : " << z.vu << "\n";
-      this->m_out << "  Optimality error (feasibility)............ : " << z.kkt[0] << "\n";
-      this->m_out << "  Optimality error (penalty)................ : " << z.kkt[1] << "\n";
-      this->m_out << "  Optimality error (penalty-interior-point). : " << z.kkt[2] << "\n";
-      this->m_out << "  Penalty parameter......................... : " << z.rho << "\n";
-      this->m_out << "  Interior-point parameter.................. : " << z.mu << "\n\n";
+      this->s << "\nFinal values\n============\n";
+      this->s << "  Objective function........................ : " << z.fu << "\n";
+      this->s << "  Feasibility violation..................... : " << z.vu << "\n";
+      this->s << "  Optimality error (feasibility)............ : " << z.kkt[0] << "\n";
+      this->s << "  Optimality error (penalty)................ : " << z.kkt[1] << "\n";
+      this->s << "  Optimality error (penalty-interior-point). : " << z.kkt[2] << "\n";
+      this->s << "  Penalty parameter......................... : " << z.rho << "\n";
+      this->s << "  Interior-point parameter.................. : " << z.mu << "\n\n";
 
-      this->m_out << "Final counters\n==============\n";
-      this->m_out << "  Iterations................................ : " << c.k << "\n";
-      this->m_out << "  Function evaluations...................... : " << c.f << "\n";
-      this->m_out << "  Gradient evaluations...................... : " << c.g << "\n";
-      this->m_out << "  Hessian evaluations....................... : " << c.H << "\n";
-      this->m_out << "  Matrix factorizations..................... : " << c.M << "\n";
+      this->s << "Final counters\n==============\n";
+      this->s << "  Iterations................................ : " << c.k << "\n";
+      this->s << "  Function evaluations...................... : " << c.f << "\n";
+      this->s << "  Gradient evaluations...................... : " << c.g << "\n";
+      this->s << "  Hessian evaluations....................... : " << c.H << "\n";
+      this->s << "  Matrix factorizations..................... : " << c.M << "\n";
 
-      Real seconds{duration_cast<seconds>(steady_clock::now() - this->m_start).count()};
-      this->m_out << "  CPU seconds............................... : " << seconds << "\n";
+      Real seconds{duration_cast<seconds>(steady_clock::now() - this->t).count()};
+      this->s << "  CPU seconds............................... : " << seconds << "\n";
     }
 
-    // ------------------------------------------------------------------------
     // Terminate output (close stream)
-    // ------------------------------------------------------------------------
     void terminate()
     {
-      if (this->m_out.ithis->m_outopen()) this->m_out.close();
+      if (this->s.ithis->m_outopen()) this->s.close();
     }
-  };
+
+  }; // class Output
 
 } // namespace Pipal

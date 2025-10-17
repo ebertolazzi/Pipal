@@ -22,348 +22,360 @@ namespace Pipal
   template<typename Real>
   struct Direction
   {
+    using Vector = Eigen::Vector<Real, Eigen::Dynamic>;
+    using Matrix = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
+    using Array  = Eigen::Array<Real, Eigen::Dynamic, 1>;
 
-    Vector x;       /*!< Primal direction. */
-    Real   x_norm;  /*!< Primal direction norm value. */
-    Real   x_norm_; /*!< Primal direction norm last value. */
-    Vector r1;      /*!< Equality constraint slack direction. */
-    Vector r2;      /*!< Equality constraint slack direction. */
-    Vector lE;      /*!< Equality constraint multiplier direction. */
-    Vector s1;      /*!< Inequality constraint slack direction. */
-    Vector s2;      /*!< Inequality constraint slack direction. */
-    Vector lI;      /*!< Inequality constraint multiplier direction. */
-    Real   l_norm;  /*!< Constraint multiplier direction norm. */
-    Real   lred0;   /*!< Penalty-interior-point linear model value for zero penalty parameter. */
-    Real   ltred0;  /*!< Penalty-interior-point linear model reduction value for zero penalty parameter. */
-    Real   ltred;   /*!< Penalty-interior-point linear model reduction value. */
-    Real   qtred;   /*!< Penalty-interior-point quadratic model reduction value. */
-    Real   m;       /*!< Quality function value. */
+    static constexpr Real INF{std::numeric_limits<Real>::infinity()}; /*!< Infinity value. */
 
-  // Constructor
-  Direction() {
-    // Initialize last direction norm
-    this->x_norm_ = INF;
-  }
+    Vector x;       // Primal direction
+    Real   x_norm;  // Primal direction norm value
+    Real   x_norm_; // Primal direction norm last value
+    Vector r1;      // Equality constraint slack direction
+    Vector r2;      // Equality constraint slack direction
+    Vector lE;      // Equality constraint multiplier direction
+    Vector s1;      // Inequality constraint slack direction
+    Vector s2;      // Inequality constraint slack direction
+    Vector lI;      // Inequality constraint multiplier direction
+    Real   l_norm;  // Constraint multiplier direction norm
+    Real   lred0;   // Penalty-interior-point linear model value for zero penalty parameter
+    Real   ltred0;  // Penalty-interior-point linear model reduction value for zero penalty parameter
+    Real   ltred;   // Penalty-interior-point linear model reduction value
+    Real   qtred;   // Penalty-interior-point quadratic model reduction value
+    Real   m;       // Quality function value
 
-  // Evaluate linear combination of directions
-  void evalLinearCombination(Input<Real> const & input, Direction<Real> const & d1, Direction<Real> const & d2,
-    Direction<Real> const & d3, Vector const & a)
-  {
-    // Evaluate linear combinations
-    this->x = a(1)*d1.x + a(2)*d2.x + a(3)*d3.x;
-    if (input.nE > 0) {
-      this->r1 = a(1)*d1.r1 + a(2)*d2.r1 + a(3)*d3.r1;
-      this->r2 = a(1)*d1.r2 + a(2)*d2.r2 + a(3)*d3.r2;
-    }
-    if (input.nI > 0) {
-      this->s1 = a(1)*d1.s1 + a(2)*d2.s1 + a(3)*d3.s1;
-      this->s2 = a(1)*d1.s2 + a(2)*d2.s2 + a(3)*d3.s2;
-    }
-    if (input.nE > 0) {
-      this->lE = a(1)*d1.lE + a(2)*d2.lE + a(3)*d3.lE;
-    }
-    if (input.nI > 0) {
-      this->lI = a(1)*d1.lI + a(2)*d2.lI + a(3)*d3.lI;
+    // Constructor
+    Direction() {
+      // Initialize last direction norm
+      this->x_norm_ = INF;
     }
 
-    // Evaluate primal direction norm
-    this->x_norm = this->x.norm();
-
-    // Evaluate dual direction norm
-    this->l_norm = norm([this->lE; this->lI]);
-  }
-
-  // Evaluate model and model reductions
-  void eval_models(i,z)
-  {
-    // Evaluate reduction in linear model of penalty-interior-point objective for zero penalty parameter
-    this->lred0 = 0;
-    if (input.nE > 0) {
-      this->lred0 = this->lred0 - sum([1-z.mu./z.r1; 1-z.mu./z.r2].*[this->r1; this->r2]);
-    }
-    if (input.nI > 0) {
-      this->lred0 = this->lred0 - sum([0-z.mu./z.s1; 1-z.mu./z.s2].*[this->s1; this->s2]);
-    }
-
-    // Evaluate remaining quantities only for nonzero penalty parameter
-    if (z.rho > 0)
+    // Evaluate linear combination of directions
+    void evalLinearCombination(Input<Real> const & i, Direction<Real> const & d1, Direction<Real> const & d2,
+      Direction<Real> const & d3, Real const a0, Real const a1, Real const a2)
     {
-      // Evaluate reduction in linear model of merit function for zero penalty parameter
-      this->ltred0 = 0;
-      if input.nE > 0, this->ltred0 = this->ltred0 - 0.5*full(sum(((1-z.mu./z.r1).*(-1+z.cE./(sqrt(z.cE.^2 +   z.mu^2)))+(1-z.mu./z.r2).*(1+z.cE./(sqrt(z.cE.^2 +   z.mu^2)))).*(z.JE*this->x))); end;
-      if input.nI > 0, this->ltred0 = this->ltred0 - 0.5*full(sum(((0-z.mu./z.s1).*(-1+z.cI./(sqrt(z.cI.^2 + 4*z.mu^2)))+(1-z.mu./z.s2).*(1+z.cI./(sqrt(z.cI.^2 + 4*z.mu^2)))).*(z.JI*this->x))); end;
-
-      // Evaluate reduction in linear model of merit function
-      this->ltred = -z.rho*z.g.transpose() * this->x + this->ltred0;
-
-      // Evaluate reduction in quadratic model of merit function
-      this->qtred = this->ltred - 0.5*this->x.transpose()*z.H*this->x;
-      if (input.nE > 0) {Jd = z.JE*this->x; Dinv = z.r1./(1+z.lE)+z.r2./(1-z.lE); this->qtred = this->qtred - 0.5*Jthis->transpose()*(Jthis->/Dinv);}
-      if (input.nI > 0) {Jd = z.JI*this->x; Dinv = z.s1./(0+z.lI)+z.s2./(1-z.lI); this->qtred = this->qtred - 0.5*Jthis->transpose()*(Jthis->/Dinv);}
-
-      // Initialize quality function vector
-      vec.setZero(input.nV+2*input.nE+2*input.nI);
-
-      // Set gradient of objective
-      vec(1:input.nV) = z.rho*z.g;
-
-      // Set gradient of Lagrangian for constraints
-      if (input.nE > 0) {vec(Eigen::seq(1, input.nV)) += ((z.lE+this->lE).transpose() * z.JE).transpose();}
-      if (input.nI > 0) {vec(Eigen::seq(1, input.nV)) += ((z.lI+this->lI).transpose() * z.JI).transpose();}
-
-      // Set complementarity for constraint slacks
-      if (input.nE > 0) {vec(1+input.nV       :input.nV+2*input.nE       ) = [(z.r1+this->r1).*(1 + (z.lE+this->lE)); (z.r2+this->r2).*(1 - (z.lE+this->lE))];}
-      if (input.nI > 0) {vec(1+input.nV+2*input.nE:input.nV+2*input.nE+2*input.nI) = [(z.s1+this->s1).*(0 + (z.lI+this->lI)); (z.s2+this->s2).*(1 - (z.lI+this->lI))];}
-
-      // Evaluate quality function
-      this->m = norm(vec, inf);
-    }
-  }
-
-  // Evaluate Newton step
-  void eval_newton_step(i,z)
-  {
-    // Evaluate direction
-    //dir = z.AS(:,z.AP)*(z.AL'\(z.AD\(z.AL\(z.AS(z.AP,:)*(-z.b)))));
-
-    // Parse direction
-    Integer idx_ini{0}, idx_end{input.nV-1};
-    this->x = dir(Eigen::seq(0,input.nV-1));
-    idx_ini += input.nV; idx_end += input.nE;
-    if (input.nE > 0) {
-      this->r1 = dir(Eigen::seq(idx_ini, idx_end));
-      this->r2 = dir(Eigen::seq(idx_ini+input.nE, idx_end+input.nE));
-    }
-    idx_ini += 2*input.nE; idx_end += 2*input.nE+input.nI;
-    if (input.nI > 0) {
-      this->s1 = dir(Eigen::seq(idx_ini:input.nV+input.nE+input.nE+input.nI);
-      this->s2 = dir(Eigen::seq(idx_ini+input.nI:input.nV+input.nE+input.nE+input.nI+input.nI);
-    }
-    if (input.nE > 0) {
-      this->lE = dir(1+input.nV+input.nE+input.nE+input.nI+input.nI:input.nV+input.nE+input.nE+input.nI+input.nI+input.nE);
-    }
-    if (input.nI > 0) {
-      this->lI = dir(1+input.nV+input.nE+input.nE+input.nI+input.nI+input.nE:input.nV+input.nE+input.nE+input.nI+input.nI+input.nE+input.nI);
-    }
-
-    // Evaluate primal direction norm
-    this->x_norm = this->x.norm();
-
-    // Evaluate dual direction norm
-    this->l_norm = norm([this->lE;this->lI]);
-  }
-
-  // Evaluate search direction quantities
-  void eval_step(p,i,c,z,a)
-  {
-    // Reset maximum exponent for interior-point parameter increases
-    p.reset_muMaxExp;
-
-    // Update penalty-interior-point parameters based on KKT errors
-    z.update_parameters(p,i);
-
-    // Evaluate matrices
-    z.eval_matrices(p,i,c);
-
-    // Set last penalty parameter
-    z.set_rho_last(z.rho);
-
-    // Check for aggressive algorithm
-    if (p.algorithm == 1)
-    {
-      // Check KKT memory for potential mu increase limit
-      if (z.kkt(2) > max(z.kkt_)) {p.mu_max_exp(0.0);}
-
-      // Store current penalty and interior-point parameters
-      rho_curr = z.rho; mu_curr = z.mu;
-
-      // Evaluate trial steps
-      this->eval_trial_steps(i,z,d1,d2,d3);
-
-      // Set trial interior-point parameter values
-      Mu = max(p.mu_min,min(p.mu_factor.^([p.mu_trials-1:-1:0]-p.mu_max_exp)*mu_curr,p.mu_max));
-
-      // Initialize feasibility direction data
-      lred0_0_mu = zeros(1,p.mu_trials);
-
-      // Loop through interior-point parameter values
-      for (j = 1:p.mu_trials)
-      {
-        // Set penalty and interior-point parameters
-        z.set_rho(0.0); z.set_mu(Mu(j));
-
-        // Evaluate direction
-        this->evalLinearCombination(i,d1,d2,d3,[(z.rho/rho_curr+z.mu/mu_curr-1),(1-z.mu/mu_curr),(1-z.rho/rho_curr)]);
-
-        // Cut length
-        this->x = min(this->x_norm_/max(this->x_norm,1),1)*this->x;
-
-        // Run fraction-to-boundary
-        a.fraction_to_boundary(p,i,z,d);
-
-        // Cut length
-        this->eval_trials_step_cut(i,a);
-
-        // Evaluate models
-        this->eval_models(i,z);
-
-        // Set feasibility direction data
-        lred0_0_mu(j) = this->lred0;
+      // Evaluate linear combinations
+      d.x = a0*d1.x  + a1*d2.x  + a2*d3.x;
+      if (i.nE > 0) {
+        d.r1 = a0*d1.r1 + a1*d2.r1 + a2*d3.r1;
+        d.r2 = a0*d1.r2 + a1*d2.r2 + a2*d3.r2;
+      }
+      if (i.nI > 0) {
+        d.s1 = a0*d1.s1 + a1*d2.s1 + a2*d3.s1;
+        d.s2 = a0*d1.s2 + a1*d2.s2 + a2*d3.s2;
+      }
+      if (i.nE > 0) {
+        d.lE = a0*d1.lE + a1*d2.lE + a2*d3.lE;
+      }
+      if (i.nI > 0) {
+        d.lI = a0*d1.lI + a1*d2.lI + a2*d3.lI;
       }
 
-      // Initialize updating data
-      ltred0_rho_mu.setZero(p.mu_trials);
-      qtred_rho_mu.setZero(p.mu_trials);
-      m_rho_mu.setZero(p.mu_trials);
+      // Evaluate primal direction norm
+      d.x_norm = d.x.norm();
 
-      // Initialize check
-      Integer check{0};
+      // Evaluate dual direction norm
+      d.l_norm = Vector(d.lE, d.lI).norm(); // OPTIMIZE
+    }
 
-      // Loop through penalty parameter values
-      for (k = 1:p.rho_trials)
+    // Evaluate model and model reductions
+    void evalModels(Input<Real> const & i, Iterate<Real> const & z)
+    {
+      // Evaluate reduction in linear model of penalty-interior-point objective for zero penalty parameter
+      d.lred0 = 0;
+      if (i.nE > 0) {d.lred0 = d.lred0 - (Vector(1-z.mu/z.r1, 1-z.mu/z.r2).array()*Vector(d.r1, d.r2).array()).sum();}
+      if (i.nI > 0) {d.lred0 = d.lred0 - (Vector(0-z.mu/z.s1, 1-z.mu/z.s2).array()*Vector(d.s1, d.s2).array()).sum();}
+
+      // Evaluate remaining quantities only for nonzero penalty parameter
+      if (z.rho > 0)
       {
-        // Set penalty parameter
-        z.set_rho(max(p.rho_min,(p.rho_factor^(k-1))*rho_curr));
+        // Evaluate reduction in linear model of merit function for zero penalty parameter
+        d.ltred0 = 0;
+        if (i.nE > 0) {
+          d.ltred0 = d.ltred0 - 0.5*full(sum(((1-z.mu/z.r1).*(-1+z.cE./(std::sqrt(z.cE.array().square().matrix() + z.mu*z.mu)))+(1-z.mu./z.r2).*(1+z.cE./(std::sqrt(z.cE.array().square().matrix() + z.mu*z.mu)))).*(z.JE*d.x)));
+        }
+        if (i.nI > 0) {
+          d.ltred0 = d.ltred0 - 0.5*full(sum(((0-z.mu/z.s1).*(-1+z.cI./(std::sqrt(z.cI.array().square().matrix() + 4*z.mu*z.mu)))+(1-z.mu./z.s2).*(1+z.cI./(std::sqrt(z.cI.array().square().matrix() + 4*z.mu*z.mu)))).*(z.JI*d.x)));
+        }
 
-        // Set last penalty parameter
-        if (rho_curr > z.kkt(1)*z.kkt(1)) {z.set_rho_last(z.rho);}
+        // Evaluate reduction in linear model of merit function
+        d.ltred = -z.rho*z.g.transpose()*d.x + d.ltred0;
+
+        // Evaluate reduction in quadratic model of merit function
+        d.qtred = d.ltred - 0.5*d.x.transpose()*z.H*d.x;
+        if (i.nE > 0) {Jd = z.JE*d.x; Dinv = z.r1./(1+z.lE)+z.r2./(1-z.lE); d.qtred = d.qtred - 0.5*Jd.transpose()*(Jd./Dinv);}
+        if (i.nI > 0) {Jd = z.JI*d.x; Dinv = z.s1./(0+z.lI)+z.s2./(1-z.lI); d.qtred = d.qtred - 0.5*Jd.transpose()*(Jd./Dinv);}
+
+        // Initialize quality function vector
+        vec.setZero(i.nV+2*i.nE+2*i.nI);
+
+        // Set gradient of objective
+        vec(Eigen::seq(0, i.nV-1)) = z.rho*z.g;
+
+        // Set gradient of Lagrangian for constraints
+        if (i.nE > 0) {vec(Eigen::seq(0, i.nV-1)) = vec(Eigen::seq(0, i.nV-1)) + ((z.lE+d.lE).transpose()*z.JE).transpose();}
+        if (i.nI > 0) {vec(Eigen::seq(0, i.nV-1)) = vec(Eigen::seq(0, i.nV-1)) + ((z.lI+d.lI).transpose()*z.JI).transpose();}
+
+        // Set complementarity for constraint slacks
+        if (i.nE > 0) {vec(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
+          ((z.r1+d.r1).array() * (1 + (z.lE+d.lE)).array()).matrix(),
+          ((z.r2+d.r2).array() * (1 - (z.lE+d.lE)).array()).matrix();
+        }
+        if (i.nI > 0) {vec(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
+          ((z.s1+d.s1).array() * (0 + (z.lI+d.lI)).array()).matrix(),
+          ((z.s2+d.s2).array() * (1 - (z.lI+d.lI)).array()).matrix();
+        }
+
+        // Evaluate quality function
+        d.m = vec.array().abs().maxCoeff();
+      }
+    }
+
+    // Evaluate Newton step
+    void evalNewtonStep(Input<Real> const & i, Iterate<Real> const & z)
+    {
+      // Evaluate direction
+      // dir = z.AS(:,z.AP)*(z.AL'\(z.AD\(z.AL\(z.AS(z.AP,:)*(-z.b))))); // FIXME
+
+      // Parse direction
+      d.x = dir(Eigen::seq(0, i.nV-1));
+      if (i.nE > 0) {
+        d.r1 = dir(Eigen::seq(i.nV, i.nV+i.nE-1));
+        d.r2 = dir(Eigen::seq(i.nV+i.nE, i.nV+i.nE+i.nE-1));
+      }
+      if (i.nI > 0) {
+        d.s1 = dir(Eigen::seq(i.nV+i.nE+i.nE, i.nV+i.nE+i.nE+i.nI-1));
+        d.s2 = dir(Eigen::seq(i.nV+i.nE+i.nE+i.nI, i.nV+i.nE+i.nE+i.nI+i.nI-1));
+      }
+      if (i.nE > 0) {
+        d.lE = dir(Eigen::seq(i.nV+i.nE+i.nE+i.nI+i.nI, i.nV+i.nE+i.nE+i.nI+i.nI+i.nE-1));
+      }
+      if (i.nI > 0) {
+        d.lI = dir(Eigen::seq(i.nV+i.nE+i.nE+i.nI+i.nI+i.nE, i.nV+i.nE+i.nE+i.nI+i.nI+i.nE+i.nI-1));
+      }
+
+      // Evaluate primal direction norm
+      d.x_norm = d.x.norm();
+
+      // Evaluate dual direction norm
+      d.l_norm = Vector(d.lE, d.lI).norm(); // OPTIMIZE
+    }
+
+    // Evaluate search direction quantities
+    void evalStep(Parameter<Real> const & p, Input<Real> const & i, Counter const & c,
+      Iterate<Real> const & z, Acceptance<Real> const & a)
+    {
+      // Reset maximum exponent for interior-point parameter increases
+      p.resetMuMaxExp();
+
+      // Update penalty-interior-point parameters based on KKT errors
+      z.updateParameters(p, i);
+
+      // Evaluate matrices
+      z.evalMatrices(p, i, c);
+
+      // Set last penalty parameter
+      z.setRhoLast(z.rho);
+
+      // Check for aggressive algorithm
+      if (p.algorithm == 1)
+      {
+        // Check KKT memory for potential mu increase limit
+        if (z.kkt(1) > std::max(z.kkt_)) {p.setMuMaxExpZero();}
+
+        // Store current penalty and interior-point parameters
+        rho_curr = z.rho; mu_curr = z.mu;
+
+        // Evaluate trial steps
+        d.evalTrialSteps(i, z, d1, d2, d3);
+
+        // Set trial interior-point parameter values
+        Eigen::ArrayXd exponents(p.mu_trials);
+        for (Integer i{0}; i < p.mu_trials; ++i) {exponents[i] = (p.mu_trials - 1 - i) - p.mu_max_exp;}
+
+        Array Mu(mu_curr * exponents.unaryExpr([p.mu_factor](Real e){return std::pow(p.mu_factor, e);}));
+        Mu = Mu.min(p.mu_max).max(p.mu_min);
+
+        // Initialize feasibility direction data
+        lred0_0_mu.setZero(p.mu_trials);
 
         // Loop through interior-point parameter values
-        for (j = 1:p.mu_trials)
+        for (Integer j{0}, j < p.mu_trials, ++j)
         {
-          // Set interior-point parameter
-          z.set_mu(Mu(j));
+          // Set penalty and interior-point parameters
+          z.setRho(0); z.setMu(Mu(j));
 
           // Evaluate direction
-          this->evalLinearCombination(i,d1,d2,d3,[(z.rho/rho_curr+z.mu/mu_curr-1),(1-z.mu/mu_curr),(1-z.rho/rho_curr)]);
+          d.evalLinearCombination(i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1), (1-z.mu/mu_curr), (1-z.rho/rho_curr));
+
+          // Cut length
+          d.x = std::min(d.x_norm_/std::max(d.x_norm, 1), 1)*d.x;
 
           // Run fraction-to-boundary
-          a.fraction_to_boundary(p,i,z,d);
+          a.fractionToBoundary(p, i, z, d);
 
-          // Cut steps
-          this->eval_trials_step_cut(i,a);
+          // Cut length
+          d.evalTrialStepCut(i, a);
 
           // Evaluate models
-          this->eval_models(i,z);
+          d.evalModels(i, z);
 
-          // Set updating data
-          ltred0_rho_mu(j) = this->ltred0;
-          qtred_rho_mu(j)  = this->qtred;
-          m_rho_mu(j)      = this->m;
-
-          // Check updating conditions for infeasible points
-          if (z.v > p.opt_err_tol && (ltred0_rho_mu(j) < p.update_con_1*lred0_0_mu(j) ||
-              qtred_rho_mu(j) < p.update_con_2*lred0_0_mu(j) || z.rho > z.kkt(1)^2)) {m_rho_mu(j) = INF;};
-
-          // Check updating conditions for feasible points
-          if (z.v <= p.opt_err_tol && qtred_rho_mu(j) < 0) {m_rho_mu(j) = INF;}
-
+          // Set feasibility direction data
+          lred0_0_mu(j) = d.lred0;
         }
 
-        // Find minimum m for current rho
-        m_min = min(m_rho_mu);
+        // Initialize updating data
+        ltred0_rho_mu.setZero(p.mu_trials);
+        qtred_rho_mu.setZero(p.mu_trials);
+        m_rho_mu.setZero(p.mu_trials);
 
-        // Check for finite minimum
-        if (m_min < inf)
+        // Initialize check
+        check = 0;
+
+        // Loop through penalty parameter values
+        for (Integer k{0}, k < p.rho_trials, ++k)
         {
-          // Loop through mu values
-          for (j = 1:p.mu_trials)
-          {
-            // Set mu
-            mu = Mu(j);
+          // Set penalty parameter
+          z.setRho(std::max(p.rho_min, std::pow(p.rho_factor, k-1)*rho_curr));
 
-            // Check condition
-            if (m_rho_mu(j) <= p.update_con_3*m_min) {z.set_mu(mu);}
+          // Set last penalty parameter
+          if (rho_curr > z.kkt(0)*z.kkt(0)) {z.setRhoLast(z.rho);}
+
+          // Loop through interior-point parameter values
+          for (Integer j{0}, j < p.mu_trials, ++j)
+          {
+            // Set interior-point parameter
+            z.setMu(Mu(j));
+
+            // Evaluate direction
+            d.evalLinearCombination(i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1), (1-z.mu/mu_curr), (1-z.rho/rho_curr));
+
+            // Run fraction-to-boundary
+            a.fractionToBoundary(p, i, z, d);
+
+            // Cut steps
+            d.evalTrialStepCut(i, a);
+
+            // Evaluate models
+            d.evalModels(i, z);
+
+            // Set updating data
+            ltred0_rho_mu(j) = d.ltred0;
+            qtred_rho_mu(j)  = d.qtred;
+            m_rho_mu(j)      = d.m;
+
+            // Check updating conditions for infeasible points
+            if (z.v > p.opt_err_tol && (ltred0_rho_mu(j) < p.update_con_1*lred0_0_mu(j) || qtred_rho_mu(j) < p.update_con_2*lred0_0_mu(j) || z.rho > z.kkt(0)*z.kkt(0))) {m_rho_mu(j) = INF;}
+
+            // Check updating conditions for feasible points
+            if (z.v <= p.opt_err_tol && qtred_rho_mu(j) < 0) {m_rho_mu(j) = INF;}
+
           }
 
-          // Set condition check
-          check = 1;
+          // Find minimum m for current rho
+          m_min = std::min(m_rho_mu);
 
-          // Break loop
-          break;
+          // Check for finite minimum
+          if (m_min < INF)
+          {
+            // Loop through mu values
+            for (Integer j{0}, j < p.mu_trials, ++j)
+            {
+              // Set mu
+              mu = Mu(j);
+
+              // Check condition
+              if (m_rho_mu(j) <= p.update_con_3*m_min) {z.setMu(mu);}
+            }
+
+            // Set condition check
+            check = 1;
+
+            // Break loop
+            break;
+          }
         }
-      }
 
-      // Check conditions
-      if (check == 0) {z.set_rho(rho_curr); z.set_mu(mu_curr);}
+        // Check conditions
+        if (check == 0) {z.setRho(rho_curr); z.setMu(mu_curr);}
 
-      // Evaluate merit
-      z.evalMerit(i);
+        // Evaluate merit
+        z.evalMerit(i);
       }
 
       // Evaluate primal-dual right-hand side vector
-      z.eval_newton_rhs(i);
+      z.evalNewtonRhs(i);
 
       // Evaluate search direction
-      this->eval_newton_step(i,z);
+      d.evalNewtonStep(i, z);
 
       // Evaluate models
-      this->eval_models(i,z);
+      d.evalModels(i, z);
 
       // Store last direction norm
-      this->x_norm_ = this->x_norm;
+      d.x_norm_ = d.x_norm;
     }
 
     // Evaluate and store trial step
-    void eval_trial_step(i,d)
+    void evalTrialStep(Input<Real> const & i, Direction<Real> const & v)
     {
       // Set direction components
-      d.x = this->x;
-      if (i.nE > 0) {d.r1 = this->r1; d.r2 = this->r2;}
-      if (i.nI > 0) {d.s1 = this->s1; d.s2 = this->s2;}
-      if (i.nE > 0) {d.lE = this->lE;}
-      if (i.nI > 0) {d.lI = this->lI;}
+      v.x = d.x;
+      if (i.nE > 0) {v.r1 = d.r1; v.r2 = d.r2;}
+      if (i.nI > 0) {v.s1 = d.s1; v.s2 = d.s2;}
+      if (i.nE > 0) {v.lE = d.lE;}
+      if (i.nI > 0) {v.lI = d.lI;}
     }
 
     // Evaluate trial step cut by fraction-to-boundary rule
-    void eval_trial_step_cut(i,a)
+    function evalTrialStepCut(Input<Real> const & i, Acceptance<Real> const & a)
     {
       // Set direction components
-      this->x = a.p*this->x;
-      if (i.nE > 0) {this->r1 = a.p*this->r1; this->r2 = a.p*this->r2;}
-      if (i.nI > 0) {this->s1 = a.p*this->s1; this->s2 = a.p*this->s2;}
-      if (i.nE > 0) {this->lE = a.d*this->lE;}
-      if (i.nI > 0) {this->lI = a.d*this->lI;}
+      d.x = a.p*d.x ;
+      if (i.nE > 0) {d.r1 = a.p*d.r1; d.r2 = a.p*d.r2;}
+      if (i.nI > 0) {d.s1 = a.p*d.s1; d.s2 = a.p*d.s2;}
+      if (i.nE > 0) {d.lE = a.d*d.lE;}
+      if (i.nI > 0) {d.lI = a.d*d.lI;}
     }
 
     // Evaluate and store directions for parameter combinations
-    void eval_trial_steps(d,i,z,d1,d2,d3)
-
+    void evalTrialSteps(i, z, d1, d2, d3)
+    {
       // Store current penalty and interior-point parameters
       rho_curr = z.rho;
       mu_curr  = z.mu;
 
       // Evaluate direction for current penalty and interior-point parameters
-      z.set_rho(rho_curr);
-      z.set_mu(mu_curr);
-      z.eval_newton_rhs(i);
-      this->eval_newton_step(i, z);
-      this->eval_trials_step(i, d1);
+      z.setRho(rho_curr);
+      z.setMu(mu_curr);
+      z.evalNewtonRhs(i);
+      d.evalNewtonStep(i, z);
+      d.evalTrialStep(i, d1);
 
       // Evaluate direction for zero interior-point parameter
-      z.set_rho(rho_curr);
-      z.set_mu(0.0);
-      z.eval_newton_rhs(i);
-      this->eval_newton_step(i, z);
-      this->eval_trials_step(i, d2);
+      z.setRho(rho_curr);
+      z.setMu(0);
+      z.evalNewtonRhs(i);
+      d.evalNewtonStep(i, z);
+      d.evalTrialStep(i, d2);
 
       // Evaluate direction for zero penalty parameter
-      z.set_rho(0.0);
-      z.set_mu(mu_curr);
-      z.eval_newton_rhs(i);
-      this->eval_newton_step(i, z);
-      this->eval_trials_step(i, d3);
+      z.setRho(0);
+      z.setMu(mu_curr);
+      z.evalNewtonRhs(i);
+      d.evalNewtonStep(i, z);
+      d.evalTrialStep(i, d3);
     }
 
     // Set direction
-    void setDirection(d,i,dx,dr1,dr2,ds1,ds2,dlE,dlI,dx_norm,dl_norm)
+    void setDirection(i,dx,dr1,dr2,ds1,ds2,dlE,dlI,dx_norm,dl_norm)
     {
       // Set primal variables
-      this->x = dx;
-      if (input.nE > 0) {this->r1 = dr1; this->r2 = dr2; this->lE = dlE;}
-      if (input.nI > 0) {this->s1 = ds1; this->s2 = ds2; this->lI = dlI;}
-      this->x_norm = dx_norm;
-      this->l_norm = dl_norm;
+      d.x = dx;
+      if (i.nE > 0) {d.r1 = dr1; d.r2 = dr2; d.lE = dlE;}
+      if (i.nI > 0) {d.s1 = ds1; d.s2 = ds2; d.lI = dlI;}
+      d.x_norm = dx_norm;
+      d.l_norm = dl_norm;
     }
 
   }; // struct Direction

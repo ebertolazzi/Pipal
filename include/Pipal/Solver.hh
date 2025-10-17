@@ -60,19 +60,14 @@ namespace Pipal
     using LagrangianHessianFunc   = typename ProblemWrapper<Real>::LagrangianHessianFunc;
     using BoundsFunc              = typename ProblemWrapper<Real>::BoundsFunc;
 
-    using Algorithm = enum class Algorithm : Integer {CONSERVATIVE = 0, ADAPTIVE = 1}; /*!< Algorithm choice. */
-
   private:
-
     Counter<Integer>      m_counter; /*!< Internal counters for solver statistics. */
     Input<Real, Integer>  m_input;  /*!< Input structure for the solver. */
-    //Output<Real, Integer> m_output;  /*!< Output class for managing solver output. */
+    Output<Real, Integer> m_output;  /*!< Output class for managing solver output. */
     Parameter<Real>       m_parameter;   /*!< Internal parameters for the solver algorithm. */
     ProblemPtr            m_problem; /*!< Problem object pointer. */
 
-
     // Some options for the solver
-    Algorithm m_algorithm{Algorithm::ADAPTIVE}; /*!< Algorithm choice. */
     bool      m_verbose{false};      /*!< Verbosity flag. */
     Integer   m_max_iterations{100}; /*!< Maximum number of iterations. */
     Real      m_tolerance{1.0e-10};  /*!< Optimality tolerance. */
@@ -279,11 +274,10 @@ namespace Pipal
       #define CMD "Pipal::Solver::optimize(...): "
 
       // Create alias for easier access
-      Parameter<Real> & parameter = this->m_parameter;
-      Counter<Integer> & counter    = this->m_counter;
-      Input<Real, Integer> & input         = this->m_input;
-      //Output & output     = this->m_output;
-      Problem<Real> * problem     = this->m_problem.get();
+      Parameter<Real> & p{this->m_parameter};
+      Counter         & c{this->m_counter};
+      Input<Real>     & i{this->m_input};
+      const Problem<Real> * problem{this->m_problem.get()};
 
       // Reset counters
       counter.reset();
@@ -293,53 +287,39 @@ namespace Pipal
         CMD "problem not set, use 'problem(...)' method to set it");
 
       // Fill input structure
-      input.fill_input(*problem, parameter, x_guess);
+      input = Input(*problem, parameter, x_guess);
 
       // Print header and break line
-      if (this->m_verbose) {
-        //output.print_header();
-        //output.print_break(counters);
-      }
+      //if (this->m_verbose) {output = Output(input) o.print_header(); o.print_break(c);}
 
       // Iterations loop
-      //while (!iterate.check_termination(parameter, input, counter))
+      while (!iterate.checkTermination(p, i, c))
       {
         // Print iterate
-        if (this->m_verbose) {
-          //output.print_iterate(counters, iterate);
-        }
+        //if (this->m_verbose) {o.print_iterate(c, i);}
 
         // Evaluate the step
-        //direction.eval_step(parameter, input, counter, iterate, acceptance);
+        direction.evalStep(p, i, c, i, a);
 
         // Print direction
-        if (this->m_verbose) {
-          //output.print_direction(direction);
-        }
+        //if (this->m_verbose) {o.print_direction(d);}
 
-        //acceptance.line_search(parameter, input, counter, iterate, direction);
+        acceptance.lineSearch(p, i, c, i, d);
 
         // Print accepted
-        if (this->m_verbose) {
-          //output.print_acceptance(acceptance);
-        }
+        //if (this->m_verbose) {o.print_acceptance(a);}
 
-        //iterate.update_iterate(parameter, input, counter, direction, acceptance);
+        iterate.updateIterate(p, i, c, d, a);
 
         // Increment iteration counter
-        ++counter.iterations;
+        ++c.incrementIterationCount();
 
         // Print break
-        if (this->m_verbose) {
-          //output.print_break(counters);
-        }
+        //if (this->m_verbose) {o.print_break(c);}
       }
 
       // Print footer and terminate
-      if (this->m_verbose) {
-        //output.print_footer(parameter, input, counters, iterate);
-        //output.terminate();
-      }
+      //if (this->m_verbose) {o.print_footer(p, i, c, i);o.terminate();}
       x_sol = x_guess;
 
       return true;
