@@ -13,58 +13,29 @@
 #ifndef INCLUDE_PIPAL_COUNTER_HH
 #define INCLUDE_PIPAL_COUNTER_HH
 
-// Standard libraries
-#include <type_traits>
-
 // Pipal includes
-#include "Pipal/Defines.hh"
+#include "Pipal/Types.hh"
 
 namespace Pipal
 {
 
-  /**
-   * \brief Internal counters for solver statistics.
-   * \tparam Integer The integer type.
-   */
-  struct Counter
-  {
-    static_assert(std::is_integral<Integer>::value,
-      "Pipal::Counter: template argument 'Integer' must be an integer type.");
+  // Reset all internal counters to zero
+  void buildCounter(struct Counter & c) {c.f = c.g = c.H = c.k = c.M = 0;}
 
-    Integer f{0}; // Function evaluation counter
-    Integer g{0}; // Gradient evaluation counter
-    Integer H{0}; // Hessian evaluation counter
-    Integer k{0}; // Iteration counter
-    Integer M{0}; // Matrix factorization counter
+  // Matrix factorization counter incrementor
+  void incrementFactorizationCount(struct Counter & c) {++c.M;}
 
-    /**
-     * \brief Reset all internal counters to zero.
-     */
-    void reset()
-    {
-      this->f = 0
-      this->g = 0
-      this->H = 0
-      this->k = 0
-      this->M = 0
-    }
+  // Function evaluation counter incrementor
+  void incrementFunctionCount(struct Counter & c) {++c.f;}
 
-    // Matrix factorization counter incrementor
-    void incrementFactorizationCount() {++this->M;}
+  // Gradient evaluation counter incrementor
+  void incrementGradientCount(struct Counter & c) {++c.g;}
 
-    // Function evaluation counter incrementor
-    void incrementFunctionCount() {++this->f;}
+  // Hessian evaluation counter incrementor
+  void incrementHessianCount(struct Counter & c) {++c.H;}
 
-    // Gradient evaluation counter incrementor
-    void incrementGradientCount() {++this->g;}
-
-    // Hessian evaluation counter incrementor
-    void incrementHessianCount() {++this->H;}
-
-    // Iteration counter incrementor
-    void incrementIterationCount() {++this->k;}
-
-  }; // struct Counter
+  // Iteration counter incrementor
+  void incrementIterationCount(struct Counter & c) {++c.k;}
 
 } // namespace Pipal
 

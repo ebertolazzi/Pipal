@@ -13,15 +13,8 @@
 #ifndef INCLUDE_PIPAL_PROBLEM_HH
 #define INCLUDE_PIPAL_PROBLEM_HH
 
-// Standard libraries
-#include <functional>
-#include <type_traits>
-
-// Eigen library
-#include <Eigen/Dense>
-
 // Pipal includes
-#include "Pipal/Defines.hh"
+#include "Pipal/Types.hh"
 
 namespace Pipal
 {

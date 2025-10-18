@@ -23,9 +23,13 @@
 #include <Eigen/Dense>
 
 // Pipal includes
-#include "Pipal/Defines.hh"
+#include "Pipal/Acceptance.hh"
 #include "Pipal/Counter.hh"
+#include "Pipal/Types.hh"
+#include "Pipal/Direction.hh"
 #include "Pipal/Input.hh"
+#include "Pipal/Iterate.hh"
+//#include "Pipal/Output.hh"
 #include "Pipal/Parameter.hh"
 #include "Pipal/Problem.hh"
 
@@ -61,11 +65,14 @@ namespace Pipal
     using BoundsFunc              = typename ProblemWrapper<Real>::BoundsFunc;
 
   private:
-    Counter<Integer>      m_counter; /*!< Internal counters for solver statistics. */
-    Input<Real, Integer>  m_input;  /*!< Input structure for the solver. */
-    Output<Real, Integer> m_output;  /*!< Output class for managing solver output. */
-    Parameter<Real>       m_parameter;   /*!< Internal parameters for the solver algorithm. */
-    ProblemPtr            m_problem; /*!< Problem object pointer. */
+    Acceptance m_acceptance; /*!< Acceptance criteria for trial points. */
+    Counter         m_counter; /*!< Internal counters for solver statistics. */
+    Input     m_input;  /*!< Input structure for the solver. */
+    Direction m_direction; /*!< Current search direction of the solver. */
+    Iterate   m_iterate; /*!< Current iterate of the solver. */
+    //Output<Real>    m_output;  /*!< Output class for managing solver output. */
+    Parameter m_parameter;   /*!< Internal parameters for the solver algorithm. */
+    ProblemPtr      m_problem; /*!< Problem object pointer. */
 
     // Some options for the solver
     bool      m_verbose{false};      /*!< Verbosity flag. */
@@ -207,7 +214,7 @@ namespace Pipal
      * \brief Get the algorithm mode.
      * \return The algorithm mode.
      */
-    Algorithm algorithm() const {return this->m_algorithm;}
+    //FIXME: Algorithm algorithm() const {return this->m_parameters.algorithm;}
 
     /**
      * \brief Set the algorithm mode.
@@ -216,7 +223,7 @@ namespace Pipal
      * or \c ADAPTIVE.
      * \param[in] t_algorithm The algorithm mode.
      */
-    void algorithm(Algorithm const t_algorithm) {this->m_algorithm = t_algorithm;}
+    //FIXME: void algorithm(Algorithm const t_algorithm) {this->m_parameters.algorithm = t_algorithm;}
 
     /**
      * \brief Set the convergence tolerance for the solver.
@@ -274,45 +281,65 @@ namespace Pipal
       #define CMD "Pipal::Solver::optimize(...): "
 
       // Create alias for easier access
-      Parameter<Real> & p{this->m_parameter};
-      Counter         & c{this->m_counter};
-      Input<Real>     & i{this->m_input};
-      const Problem<Real> * problem{this->m_problem.get()};
+      Parameter  & p{this->m_parameter};
+      Counter          & c{this->m_counter};
+      Input      & i{this->m_input};
+      Iterate    & z{this->m_iterate};
+      Direction  & d{this->m_direction};
+      Acceptance & a{this->m_acceptance};
+      Problem<Real>    * problem{this->m_problem.get()};
+
+      // Get variable bounds
+      Vector bl(i.nV), bu(i.nV);
+      PIPAL_ASSERT(problem->primal_lower_bounds(bl),
+        CMD "error in evaluating lower bounds on primal variables");
+      PIPAL_ASSERT(problem->primal_upper_bounds(bu),
+        CMD "error in evaluating upper bounds on primal variables");
+
+      // Get constraint bounds
+      Vector cl(i.nI), cu(i.nI);
+      PIPAL_ASSERT(problem->constraints_lower_bounds(cl),
+        CMD "error in evaluating lower bounds on constraints");
+      PIPAL_ASSERT(problem->constraints_upper_bounds(cu),
+        CMD "error in evaluating upper bounds on constraints");
 
       // Reset counters
-      counter.reset();
+      c.reset();
 
       // Check that the problem is set
       PIPAL_ASSERT(problem != nullptr,
         CMD "problem not set, use 'problem(...)' method to set it");
 
       // Fill input structure
-      input = Input(*problem, parameter, x_guess);
+      std::string name{"Pipal Problem FIXME"};
+      i = Input(p, name, problem->objective(), problem->constraints(),
+        problem->objective_gradient(), problem->constraints_jacobian(),
+        problem->lagrangian_hessian(), x_guess, bl, bu, cl, cu);
 
       // Print header and break line
       //if (this->m_verbose) {output = Output(input) o.print_header(); o.print_break(c);}
 
       // Iterations loop
-      while (!iterate.checkTermination(p, i, c))
+      while (!z.checkTermination(p, i, c))
       {
         // Print iterate
         //if (this->m_verbose) {o.print_iterate(c, i);}
 
         // Evaluate the step
-        direction.evalStep(p, i, c, i, a);
+        d.evalStep(p, i, c, z, a);
 
         // Print direction
         //if (this->m_verbose) {o.print_direction(d);}
 
-        acceptance.lineSearch(p, i, c, i, d);
+        a.lineSearch(p, i, c, z, d);
 
         // Print accepted
         //if (this->m_verbose) {o.print_acceptance(a);}
 
-        iterate.updateIterate(p, i, c, d, a);
+        z.updateIterate(p, i, c, d, a);
 
         // Increment iteration counter
-        ++c.incrementIterationCount();
+        c.incrementIterationCount();
 
         // Print break
         //if (this->m_verbose) {o.print_break(c);}

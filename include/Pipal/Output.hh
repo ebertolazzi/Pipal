@@ -14,11 +14,7 @@
 #define INCLUDE_PIPAL_OUTPUT_HH
 
 // Pipal includes
-#include "Pipal/Defines.hh"
-
-// Standard libraries
-#include <iostream>
-#include <iomanip>
+#include "Pipal/Types.hh"
 
 namespace Pipal
 {
@@ -31,55 +27,49 @@ namespace Pipal
   template<typename Real>
   class Output
   {
-    static_assert(is_floating_point<Real>::value,
+    static_assert(std::is_floating_point<Real>::value,
       "Pipal::Output: template argument 'Real' must be a floating-point type.");
-    static_assert(is_integral<Integer>::value,
-      "Pipal::Output: template argument 'Integer' must be an integer type.");
 
   private:
-    using string;
-    using ostream;
-    using chrono::steady_clock;
-    using chrono::duration_cast::time_point;
-    using chrono::duration_cast;
-    using chrono::seconds;
+    using String       = std::string;
+    using Ostream      = std::ostream;
+    using SteadyClock  = std::chrono::steady_clock;
+    using DurationCast = std::chrono::duration_cast;
+    using TimePoint    = std::chrono::duration_cast::time_point;
+    using Seconds      = std::chrono::seconds;
 
-    ofstream   s; // Output stream
-    string     l; // Line break string
-    string     q; // Quantities header
-    string     n; // Footer line
-    time_point t; // Timer
+    Ostream   s; // Output stream
+    String    l; // Line break string
+    String    q; // Quantities header
+    String    n; // Footer line
+    TimePoint t; // Timer
 
   public:
     // Constructor
-    Output(string const & id, string const & outfile)
+    Output()
     {
-      this->t = chrono::steady_clock::now();
-      this->s.open(outfile);
-      assert(this->s.ithis->s.open() && "PIPAL: Failed to open output file.");
-
+      this->t = SteadyClock::now();
       this->l = "======+=========================+====================================+=========================+===========================================================================+=======================";
       this->q = "Iter. |  Objective     Infeas.  |  Pen. Par.   I.P. Par.  Opt. Error |    Merit     P.I.P. Err.|    Shift    ||P.Step||  ||D.Step||   Lin. Red.    Quad. Red.    Quality   | Pri. Step.  Dual Step.";
       this->n = "-----------  ---------- | ----------  ----------  ----------  -----------  -----------  ----------- | ----------  ----------";
     }
 
     // Destructor closes stream
-    ~Output() {this->terminate();}
+    ~Output() {}
 
     // Header printing
-    template<typename Info, typename Z>
-    void printHeader(Info const & i, Iterate<Real> const & z)
+    void printHeader(Input const & i, Iterate const & z)
     {
       this->s << "Problem name\n============\n  " << i.id << "\n\n";
       this->s << "Problem size\n============\n";
-      this->s << "  Number of variables....................... : " << setw(8) << i.nV << "\n";
-      this->s << "  Number of equality constraints............ : " << setw(8) << i.nE << "\n";
-      this->s << "  Number of inequality constraints.......... : " << setw(8) << i.nI << "\n\n";
+      this->s << "  Number of variables....................... : " << std::setw(8) << i.nV << "\n";
+      this->s << "  Number of equality constraints............ : " << std::setw(8) << i.nE << "\n";
+      this->s << "  Number of inequality constraints.......... : " << std::setw(8) << i.nI << "\n\n";
 
       this->s << "Problem sparsity\n================\n";
-      this->s << "  Nonzeros in Hessian of Lagrangian......... : " << setw(8) << z.Hnnz << "\n";
-      this->s << "  Nonzeros in equality constraint Jacobian.. : " << setw(8) << z.JEnnz << "\n";
-      this->s << "  Nonzeros in inequality constraint Jacobian : " << setw(8) << z.JInnz << "\n\n";
+      this->s << "  Nonzeros in Hessian of Lagrangian......... : " << std::setw(8) << z.Hnnz << "\n";
+      this->s << "  Nonzeros in equality constraint Jacobian.. : " << std::setw(8) << z.JEnnz << "\n";
+      this->s << "  Nonzeros in inequality constraint Jacobian : " << std::setw(8) << z.JInnz << "\n\n";
     }
 
     // Break printing (every 20 iterations)
@@ -91,34 +81,34 @@ namespace Pipal
     }
 
     // Direction info
-    void printDirection(Iterate<Real> const & z, Direction<Real> const & d)
+    void printDirection(Iterate const & z, Direction const & d)
     {
-      this->s << showpos << scientific << setprecision(4)
+      this->s << std::showpos << std::scientific << std::setprecision(4)
         << z.phi << "  " << z.kkt[2] << " | "
-        << z.shift << "  " << d.x_norm << "  " << d.this->m_line_breaknorm << "  "
+        << z.shift << "  " << d.x_norm << "  " << d.l_norm << "  "
         << d.ltred << "  " << d.qtred << "  " << d.m << " | ";
     }
 
     // Iterate info
-    void printIterate(Counter const & c, Iterate<Real> const & z)
+    void printIterate(Counter const & c, Iterate const & z)
     {
-      this->s << setw(5) << c.k << " | "
-        << showpos << scientific << setprecision(4)
+      this->s << std::setw(5) << c.k << " | "
+        << std::showpos << std::scientific << std::setprecision(4)
         << z.f << "  " << z.v << " | "
         << z.rho << "  " << z.mu << "  " << z.kkt[1] << " | ";
     }
 
     // Acceptance info
-    void printAcceptance(Acceptance<Real> const & a)
+    void printAcceptance(Acceptance const & a)
     {
-      this->s << scientific << setprecision(4)
+      this->s << std::scientific << std::setprecision(4)
         << a.p << "  " << a.d;
       if (a.s == 1) this->s << " SOC";
       this->s << "\n";
     }
 
     // Footer printing
-    void printFooter(Parameter<Real> const & p, Input<Real> const & i, Counter const & c, Iterate<Real> const & z)
+    void printFooter(Parameter const & p, Input const & i, Counter const & c, Iterate const & z)
     {
       this->printIterate(c, z);
       this->s << this->n << "\n" << this->l << "\n\n";
@@ -152,16 +142,12 @@ namespace Pipal
       this->s << "  Hessian evaluations....................... : " << c.H << "\n";
       this->s << "  Matrix factorizations..................... : " << c.M << "\n";
 
-      Real seconds{duration_cast<seconds>(steady_clock::now() - this->t).count()};
+      Real seconds{std::chrono::duration_cast<Seconds>(SteadyClock::now() - this->t).count()};
       this->s << "  CPU seconds............................... : " << seconds << "\n";
-    }
-
-    // Terminate output (close stream)
-    void terminate()
-    {
-      if (this->s.ithis->m_outopen()) this->s.close();
     }
 
   }; // class Output
 
 } // namespace Pipal
+
+#endif // INCLUDE_PIPAL_OUTPUT_HH
