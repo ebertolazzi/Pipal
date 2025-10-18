@@ -45,9 +45,9 @@ namespace Pipal
     z.kkt_.setConstant(p.opt_err_mem, INFTY);
     z.cut_  = 0;
     evalHessian(z, i, c);
-    z.Hnnz  = Pipal::nnz(z.H);
-    z.JEnnz = Pipal::nnz(z.JE);
-    z.JInnz = Pipal::nnz(z.JI);
+    z.Hnnz  = nnz(z.H);
+    z.JEnnz = nnz(z.JE);
+    z.JInnz = nnz(z.JI);
     initNewtonMatrix(z, i);
     evalNewtonMatrix(z, p, i, c);
   }
@@ -262,8 +262,7 @@ namespace Pipal
     try
     {
       // Evaluate H_orig
-      if (i.nE+i.n7+i.n8+i.n9 == 0) {i.H_fun(x_orig, H_orig);}
-      else {i.H_fun(x_orig, l_orig, H_orig);}
+      i.H_fun(x_orig, l_orig, H_orig);
     }
     catch (...)
     {
@@ -288,8 +287,8 @@ namespace Pipal
   void evalInfeasibility(struct Iterate & z, struct Input & i)
   {
     // Evaluate scaled and unscaled feasibility violations
-    z.v  = evalViolation(z, i, z.cE, z.cI) / std::max(1,z.v0);
-    z.vu = evalViolation(z, i, z.cEu, z.cIu);
+    z.v  = evalViolation(i, z.cE, z.cI) / std::max(1.0, z.v0);
+    z.vu = evalViolation(i, z.cEu, z.cIu);
   }
 
   // KKT error evaluator
@@ -309,17 +308,17 @@ namespace Pipal
     // Set complementarity for constraint slacks
     if (i.nE > 0) {
       kkt(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
-        (z.r1.array() * (1 + z.lE).array()).matrix() - mu,
-        (z.r2.array() * (1 - z.lE).array()).matrix() - mu;
+        (z.r1.array() * (1.0 + z.lE.array()).array()) - mu,
+        (z.r2.array() * (1.0 - z.lE.array()).array()) - mu;
     }
     if (i.nI > 0) {
       kkt(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
-        (z.s1.array() * (0 + z.lI).array()).matrix() - mu,
-        (z.s2.array() * (1 - z.lI).array()).matrix() - mu;
+        (z.s1.array() * (0.0 + z.lI.array()).array()) - mu,
+        (z.s2.array() * (1.0 - z.lI.array()).array()) - mu;
     }
 
     // Scale complementarity
-    if (rho > 0) {kkt = (1.0 / std::max(1, (rho*z.g).array().abs().maxCoeff()))*kkt.maxCoeff();}
+    // FIXME if (rho > 0) {kkt = (1.0 / std::max(1.0, (rho*z.g).array().abs().maxCoeff()))*kkt.maxCoeff();}
 
     // Evaluate optimality error
     return kkt.array().abs().maxCoeff();
@@ -341,12 +340,14 @@ namespace Pipal
     l.setZero(i.nE+i.n7+i.n8+i.n9);
 
     // Scale equality constraint multipliers
+    Vector lE;
     if (i.nE > 0) {lE = (z.lE.array()*(z.cEs/(z.rho*z.fs)).array()).matrix();}
 
     // Set equality constraint multipliers in original space
     if (i.nE > 0) {l(i.I6) = lE;}
 
     // Scale inequality constraint multipliers
+    Vector lI;
     if (i.n7+i.n8+i.n9 > 0) {lI = (z.lI.array()*(z.cIs/(z.rho*z.fs)).array()).matrix();}
 
     // Set inequality constraint multipliers in original space
@@ -354,7 +355,7 @@ namespace Pipal
       l(i.I7) = -lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5, i.n3+i.n4+i.n5+i.n5+i.n7-1));
     }
     if (i.n8 > 0) {
-      l(i.I8) = +lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8-1));
+      l(i.I8) =  lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8-1));
     }
     if (i.n9 > 0) {
       l(i.I9) = -lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9-1))
@@ -395,8 +396,8 @@ namespace Pipal
     {
       // Set diagonal terms
       for (Integer j{0}; j < i.nE; ++j) {
-        z.A(i.nV+j, i.nV+j)           = (1+z.lE(j))/z.r1(j);
-        z.A(i.nV+i.nE+j, i.nV+i.nE+j) = (1-z.lE(j))/z.r2(j);
+        z.A(i.nV+j, i.nV+j)           = (1.0 + z.lE(j))/z.r1(j);
+        z.A(i.nV+i.nE+j, i.nV+i.nE+j) = (1.0 - z.lE(j))/z.r2(j);
       }
 
       // Set constraint Jacobian
@@ -408,8 +409,8 @@ namespace Pipal
     {
       // Set diagonal terms
       for (Integer j{0}; j < i.nI; ++j) {
-        z.A(i.nV+2*i.nE+j, i.nV+2*i.nE+j)           = (0+z.lI(j))/z.s1(j);
-        z.A(i.nV+2*i.nE+i.nI+j, i.nV+2*i.nE+i.nI+j) = (1-z.lI(j))/z.s2(j);
+        z.A(i.nV+2*i.nE+j, i.nV+2*i.nE+j)           = (0.0 + z.lI(j))/z.s1(j);
+        z.A(i.nV+2*i.nE+i.nI+j, i.nV+2*i.nE+i.nI+j) = (1.0 - z.lI(j))/z.s2(j);
       }
 
       // Set constraint Jacobian
@@ -431,7 +432,7 @@ namespace Pipal
     while (!done && z.shift < p.shift_max)
     {
       // Set Hessian of Lagrangian
-      z.A(Eigen::seq(0, i.nV-1), Eigen::seq(0, i.nV-1)) = z.H+z.shift*speye(i.nV);
+      z.A(Eigen::seq(0, i.nV-1), Eigen::seq(0, i.nV-1)) = z.H+z.shift*SparseMatrix::Identity(i.nV, i.nV);
 
       // Set diagonal terms
       for (Integer j{0}; j < i.nE; ++j) {
@@ -444,17 +445,20 @@ namespace Pipal
       }
 
       // Set number of nonzeros in (upper triangle of) Newton matrix
-      z.Annz = Pipal::nnz<MatrixView::TRIL>(z.A);
+      z.Annz = nnz<MatrixView::TRIL>(z.A);
 
       // Factor primal-dual matrix
-      Eigen::SimplicialLDLT<Eigen::SparseMatrix<Real>> ldl;
-      ldl.compute(z.A.template triangularView<Eigen::Lower>());
-      z.AL = ldl.matrixL();                         // Lower factor (unit diagonal)
-      z.AD = ldl.vectorD().asDiagonal();            // Diagonal matrix
-      z.AP = ldl.permutationP().indices();          // Permutation vector
-      z.AS = ldl.permutationP().toDenseMatrix();    // Permutation matrix
-      // Eigen doesn't directly expose inertia count (neig) You can approximate it manually:
-      Integer neig{(ldl.vectorD().array() < 0).count()};
+      //Eigen::SimplicialLDLT<SparseMatrix> ldl;
+      Eigen::LDLT<Eigen::MatrixXd> ldl;
+      ldl.compute(z.A.selfadjointView<Eigen::Lower>());
+
+      z.AL = ldl.matrixL();                          // Lower factor (unit lower-triangular)
+      z.AD = ldl.vectorD().asDiagonal();             // Diagonal matrix (D)
+      z.AP = ldl.transpositionsP().indices();        // Permutation vector
+      z.AS = ldl.transpositionsP().indices();  // Permutation matrix
+
+      // Approximate number of negative pivots (inertia)
+      Integer neig{static_cast<Integer>((ldl.vectorD().array() < 0).count())};
 
 
       // Increment factorization counter
@@ -470,7 +474,7 @@ namespace Pipal
     }
 
     // Update Hessian
-    z.H = z.H+z.shift*speye(i.nV);
+    z.H = z.H+z.shift*SparseMatrix::Identity(i.nV, i.nV);
   }
 
   // Newton right-hand side evaluator
@@ -487,11 +491,17 @@ namespace Pipal
     if (i.nI > 0) {z.b(Eigen::seq(0, i.nV-1)) = z.b(Eigen::seq(0, i.nV-1)) + (z.lI.transpose()*z.JI).transpose();}
 
     // Set complementarity for constraint slacks
-    if (i.nE > 0) {z.b(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
-      1 + z.lE - z.mu/z.r1, 1 - z.lE - z.mu/z.r2;
+    if (i.nE > 0) {
+      // compute element-wise complementarity terms with safe element-wise division
+      Vector tmpE1((1.0 + z.lE.array() - z.mu * z.r1.cwiseInverse().array()).matrix());
+      Vector tmpE2((1.0 - z.lE.array() - z.mu * z.r2.cwiseInverse().array()).matrix());
+      z.b(Eigen::seq(i.nV, i.nV+2*i.nE-1)) << tmpE1, tmpE2;
     }
-    if (i.nI > 0) {z.b(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
-      z.lI - z.mu/z.s1, 1 - z.lI - z.mu/z.s2;
+    if (i.nI > 0) {
+      // compute element-wise complementarity terms with safe element-wise division
+      Vector tmpI1((z.lI.array() - z.mu * z.s1.cwiseInverse().array()).matrix());
+      Vector tmpI2((1.0 - z.lI.array() - z.mu * z.s2.cwiseInverse().array()).matrix());
+      z.b(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) << tmpI1, tmpI2;
     }
 
     // Set penalty-interior-point constraint values
@@ -535,24 +545,24 @@ namespace Pipal
     if (i.nE > 0)
     {
       // Set slacks
-      z.r1 = 0.5*(z.mu - z.cE + std::sqrt(z.cE.array().square().matrix() + z.mu*z.mu));
-      z.r2 = 0.5*(z.mu + z.cE + std::sqrt(z.cE.array().square().matrix() + z.mu*z.mu));
+      z.r1 = 0.5*((z.mu - z.cE.array()) + (z.cE.array().square() + z.mu*z.mu).sqrt()).matrix();
+      z.r2 = 0.5*((z.mu + z.cE.array()) + (z.cE.array().square() + z.mu*z.mu).sqrt()).matrix();
 
       // Adjust for numerical error
-      z.r1 = std::max(z.r1, p.slack_min);
-      z.r2 = std::max(z.r2, p.slack_min);
+      z.r1.cwiseMax(p.slack_min);
+      z.r2.cwiseMax(p.slack_min);
     }
 
     // Check for inequality constraints
     if (i.nI > 0)
     {
       // Set slacks
-      z.s1 = 0.5*(2.0*z.mu - z.cI + std::sqrt(z.cI.array().square().matrix() + 4.0*z.mu*z.mu));
-      z.s2 = 0.5*(2.0*z.mu + z.cI + std::sqrt(z.cI.array().square().matrix() + 4.0*z.mu*z.mu));
+      z.s1 = 0.5*((2.0*z.mu - z.cI.array()) + (z.cI.array().square() + 4.0*z.mu*z.mu).sqrt()).matrix();
+      z.s2 = 0.5*((2.0*z.mu + z.cI.array()) + (z.cI.array().square() + 4.0*z.mu*z.mu).sqrt()).matrix();
 
       // Adjust for numerical error
-      z.s1 = std::max(z.s1, p.slack_min);
-      z.s2 = std::max(z.s2, p.slack_min);
+      z.s1.cwiseMax(p.slack_min);
+      z.s2.cwiseMax(p.slack_min);
     }
   }
 
@@ -571,7 +581,7 @@ namespace Pipal
   }
 
   // Gets primal-dual point
-  void getSolution(struct Iterate & z, struct Input & i, Vector & x, Vector & l) const
+  void getSolution(struct Iterate & z, struct Input & i, Vector & x, Vector & l)
   {
     evalXOriginal(z, i, x);
     evalLambdaOriginal(z, i, l);
@@ -581,26 +591,26 @@ namespace Pipal
   void initNewtonMatrix(struct Iterate & z, struct Input & i)
   {
     // Allocate memory
-    z.A = spalloc(i.nA,i.nA,z.Hnnz+5*i.nE+5*i.nI+z.JEnnz+z.JInnz);
+    z.A.resize(i.nA, i.nA);// FIXME, z.Hnnz+5*i.nE+5*i.nI+z.JEnnz+z.JInnz);
 
     // Initialize interior-point Hessians
-    z.A(Eigen::seq(i.nV, i.nV+2*i.nE-1), Eigen::seq(i.nV, i.nV+2*i.nE-1)) = speye(2*i.nE);
-    z.A(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1), Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) = speye(2*i.nI);
+    z.A(Eigen::seq(i.nV, i.nV+2*i.nE-1), Eigen::seq(i.nV, i.nV+2*i.nE-1)) = SparseMatrix::Identity(2*i.nE, 2*i.nE);
+    z.A(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1), Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) = SparseMatrix::Identity(2*i.nI, 2*i.nI);
 
     // Check for equality constraints
     if (i.nE > 0)
     {
       // Initialize constraint Jacobian
-      z.A(Eigen::seq(i.nV+2*i.nE+2*i.nI, i.nV+3*i.nE+2*i.nI-1), Eigen::seq(i.nV, i.nV+i.nE-1)) =  speye(i.nE);
-      z.A(Eigen::seq(i.nV+2*i.nE+2*i.nI, i.nV+3*i.nE+2*i.nI-1), Eigen::seq(i.nV+i.nE, i.nV+2*i.nE-1)) = -speye(i.nE);
+      z.A(Eigen::seq(i.nV+2*i.nE+2*i.nI, i.nV+3*i.nE+2*i.nI-1), Eigen::seq(i.nV, i.nV+i.nE-1)) =  SparseMatrix::Identity(i.nE, i.nE);
+      z.A(Eigen::seq(i.nV+2*i.nE+2*i.nI, i.nV+3*i.nE+2*i.nI-1), Eigen::seq(i.nV+i.nE, i.nV+2*i.nE-1)) = -SparseMatrix::Identity(i.nE, i.nE);
     }
 
     // Check for inequality constraints
     if (i.nI > 0)
     {
       // Initialize constraint Jacobian
-      z.A(Eigen::seq(i.nV+3*i.nE+2*i.nI, i.nV+3*i.nE+3*i.nI-1), Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+i.nI-1)) =  speye(i.nI);
-      z.A(Eigen::seq(i.nV+3*i.nE+2*i.nI, i.nV+3*i.nE+3*i.nI-1), Eigen::seq(i.nV+2*i.nE+i.nI, i.nV+2*i.nE+2*i.nI-1)) = -speye(i.nI);
+      z.A(Eigen::seq(i.nV+3*i.nE+2*i.nI, i.nV+3*i.nE+3*i.nI-1), Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+i.nI-1)) =  SparseMatrix::Identity(i.nI, i.nI);
+      z.A(Eigen::seq(i.nV+3*i.nE+2*i.nI, i.nV+3*i.nE+3*i.nI-1), Eigen::seq(i.nV+2*i.nE+i.nI, i.nV+2*i.nE+2*i.nI-1)) = -SparseMatrix::Identity(i.nI, i.nI);
     }
   }
 
@@ -651,7 +661,7 @@ namespace Pipal
     while (z.mu > p.mu_min && z.kkt(2) <= std::max({z.mu, p.opt_err_tol-z.mu}))
     {
       // Restrict interior-point parameter increase
-      p.setMuMaxExpZero();
+      setMuMaxExpZero(p);
 
       // Update interior-point parameter
       if (z.mu > p.mu_min)
@@ -692,7 +702,7 @@ namespace Pipal
   }
 
   // Feasibility violation evaluator
-  Real evalViolation(struct Iterate & z, struct Input & i, Vector & cE, Vector & cI)
+  Real evalViolation(struct Input & i, Vector & cE, Vector & cI)
   {
     // Initialize violation vector
     Vector vec;

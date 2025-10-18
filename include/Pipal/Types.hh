@@ -120,7 +120,7 @@ namespace Pipal
   using ObjectiveGradientFunc   = std::function<bool(Vector const &, Vector &)>;
   using ObjectiveHessianFunc    = std::function<bool(Vector const &, Matrix &)>;
   using ConstraintsFunc         = std::function<bool(Vector const &, Vector &)>;
-  using ConstraintsJacobianFunc = std::function<bool(Vector const &, Vector const &, Matrix &)>;
+  using ConstraintsJacobianFunc = std::function<bool(Vector const &, Matrix &)>;
   using LagrangianHessianFunc   = std::function<bool(Vector const &, Vector const &, Matrix &)>;
   using BoundsFunc              = std::function<bool(Vector &)>;
 
@@ -371,6 +371,30 @@ namespace Pipal
     Real d{0.0};   // Dual steplength
     bool s{false}; // Bool for second-order correction
   }; // struct Acceptance
+
+  void fractionToBoundary(struct Acceptance & a, struct Parameter & p, struct Input & i, struct Iterate & z,
+    struct Direction & d);
+  void evalTrialSteps(struct Direction & d, struct Input & i, struct Iterate & z, struct Direction & d1,
+    struct Direction & d2, struct Direction & d3);
+  void evalTrialStepCut(struct Direction & d, struct Input & i, struct Acceptance & a);
+
+  void evalScalings(struct Iterate & z, struct Parameter & p, struct Input & i, struct Counter & c);
+  void evalFunctions(struct Iterate & z, struct Input & i, struct Counter & c);
+  void evalGradients(struct Iterate & z, struct Input & i, struct Counter & c);
+  void evalDependent(struct Iterate & z, struct Parameter & p, struct Input & i);
+  void evalInfeasibility(struct Iterate & z, struct Input & i);
+  void evalHessian(struct Iterate & z, struct Input & i, struct Counter & c);
+  void initNewtonMatrix(struct Iterate & z, struct Input & i);
+  void evalNewtonMatrix(struct Iterate & z, struct Parameter & p, struct Input & i, struct Counter & c);
+  void evalSlacks(struct Iterate & z, struct Parameter & p, struct Input & i);
+  void evalMerit(struct Iterate & z, struct Input & i);
+  void evalKKTErrors(struct Iterate & z, struct Input & i);
+  void evalXOriginal(struct Iterate & z, struct Input & i, Vector & x);
+  void evalLambdaOriginal(struct Iterate & z, struct Input & i, Vector & l);
+  Real evalViolation(struct Input & i, Vector & cE, Vector & cI);
+  void updatePoint(struct Iterate & z, struct Input & i, Direction & d, Acceptance & a);
+
+  Real evalViolation(struct Input & i, Vector & cE, Vector & cI);
 
 } // namespace Pipal
 

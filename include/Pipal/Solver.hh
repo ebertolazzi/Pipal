@@ -304,7 +304,7 @@ namespace Pipal
         CMD "error in evaluating upper bounds on constraints");
 
       // Reset counters
-      c.reset();
+      c.buildCounter();
 
       // Check that the problem is set
       PIPAL_ASSERT(problem != nullptr,
@@ -312,7 +312,7 @@ namespace Pipal
 
       // Fill input structure
       std::string name{"Pipal Problem FIXME"};
-      i = Input(p, name, problem->objective(), problem->constraints(),
+      i = buildInput(p, name, problem->objective(), problem->constraints(),
         problem->objective_gradient(), problem->constraints_jacobian(),
         problem->lagrangian_hessian(), x_guess, bl, bu, cl, cu);
 
@@ -320,26 +320,26 @@ namespace Pipal
       //if (this->m_verbose) {output = Output(input) o.print_header(); o.print_break(c);}
 
       // Iterations loop
-      while (!z.checkTermination(p, i, c))
+      while (!checkTermination(z, p, i, c))
       {
         // Print iterate
         //if (this->m_verbose) {o.print_iterate(c, i);}
 
         // Evaluate the step
-        d.evalStep(p, i, c, z, a);
+        evalStep(d, p, i, c, z, a);
 
         // Print direction
         //if (this->m_verbose) {o.print_direction(d);}
 
-        a.lineSearch(p, i, c, z, d);
+        lineSearch(a, p, i, c, z, d);
 
         // Print accepted
         //if (this->m_verbose) {o.print_acceptance(a);}
 
-        z.updateIterate(p, i, c, d, a);
+        updateIterate(z, p, i, c, d, a);
 
         // Increment iteration counter
-        c.incrementIterationCount();
+        incrementIterationCount(c);
 
         // Print break
         //if (this->m_verbose) {o.print_break(c);}

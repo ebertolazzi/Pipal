@@ -15,7 +15,6 @@
 
 // Pipal includes
 #include "Pipal/Types.hh"
-#include "Pipal/Input.hh"
 #include "Pipal/Parameter.hh"
 
 namespace Pipal

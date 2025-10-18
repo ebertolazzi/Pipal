@@ -73,7 +73,7 @@ public:
   }
 
   // Jacobian of the constraints function
-  bool constraints_jacobian(Vector const & /*x*/, Vector const & /*z*/, Matrix & out) const override
+  bool constraints_jacobian(Vector const & /*x*/, Matrix & out) const override
   {
     out = this->m_A;
     return out.allFinite();
@@ -165,7 +165,7 @@ TEST_F(LinearRegression, ProblemWrapper) {
     [this] (const Vector & x, Vector & out) {return this->problem->objective_gradient(x, out);},
     [this] (const Vector & x, Matrix & out) {return this->problem->objective_hessian(x, out);},
     [this] (const Vector & x, Vector & out) {return this->problem->constraints(x, out);},
-    [this] (const Vector & x, const Vector & z, Matrix & out) {return this->problem->constraints_jacobian(x, z, out);},
+    [this] (const Vector & x, Matrix & out) {return this->problem->constraints_jacobian(x, out);},
     [this] (const Vector & x, const Vector & z, Matrix & out) {return this->problem->lagrangian_hessian(x, z, out);},
     [this] (Vector & out) {return this->problem->primal_lower_bounds(out);},
     [this] (Vector & out) {return this->problem->primal_upper_bounds(out);},

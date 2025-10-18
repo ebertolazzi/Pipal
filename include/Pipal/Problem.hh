@@ -109,11 +109,10 @@ namespace Pipal
     /**
      * \brief Evaluate the Jacobian of the constraints function with respect to the primal variables.
      * \param[in] x Primal variables.
-     * \param[in] z Dual variables.
      * \param[out] out The Jacobian matrix of the constraints function.
      * \return True if the evaluation was successful, false otherwise.
      */
-    virtual bool constraints_jacobian(Vector const & x, Vector const & z, Matrix & out) const = 0;
+    virtual bool constraints_jacobian(Vector const & x, Matrix & out) const = 0;
 
     /**
      * \brief Evaluate the Hessian of the Lagrangian function with respect to the primal variables.
@@ -172,7 +171,7 @@ namespace Pipal
     using ObjectiveGradientFunc   = std::function<bool(Vector const &, Vector &)>;
     using ObjectiveHessianFunc    = std::function<bool(Vector const &, Matrix &)>;
     using ConstraintsFunc         = std::function<bool(Vector const &, Vector &)>;
-    using ConstraintsJacobianFunc = std::function<bool(Vector const &, Vector const &, Matrix &)>;
+    using ConstraintsJacobianFunc = std::function<bool(Vector const &, Matrix &)>;
     using LagrangianHessianFunc   = std::function<bool(Vector const &, Vector const &, Matrix &)>;
     using BoundsFunc              = std::function<bool(Vector &)>;
 

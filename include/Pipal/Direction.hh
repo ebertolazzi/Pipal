@@ -15,7 +15,7 @@
 
 // Pipal includes
 #include "Pipal/Types.hh"
-#include "Pipal/Direction.hh"
+#include "Pipal/Acceptance.hh"
 #include "Pipal/Input.hh"
 #include "Pipal/Iterate.hh"
 
@@ -23,8 +23,8 @@ namespace Pipal
 {
 
   // Evaluate linear combination of directions
-  void evalLinearCombination(struct Direction & d, struct Input & i, Direction & d1, Direction & d2,
-    Direction & d3, Real const a0, Real const a1, Real const a2)
+  void evalLinearCombination(struct Direction & d, struct Input & i, struct Direction & d1, struct Direction & d2,
+    struct Direction & d3, Real const a0, Real const a1, Real const a2)
   {
     // Evaluate linear combinations
     d.x = a0*d1.x  + a1*d2.x  + a2*d3.x;
@@ -55,8 +55,8 @@ namespace Pipal
   {
     // Evaluate reduction in linear model of penalty-interior-point objective for zero penalty parameter
     d.lred0 = 0;
-    if (i.nE > 0) {d.lred0 = d.lred0 - (Vector(1-z.mu/z.r1, 1-z.mu/z.r2).array()*Vector(d.r1, d.r2).array()).sum();}
-    if (i.nI > 0) {d.lred0 = d.lred0 - (Vector(0-z.mu/z.s1, 1-z.mu/z.s2).array()*Vector(d.s1, d.s2).array()).sum();}
+    if (i.nE > 0) {d.lred0 = d.lred0 - (Vector(1.0-z.mu/z.r1.array(), 1.0-z.mu/z.r2.array()).array()*Vector(d.r1, d.r2).array()).sum();}
+    if (i.nI > 0) {d.lred0 = d.lred0 - (Vector(0.0-z.mu/z.s1.array(), 1.0-z.mu/z.s2.array()).array()*Vector(d.s1, d.s2).array()).sum();}
 
     // Evaluate remaining quantities only for nonzero penalty parameter
     if (z.rho > 0)
@@ -83,12 +83,12 @@ namespace Pipal
       d.qtred = d.ltred - 0.5*d.x.transpose()*z.H*d.x;
       if (i.nE > 0) {
         Vector Jd(z.JE*d.x);
-        Matrix Dinv((z.r1.array()/(1+z.lE).array() + z.r2.array()/(1-z.lE).array()).matrix());
+        Matrix Dinv((z.r1.array()/(1.0+z.lE.array()).array() + z.r2.array()/(1.0-z.lE.array()).array()).matrix());
         d.qtred -= 0.5*Jd.transpose()*((Jd.array()/Dinv.array()).matrix());
       }
       if (i.nI > 0) {
         Vector Jd(z.JI*d.x);
-        Matrix Dinv((z.s1.array()/(0+z.lI).array() + z.s2.array()/(1-z.lI).array()).matrix());
+        Matrix Dinv((z.s1.array()/(0.0+z.lI.array()).array() + z.s2.array()/(1.0-z.lI.array()).array()).matrix());
         d.qtred -= 0.5*Jd.transpose()*((Jd.array()/Dinv.array()).matrix());
       }
 
@@ -105,12 +105,12 @@ namespace Pipal
 
       // Set complementarity for constraint slacks
       if (i.nE > 0) {vec(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
-        ((z.r1+d.r1).array() * (1 + (z.lE+d.lE)).array()).matrix(),
-        ((z.r2+d.r2).array() * (1 - (z.lE+d.lE)).array()).matrix();
+        ((z.r1+d.r1).array() * (1.0 + (z.lE+d.lE).array()).array()).matrix(),
+        ((z.r2+d.r2).array() * (1.0 - (z.lE+d.lE).array()).array()).matrix();
       }
       if (i.nI > 0) {vec(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
-        ((z.s1+d.s1).array() * (0 + (z.lI+d.lI)).array()).matrix(),
-        ((z.s2+d.s2).array() * (1 - (z.lI+d.lI)).array()).matrix();
+        ((z.s1+d.s1).array() * (0.0 + (z.lI+d.lI).array()).array()).matrix(),
+        ((z.s2+d.s2).array() * (1.0 - (z.lI+d.lI).array()).array()).matrix();
       }
 
       // Evaluate quality function
@@ -162,32 +162,32 @@ namespace Pipal
     Iterate & z, struct Acceptance & a)
   {
     // Reset maximum exponent for interior-point parameter increases
-    p.resetMuMaxExp();
+    resetMuMaxExp(p);
 
     // Update penalty-interior-point parameters based on KKT errors
-    z.updateParameters(p, i);
+    updateParameters(z, p, i);
 
     // Evaluate matrices
-    z.evalMatrices(p, i, c);
+    evalMatrices(z, p, i, c);
 
     // Set last penalty parameter
-    z.setRhoLast(z.rho);
+    setRhoLast(z, z.rho);
 
     // Check for aggressive algorithm
-    if (p.algorithm == 1)
+    if (p.algorithm == Algorithm::ADAPTIVE)
     {
       // Check KKT memory for potential mu increase limit
-      if (z.kkt(1) > std::max(z.kkt_)) {p.setMuMaxExpZero();}
+      if (z.kkt(1) > z.kkt_.maxCoeff()) {setMuMaxExpZero(p);}
 
       // Store current penalty and interior-point parameters
       Real rho_curr{z.rho}, mu_curr{z.mu};
 
       // Evaluate trial steps
       Direction d1, d2, d3;
-      d.evalTrialSteps(i, z, d1, d2, d3);
+      evalTrialSteps(d, i, z, d1, d2, d3);
 
       // Set trial interior-point parameter values
-      Eigen::ArrayXd exponents(p.mu_trials);
+      Array exponents(p.mu_trials);
       for (Integer i{0}; i < p.mu_trials; ++i) {exponents[i] = (p.mu_trials - 1 - i) - p.mu_max_exp;}
 
       Array Mu(mu_curr * exponents.unaryExpr([&p](Real e){return std::pow(p.mu_factor, e);}));
@@ -201,22 +201,23 @@ namespace Pipal
       for (Integer j{0}; j < p.mu_trials; ++j)
       {
         // Set penalty and interior-point parameters
-        z.setRho(0); z.setMu(Mu(j));
+        setRho(z, 0);
+        setMu(z, Mu(j));
 
         // Evaluate direction
-        d.evalLinearCombination(i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1), (1-z.mu/mu_curr), (1-z.rho/rho_curr));
+        evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1), (1-z.mu/mu_curr), (1-z.rho/rho_curr));
 
         // Cut length
-        d.x = std::min(d.x_norm_/std::max(d.x_norm, 1), 1)*d.x;
+        d.x = std::min(d.x_norm_/std::max(d.x_norm, 1.0), 1.0)*d.x;
 
         // Run fraction-to-boundary
-        a.fractionToBoundary(p, i, z, *this);
+        fractionToBoundary(a, p, i, z, d);
 
         // Cut length
-        d.evalTrialStepCut(i, a);
+        evalTrialStepCut(d, i, a);
 
         // Evaluate models
-        d.evalModels(i, z);
+        evalModels(d, i, z);
 
         // Set feasibility direction data
         lred0_0_mu(j) = d.lred0;
@@ -237,28 +238,28 @@ namespace Pipal
       for (Integer k{0}; k < p.rho_trials; ++k)
       {
         // Set penalty parameter
-        z.setRho(std::max(p.rho_min, std::pow(p.rho_factor, k-1)*rho_curr));
+        setRho(z, std::max(p.rho_min, std::pow(p.rho_factor, k-1)*rho_curr));
 
         // Set last penalty parameter
-        if (rho_curr > z.kkt(0)*z.kkt(0)) {z.setRhoLast(z.rho);}
+        if (rho_curr > z.kkt(0)*z.kkt(0)) {setRhoLast(z, z.rho);}
 
         // Loop through interior-point parameter values
         for (Integer j{0}; j < p.mu_trials; ++j)
         {
           // Set interior-point parameter
-          z.setMu(Mu(j));
+          setMu(z, Mu(j));
 
           // Evaluate direction
-          d.evalLinearCombination(i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1), (1-z.mu/mu_curr), (1-z.rho/rho_curr));
+          evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1), (1-z.mu/mu_curr), (1-z.rho/rho_curr));
 
           // Run fraction-to-boundary
-          a.fractionToBoundary(p, i, z, *this);
+          fractionToBoundary(a, p, i, z, d);
 
           // Cut steps
-          d.evalTrialStepCut(i, a);
+          evalTrialStepCut(d, i, a);
 
           // Evaluate models
-          d.evalModels(i, z);
+          evalModels(d, i, z);
 
           // Set updating data
           ltred0_rho_mu(j) = d.ltred0;
@@ -266,23 +267,23 @@ namespace Pipal
           m_rho_mu(j)      = d.m;
 
           // Check updating conditions for infeasible points
-          if (z.v > p.opt_err_tol && (ltred0_rho_mu(j) < p.update_con_1*lred0_0_mu(j) || qtred_rho_mu(j) < p.update_con_2*lred0_0_mu(j) || z.rho > z.kkt(0)*z.kkt(0))) {m_rho_mu(j) = INF;}
+          if (z.v > p.opt_err_tol && (ltred0_rho_mu(j) < p.update_con_1*lred0_0_mu(j) || qtred_rho_mu(j) < p.update_con_2*lred0_0_mu(j) || z.rho > z.kkt(0)*z.kkt(0))) {m_rho_mu(j) = INFTY;}
 
           // Check updating conditions for feasible points
-          if (z.v <= p.opt_err_tol && qtred_rho_mu(j) < 0) {m_rho_mu(j) = INF;}
+          if (z.v <= p.opt_err_tol && qtred_rho_mu(j) < 0) {m_rho_mu(j) = INFTY;}
         }
 
         // Find minimum m for current rho
         Real m_min{m_rho_mu.minCoeff()};
 
         // Check for finite minimum
-        if (m_min < INF)
+        if (m_min < INFTY)
         {
           // Loop through mu values
           for (Integer j{0}; j < p.mu_trials; ++j)
           {
             // Check condition
-            if (m_rho_mu(j) <= p.update_con_3*m_min) {z.setMu(Mu(j));}
+            if (m_rho_mu(j) <= p.update_con_3*m_min) {setMu(z, Mu(j));}
           }
 
           // Set condition check
@@ -294,20 +295,20 @@ namespace Pipal
       }
 
       // Check conditions
-      if (check == false) {z.setRho(rho_curr); z.setMu(mu_curr);}
+      if (check == false) {setRho(z, rho_curr); setMu(z, mu_curr);}
 
       // Evaluate merit
-      z.evalMerit(i);
+      evalMerit(z, i);
     }
 
     // Evaluate primal-dual right-hand side vector
-    z.evalNewtonRhs(i);
+    evalNewtonRhs(z, i);
 
     // Evaluate search direction
-    d.evalNewtonStep(i, z);
+    evalNewtonStep(d, i, z);
 
     // Evaluate models
-    d.evalModels(i, z);
+    evalModels(d, i, z);
 
     // Store last direction norm
     d.x_norm_ = d.x_norm;
@@ -343,25 +344,25 @@ namespace Pipal
     Real rho_curr{z.rho}, mu_curr{z.mu};
 
     // Evaluate direction for current penalty and interior-point parameters
-    z.setRho(rho_curr);
-    z.setMu(mu_curr);
-    z.evalNewtonRhs(i);
-    d.evalNewtonStep(i, z);
-    d.evalTrialStep(i, d1);
+    setRho(z, rho_curr);
+    setMu(z, mu_curr);
+    evalNewtonRhs(z, i);
+    evalNewtonStep(d, i, z);
+    evalTrialStep(d, i, d1);
 
     // Evaluate direction for zero interior-point parameter
-    z.setRho(rho_curr);
-    z.setMu(0);
-    z.evalNewtonRhs(i);
-    d.evalNewtonStep(i, z);
-    d.evalTrialStep(i, d2);
+    setRho(z, rho_curr);
+    setMu(z, 0);
+    evalNewtonRhs(z, i);
+    evalNewtonStep(d, i, z);
+    evalTrialStep(d, i, d2);
 
     // Evaluate direction for zero penalty parameter
-    z.setRho(0);
-    z.setMu(mu_curr);
-    z.evalNewtonRhs(i);
-    d.evalNewtonStep(i, z);
-    d.evalTrialStep(i, d3);
+    setRho(z, 0);
+    setMu(z, mu_curr);
+    evalNewtonRhs(z, i);
+    evalNewtonStep(d, i, z);
+    evalTrialStep(d, i, d3);
   }
 
   // Set direction

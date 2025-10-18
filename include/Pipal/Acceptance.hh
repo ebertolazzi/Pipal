@@ -15,7 +15,6 @@
 
 // Pipal includes
 #include "Pipal/Types.hh"
-#include "Pipal/Acceptance.hh"
 #include "Pipal/Iterate.hh"
 #include "Pipal/Input.hh"
 #include "Pipal/Parameter.hh"
@@ -53,14 +52,14 @@ namespace Pipal
         // Check for nonlinear fraction-to-boundary violation
         Integer ftb{0};
         if (i.nE > 0) {
-          ftb += (z.r1 < std::min(p.ls_frac, z.mu)*r1).count() + (z.r2 < std::min(p.ls_frac, z.mu)*r2).count();
+          ftb += (z.r1.array() < (std::min(p.ls_frac, z.mu)*r1).array()).count() + (z.r2.array() < (std::min(p.ls_frac, z.mu)*r2).array()).count();
         }
         if (i.nI > 0) {
-          ftb += (z.s1 < std::min(p.ls_frac, z.mu)*s1).count() + (z.s2 < std::min(p.ls_frac, z.mu)*s2).count();
+          ftb += (z.s1.array() < (std::min(p.ls_frac, z.mu)*s1).array()).count() + (z.s2.array() < (std::min(p.ls_frac, z.mu)*s2).array()).count();
         }
 
         // Check Armijo condition
-        if (ftb == 0 && z.phi - phi <= -p.ls_thresh*a.p*std::max(d.qtred, 0))
+        if (ftb == 0 && z.phi - phi <= -p.ls_thresh*a.p*std::max(d.qtred, 0.0))
         {
           // Reset variables and return
           setPrimals(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
@@ -94,14 +93,14 @@ namespace Pipal
     // Update primal fraction-to-boundary for constraint slacks
     if (i.nE > 0) {
       a.p0 = std::min({a.p0,
-        (((std::min(p.ls_frac, z.mu)-1)*z.r1(find(d.r1 < 0))).array() / (d.r1(find(d.r1 < 0))).array()).minCoeff(),
-        (((std::min(p.ls_frac, z.mu)-1)*z.r2(find(d.r2 < 0))).array() / (d.r2(find(d.r2 < 0))).array()).minCoeff()
+        (((std::min(p.ls_frac, z.mu)-1.0)*z.r1(find(d.r1.array() < 0.0))).array() / (d.r1(find(d.r1.array() < 0.0))).array()).minCoeff(),
+        (((std::min(p.ls_frac, z.mu)-1.0)*z.r2(find(d.r2.array() < 0.0))).array() / (d.r2(find(d.r2.array() < 0.0))).array()).minCoeff()
       });
     }
     if (i.nI > 0) {
       a.p0 = std::min({a.p0,
-        (((std::min(p.ls_frac, z.mu)-1)*z.s1(find(d.s1 < 0))).array() / (d.s1(find(d.s1 < 0))).array()).minCoeff(),
-        (((std::min(p.ls_frac, z.mu)-1)*z.s2(find(d.s2 < 0))).array() / (d.s2(find(d.s2 < 0))).array()).minCoeff()
+        (((std::min(p.ls_frac, z.mu)-1.0)*z.s1(find(d.s1.array() < 0.0))).array() / (d.s1(find(d.s1.array() < 0.0))).array()).minCoeff(),
+        (((std::min(p.ls_frac, z.mu)-1.0)*z.s2(find(d.s2.array() < 0.0))).array() / (d.s2(find(d.s2.array() < 0.0))).array()).minCoeff()
       });
     }
 
@@ -114,14 +113,14 @@ namespace Pipal
     // Update dual fraction-to-boundary for constraint multipliers
     if (i.nE > 0) {
       a.d = std::min({a.d,
-        (((std::min(p.ls_frac, z.mu)-1)*(1+z.lE(find(d.lE < 0)))).array() / (d.lE(find(d.lE < 0))).array()).minCoeff(),
-        (((1-std::min(p.ls_frac, z.mu))*(1-z.lE(find(d.lE > 0)))).array() / (d.lE(find(d.lE > 0))).array()).minCoeff()
+        (((std::min(p.ls_frac, z.mu)-1.0)*(1.0+z.lE(find(d.lE.array() < 0.0)))).array() / (d.lE(find(d.lE.array() < 0.0))).array()).minCoeff(),
+        (((1.0-std::min(p.ls_frac, z.mu))*(1.0-z.lE(find(d.lE.array() > 0.0)))).array() / (d.lE(find(d.lE.array() > 0.0))).array()).minCoeff()
       });
     }
     if (i.nI > 0) {
       a.d = std::min({a.d,
-        (((std::min(p.ls_frac, z.mu)-1)*(0+z.lI(find(d.lI < 0)))).array() / (d.lI(find(d.lI < 0))).array()).minCoeff(),
-        (((1-std::min(p.ls_frac, z.mu))*(1-z.lI(find(d.lI > 0)))).array() / (d.lI(find(d.lI > 0))).array()).minCoeff()
+        (((std::min(p.ls_frac, z.mu)-1.0)*(0.0+z.lI(find(d.lI.array() < 0.0)))).array() / (d.lI(find(d.lI.array() < 0.0))).array()).minCoeff(),
+        (((1.0-std::min(p.ls_frac, z.mu))*(1.0-z.lI(find(d.lI.array() > 0.0)))).array() / (d.lI(find(d.lI.array() > 0.0))).array()).minCoeff()
       });
     }
   }
@@ -166,14 +165,14 @@ namespace Pipal
         // Check for nonlinear fraction-to-boundary violation
         Integer ftb{0};
         if (i.nE > 0) {
-          ftb += (z.r1 < std::min(p.ls_frac, z.mu)*r1).count() + (z.r2 < std::min(p.ls_frac, z.mu)*r2).count();
+          ftb += (z.r1.array() < (std::min(p.ls_frac, z.mu)*r1).array()).count() + (z.r2.array() < (std::min(p.ls_frac, z.mu)*r2).array()).count();
         }
         if (i.nI > 0) {
-          ftb += (z.s1 < std::min(p.ls_frac, z.mu)*s1).count() + (z.s2 < std::min(p.ls_frac, z.mu)*s2).count();
+          ftb += (z.s1.array() < (std::min(p.ls_frac, z.mu)*s1).array()).count() + (z.s2.array() < (std::min(p.ls_frac, z.mu)*s2).array()).count();
         }
 
         // Check Armijo condition
-        if (ftb == 0 && z.phi - phi <= -p.ls_thresh*a.p*std::max(d.qtred, 0))
+        if (ftb == 0 && z.phi - phi <= -p.ls_thresh*a.p*std::max(d.qtred, 0.0))
         {
           // Reset variables, set boolean, and return
           setPrimals(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi); b = 1;
@@ -211,10 +210,10 @@ namespace Pipal
     struct Iterate & z, struct Direction & d)
   {
     // Check fraction-to-boundary rule
-    fractionToBoundary(<, p, i, z, d);
+    fractionToBoundary(a, p, i, z, d);
 
     // Check for full step for trial penalty parameters
-    Integer b{fullStepCheck(<, p, i, c, z, d)};
+    Integer b{fullStepCheck(a, p, i, c, z, d)};
 
     // Run second-order correction
     a.s = 0;
@@ -322,10 +321,10 @@ namespace Pipal
       // Check for nonlinear fraction-to-boundary violation
       Integer ftb{0};
       if (i.nE > 0) {
-        ftb += (z.r1 < std::min(p.ls_frac, z.mu)*r1).count() + (z.r2 < std::min(p.ls_frac, z.mu)*r2).count();
+        ftb += (z.r1.array() < std::min(p.ls_frac, z.mu)*r1.array()).count() + (z.r2.array() < std::min(p.ls_frac, z.mu)*r2.array()).count();
       }
       if (i.nI > 0) {
-        ftb += (z.s1 < std::min(p.ls_frac, z.mu)*s1).count() + (z.s2 < std::min(p.ls_frac, z.mu)*s2).count();
+        ftb += (z.s1.array() < std::min(p.ls_frac, z.mu)*s1.array()).count() + (z.s2.array() < std::min(p.ls_frac, z.mu)*s2.array()).count();
       }
 
       // Check Armijo condition
