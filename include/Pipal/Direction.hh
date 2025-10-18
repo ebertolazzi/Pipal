@@ -47,7 +47,7 @@ namespace Pipal
     d.x_norm = d.x.norm();
 
     // Evaluate dual direction norm
-    d.l_norm = Vector(d.lE, d.lI).norm(); // OPTIMIZE
+    d.l_norm = std::sqrt(d.lE.squaredNorm() + d.lI.squaredNorm());
   }
 
   // Evaluate model and model reductions
@@ -55,8 +55,24 @@ namespace Pipal
   {
     // Evaluate reduction in linear model of penalty-interior-point objective for zero penalty parameter
     d.lred0 = 0;
-    if (i.nE > 0) {d.lred0 = d.lred0 - (Vector(1.0-z.mu/z.r1.array(), 1.0-z.mu/z.r2.array()).array()*Vector(d.r1, d.r2).array()).sum();}
-    if (i.nI > 0) {d.lred0 = d.lred0 - (Vector(0.0-z.mu/z.s1.array(), 1.0-z.mu/z.s2.array()).array()*Vector(d.s1, d.s2).array()).sum();}
+    if (i.nE > 0) {
+      Vector tmp1(1.0 - z.mu / z.r1.array());
+      Vector tmp2(1.0 - z.mu / z.r2.array());
+      Vector tmp3(tmp1.size() + tmp2.size());
+      tmp3 << tmp1, tmp2;
+      Vector tmp4(d.r1.size() + d.r2.size());
+      tmp4 << d.r1, d.r2;
+      d.lred0 -= (tmp3.array()*tmp4.array()).sum();
+    }
+    if (i.nI > 0) {
+      Vector tmp1(0.0 - z.mu / z.s1.array());
+      Vector tmp2(1.0 - z.mu / z.s2.array());
+      Vector tmp3(tmp1.size() + tmp2.size());
+      tmp3 << tmp1, tmp2;
+      Vector tmp4(d.s1.size() + d.s2.size());
+      tmp4 << d.s1, d.s2;
+      d.lred0 -= (tmp3.array()*tmp4.array()).sum();
+    }
 
     // Evaluate remaining quantities only for nonzero penalty parameter
     if (z.rho > 0)
@@ -154,7 +170,7 @@ namespace Pipal
     d.x_norm = d.x.norm();
 
     // Evaluate dual direction norm
-    d.l_norm = Vector(d.lE, d.lI).norm(); // OPTIMIZE
+    d.l_norm = std::sqrt(d.lE.squaredNorm() + d.lI.squaredNorm());
   }
 
   // Evaluate search direction quantities
@@ -366,8 +382,8 @@ namespace Pipal
   }
 
   // Set direction
-  void setDirection(struct Direction & d, struct Input & i, Vector & dx, Vector & dr1, Vector & dr2,
-    Vector & ds1, Vector & ds2, Vector & dlE, Vector & dlI, Real const dx_norm, Real const dl_norm)
+  void setDirection(struct Direction & d, struct Input & i, Vector const & dx, Vector const & dr1, Vector const & dr2,
+    Vector const & ds1, Vector const & ds2, Vector const & dlE, Vector const & dlI, Real const dx_norm, Real const dl_norm)
   {
     // Set primal variables
     d.x = dx;

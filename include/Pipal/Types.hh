@@ -320,7 +320,7 @@ namespace Pipal
     Real         phi;   // Merit function value
     SparseMatrix AL;    // Newton matrix L-factor in LDL factorization
     SparseMatrix AD;    // Newton matrix D-factor in LDL factorization
-    SparseMatrix AP;    // Newton matrix P-factor in LDL factorization
+    Indices      AP;    // Newton matrix P-factor in LDL factorization
     SparseMatrix AS;    // Newton matrix S-factor in LDL factorization
     Integer      Annz;  // Newton matrix (upper triangle) nonzeros
     Real         shift; // Hessian shift value
@@ -395,6 +395,9 @@ namespace Pipal
   void updatePoint(struct Iterate & z, struct Input & i, Direction & d, Acceptance & a);
 
   Real evalViolation(struct Input & i, Vector & cE, Vector & cI);
+
+  Integer secondOrderCorrection(struct Acceptance & a, struct Parameter & p, struct Input & i, struct Counter & c,
+    struct Iterate & z, struct Direction & d);
 
 } // namespace Pipal
 

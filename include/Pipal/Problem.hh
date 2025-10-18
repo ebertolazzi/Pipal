@@ -476,13 +476,12 @@ namespace Pipal
     /**
      * \brief Evaluate the Jacobian of the constraints function.
      * \param[in] x Primal variables.
-     * \param[in] z Dual variables.
      * \param[out] out The Jacobian matrix of the constraints function.
      * \return True if the evaluation was successful, false otherwise.
      */
-    bool constraints_jacobian(Vector const & x, Vector const & z, Matrix & out) const override
+    bool constraints_jacobian(Vector const & x, Matrix & out) const override
     {
-      return this->m_constraints_jacobian(x, z, out);
+      return this->m_constraints_jacobian(x, out);
     }
 
     /**

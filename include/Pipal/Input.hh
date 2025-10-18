@@ -21,10 +21,10 @@ namespace Pipal
 {
 
   // Constructor
-  void buildInput(struct Input & i, struct Parameter & p, String & name, ObjectiveFunc & f_orig,
-    ConstraintsFunc & c_orig, ObjectiveGradientFunc & g_orig,
-    ConstraintsJacobianFunc & J_orig, LagrangianHessianFunc & H_orig,
-    Vector & x0, Vector & bl, Vector & bu, Vector & cl, Vector & cu)
+  void buildInput(struct Input & i, struct Parameter & p, String const & name, ObjectiveFunc const & f_orig,
+    ConstraintsFunc const & c_orig, ObjectiveGradientFunc const & g_orig,
+    ConstraintsJacobianFunc const & J_orig, LagrangianHessianFunc const & H_orig,
+    Vector const & x0, Vector const & bl, Vector const & bu, Vector const & cl, Vector const & cu)
   {
     #define CMD "Pipal::resetInput(...): "
 

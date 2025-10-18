@@ -318,7 +318,7 @@ namespace Pipal
     }
 
     // Scale complementarity
-    // FIXME if (rho > 0) {kkt = (1.0 / std::max(1.0, (rho*z.g).array().abs().maxCoeff()))*kkt.maxCoeff();}
+    if (rho > 0) {kkt = (1.0 / std::max(1.0, (rho*z.g).array().abs().maxCoeff()))*kkt;}
 
     // Evaluate optimality error
     return kkt.array().abs().maxCoeff();
@@ -454,8 +454,8 @@ namespace Pipal
 
       z.AL = ldl.matrixL();                          // Lower factor (unit lower-triangular)
       z.AD = ldl.vectorD().asDiagonal();             // Diagonal matrix (D)
-      z.AP = ldl.transpositionsP().indices();        // Permutation vector
-      z.AS = ldl.transpositionsP().indices();  // Permutation matrix
+      //FIXME z.AP = ldl.transpositionsP().indices();        // Permutation vector
+      //FIXME z.AS = ldl.transpositionsP().indices();  // Permutation matrix
 
       // Approximate number of negative pivots (inertia)
       Integer neig{static_cast<Integer>((ldl.vectorD().array() < 0).count())};

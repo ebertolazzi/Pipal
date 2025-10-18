@@ -282,7 +282,7 @@ namespace Pipal
 
       // Create alias for easier access
       Parameter  & p{this->m_parameter};
-      Counter          & c{this->m_counter};
+      Counter    & c{this->m_counter};
       Input      & i{this->m_input};
       Iterate    & z{this->m_iterate};
       Direction  & d{this->m_direction};
@@ -304,17 +304,21 @@ namespace Pipal
         CMD "error in evaluating upper bounds on constraints");
 
       // Reset counters
-      c.buildCounter();
+      buildCounter(c);
 
       // Check that the problem is set
       PIPAL_ASSERT(problem != nullptr,
         CMD "problem not set, use 'problem(...)' method to set it");
 
-      // Fill input structure
-      std::string name{"Pipal Problem FIXME"};
-      i = buildInput(p, name, problem->objective(), problem->constraints(),
-        problem->objective_gradient(), problem->constraints_jacobian(),
-        problem->lagrangian_hessian(), x_guess, bl, bu, cl, cu);
+    // Fill input structure
+    std::string name{"Pipal Problem FIXME"};
+    auto * problem_rapper = static_cast<ProblemWrapper<Real>*>(problem);
+    auto f_fun = problem_rapper->objective();
+    auto c_fun = problem_rapper->constraints();
+    auto g_fun = problem_rapper->objective_gradient();
+    auto J_fun = problem_rapper->constraints_jacobian();
+    auto H_fun = problem_rapper->lagrangian_hessian();
+    buildInput(i, p, name, f_fun, c_fun, g_fun, J_fun, H_fun, x_guess, bl, bu, cl, cu);
 
       // Print header and break line
       //if (this->m_verbose) {output = Output(input) o.print_header(); o.print_break(c);}
