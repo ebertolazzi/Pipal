@@ -28,8 +28,6 @@
 
 // Eigen library
 #include <Eigen/Dense>
-#include <Eigen/Sparse>
-#include <Eigen/SparseCholesky>
 
 // Print Pipal errors
 #ifndef PIPAL_ERROR
@@ -185,8 +183,7 @@ namespace Pipal
    * \brief Internal parameters for the solver algorithm.
    * \tparam Real The floating-point type.
    */
-  struct Parameter
-  {
+  using Parameter = struct Parameter {
     static constexpr Real    opt_err_tol{1.0e-06};   // Default optimality tolerance
     static constexpr Real    iter_max{1.0e+03};      // Default iteration limit
     static constexpr Real    rhs_bnd{1.0e+18};       // Maximum absolute value allowed for constraint right-hand side
@@ -197,7 +194,6 @@ namespace Pipal
     static constexpr Real    ls_factor{5.0e-01};     // Line search reduction factor
     static constexpr Real    ls_thresh{1.0e-08};     // Line search threshold value
     static constexpr Real    ls_frac{1.0e-02};       // Line search fraction-to-boundary constant
-    static constexpr Real    pivot_thresh{5.0e-01};  // Pivot threshold for LDL factorization
     static constexpr Real    slack_min{1.0e-20};     // Slack variable bound
     static constexpr Real    shift_min{1.0e-12};     // Hessian shift (non-zero) minimum value
     static constexpr Real    shift_factor1{5.0e-01}; // Hessian shift update value (for decreases)
@@ -226,8 +222,7 @@ namespace Pipal
    * \brief Internal counters for solver statistics.
    * \tparam Integer The integer type.
    */
-  struct Counter
-  {
+  using Counter = struct Counter {
     Integer f{0}; // Function evaluation counter
     Integer g{0}; // Gradient evaluation counter
     Integer H{0}; // Hessian evaluation counter
@@ -240,8 +235,7 @@ namespace Pipal
    * \tparam Real The floating-point type.
    * \tparam Integer The integer type.
    */
-  struct Input
-  {
+  using Input = struct Input {
     String  id; // Problem identity
     Integer n0; // Number of original formulation variables
     Indices I1; // Indices of free variables
@@ -291,8 +285,7 @@ namespace Pipal
    * \tparam Real The floating-point type.
    * \tparam Integer The integer type.
    */
-  struct Iterate
-  {
+  using Iterate = struct Iterate {
     Vector       x;     // Primal point
     Real         rho;   // Penalty parameter value
     Real         rho_;  // Penalty parameter last value
@@ -303,13 +296,13 @@ namespace Pipal
     Vector       r1;    // Equality constraint slack value
     Vector       r2;    // Equality constraint slack value
     Vector       cE;    // Equality constraint value (scaled)
-    SparseVector JE;    // Equality constraint Jacobian value
+    SparseMatrix JE;    // Equality constraint Jacobian value
     Integer      JEnnz; // Equality constraint Jacobian nonzeros
     Vector       lE;    // Equality constraint multipliers
     Vector       s1;    // Inequality constraint slack value
     Vector       s2;    // Inequality constraint slack value
     Vector       cI;    // Inequality constraint value (scaled)
-    SparseVector JI;    // Inequality constraint Jacobian value
+    SparseMatrix JI;    // Inequality constraint Jacobian value
     Integer      JInnz; // Inequality constraint Jacobian nonzeros
     Vector       lI;    // Inequality constraint multipliers
     SparseMatrix H;     // Hessian of Lagrangian
@@ -318,10 +311,7 @@ namespace Pipal
     Real         vu;    // Feasibility violation measure value (unscaled)
     Real         v0;    // Feasibility violation measure initial value
     Real         phi;   // Merit function value
-    SparseMatrix AL;    // Newton matrix L-factor in LDL factorization
-    SparseMatrix AD;    // Newton matrix D-factor in LDL factorization
-    Indices      AP;    // Newton matrix P-factor in LDL factorization
-    SparseMatrix AS;    // Newton matrix S-factor in LDL factorization
+    Eigen::LDLT<SparseMatrix, Eigen::Lower> ldlt; // LDLT factorization of Newton matrix
     Integer      Annz;  // Newton matrix (upper triangle) nonzeros
     Real         shift; // Hessian shift value
     SparseVector b;     // Newton right-hand side
@@ -345,8 +335,7 @@ namespace Pipal
    * \tparam Real The floating-point type.
    * \tparam Integer The integer type.
    */
-  struct Direction
-  {
+  using Direction = struct Direction {
     Vector x;       // Primal direction
     Real   x_norm;  // Primal direction norm value
     Real   x_norm_{INFTY}; // Primal direction norm last value
@@ -364,40 +353,39 @@ namespace Pipal
     Real   m;       // Quality function value
   }; // struct Direction
 
-  struct Acceptance
-  {
+  using Acceptance = struct Acceptance {
     Real p0{0.0};  // Fraction-to-the-boundary steplength
     Real p{0.0};   // Primal steplength
     Real d{0.0};   // Dual steplength
     bool s{false}; // Bool for second-order correction
   }; // struct Acceptance
 
-  void fractionToBoundary(struct Acceptance & a, struct Parameter & p, struct Input & i, struct Iterate & z,
-    struct Direction & d);
-  void evalTrialSteps(struct Direction & d, struct Input & i, struct Iterate & z, struct Direction & d1,
-    struct Direction & d2, struct Direction & d3);
-  void evalTrialStepCut(struct Direction & d, struct Input & i, struct Acceptance & a);
+  void fractionToBoundary(Acceptance & a, Parameter & p, Input & i, Iterate & z,Direction & d);
+  void evalTrialSteps(Direction & d, Input & i, Iterate & z, Direction & d1, Direction & d2, Direction & d3);
+  void evalTrialStepCut(Direction & d, Input & i, Acceptance & a);
 
-  void evalScalings(struct Iterate & z, struct Parameter & p, struct Input & i, struct Counter & c);
-  void evalFunctions(struct Iterate & z, struct Input & i, struct Counter & c);
-  void evalGradients(struct Iterate & z, struct Input & i, struct Counter & c);
-  void evalDependent(struct Iterate & z, struct Parameter & p, struct Input & i);
-  void evalInfeasibility(struct Iterate & z, struct Input & i);
-  void evalHessian(struct Iterate & z, struct Input & i, struct Counter & c);
-  void initNewtonMatrix(struct Iterate & z, struct Input & i);
-  void evalNewtonMatrix(struct Iterate & z, struct Parameter & p, struct Input & i, struct Counter & c);
-  void evalSlacks(struct Iterate & z, struct Parameter & p, struct Input & i);
-  void evalMerit(struct Iterate & z, struct Input & i);
-  void evalKKTErrors(struct Iterate & z, struct Input & i);
-  void evalXOriginal(struct Iterate & z, struct Input & i, Vector & x);
-  void evalLambdaOriginal(struct Iterate & z, struct Input & i, Vector & l);
-  Real evalViolation(struct Input & i, Vector & cE, Vector & cI);
-  void updatePoint(struct Iterate & z, struct Input & i, Direction & d, Acceptance & a);
+  void evalScalings(Iterate & z, Parameter & p, Input & i, Counter & c);
+  void evalFunctions(Iterate & z, Input & i, Counter & c);
+  void evalGradients(Iterate & z, Input & i, Counter & c);
+  void evalDependent(Iterate & z, Parameter & p, Input & i);
+  void evalInfeasibility(Iterate & z, Input & i);
+  void evalHessian(Iterate & z, Input & i, Counter & c);
+  void initNewtonMatrix(Iterate & z, Input & i);
+  void evalNewtonMatrix(Iterate & z, Parameter & p, Input & i, Counter & c);
+  void evalSlacks(Iterate & z, Parameter & p, Input & i);
+  void evalMerit(Iterate & z, Input & i);
+  void evalKKTErrors(Iterate & z, Input & i);
+  void evalXOriginal(Iterate & z, Input & i, Vector & x);
+  void evalLambdaOriginal(Iterate & z, Input & i, Vector & l);
+  Real evalViolation(Input & i, Vector & cE, Vector & cI);
+  void updatePoint(Iterate & z, Input & i, Direction & d, Acceptance & a);
 
-  Real evalViolation(struct Input & i, Vector & cE, Vector & cI);
+  Real evalViolation(Input & i, Vector & cE, Vector & cI);
 
-  Integer secondOrderCorrection(struct Acceptance & a, struct Parameter & p, struct Input & i, struct Counter & c,
-    struct Iterate & z, struct Direction & d);
+  Integer secondOrderCorrection(Acceptance & a, Parameter & p, Input & i, Counter & c,
+    Iterate & z, Direction & d);
+
+  Integer checkTermination(Iterate & z, Parameter & p, Input & i, Counter & c);
 
 } // namespace Pipal
 

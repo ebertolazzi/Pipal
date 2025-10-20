@@ -23,9 +23,47 @@ namespace Pipal
 {
 
   // Constructor
-  void buildIterate(struct Iterate & z, struct Parameter & p, struct Input & i, struct Counter & c)
+  void buildIterate(Iterate & z, Parameter & p, Input & i, Counter & c)
   {
     // Initialize quantities
+    z.rho_ = p.rho_init;
+    z.f = 0.0;
+    z.fu = 0.0;
+    z.g.setZero(i.nV);
+    z.r1.setZero(i.nE);
+    z.r2.setZero(i.nE);
+    z.cE.setZero(i.nE);
+    z.JE.setZero(i.nE, i.nV); // SparseMatrix
+    z.JEnnz = 0;
+    z.lE.setZero(i.nE);
+    z.s1.setZero(i.nI);
+    z.s2.setZero(i.nI);
+    z.cI.setZero(i.nI);
+    z.JI.setZero(i.nI, i.nV); // SparseMatrix
+    z.JInnz = 0;
+    z.lI.setConstant(i.nI, 0.5);
+    z.H.setZero(i.nV, i.nV); // SparseMatrix
+    z.Hnnz = 0;
+    z.v = 0.0;
+    z.vu = 0.0;
+    z.v0 = 1.0;
+    z.phi = 0.0;
+    z.Annz = 0;
+    z.shift = 0.0;
+    z.b.setZero(i.nA);
+    z.kkt.setZero(3);
+    z.kkt_.setConstant(INFTY, 1, p.opt_err_mem);
+    z.err = 0;
+    z.fs = 1.0;
+    z.cEs.setOnes(i.nE);
+    z.cEu.setZero(i.nE);
+    z.cIs.setOnes(i.nI);
+    z.cIu.setZero(i.nI);
+    z.A.setZero(i.nA, i.nA);
+    z.shift22 = 0.0;
+    z.v_ = 0.0;
+    z.cut_ = false;
+
     z.x     = i.x0;
     z.rho   = p.rho_init;
     z.mu    = p.mu_init;
@@ -36,14 +74,11 @@ namespace Pipal
     evalFunctions(z, i, c);
     evalGradients(z, i, c);
     evalDependent(z, p, i);
-    z.v0    = 1;
+    z.v0    = 1.0;
     evalInfeasibility(z, i);
     z.v0    = z.v;
     evalInfeasibility(z, i);
     z.v_    = z.v;
-    z.shift = 0;
-    z.kkt_.setConstant(p.opt_err_mem, INFTY);
-    z.cut_  = 0;
     evalHessian(z, i, c);
     z.Hnnz  = nnz(z.H);
     z.JEnnz = nnz(z.JE);
@@ -53,7 +88,7 @@ namespace Pipal
   }
 
   // Termination checker
-  Integer checkTermination(struct Iterate & z, struct Parameter & p, struct Input & i, struct Counter & c)
+  Integer checkTermination(Iterate & z, Parameter & p, Input & i, Counter & c)
   {
     // Update termination based on optimality error of nonlinear optimization problem
     if (z.kkt(1) <= p.opt_err_tol && z.v <= p.opt_err_tol) {return 1;}
@@ -74,7 +109,7 @@ namespace Pipal
   }
 
   // Dependent quantity evaluator
-  void evalDependent(struct Iterate & z, struct Parameter & p, struct Input & i)
+  void evalDependent(Iterate & z, Parameter & p, Input & i)
   {
     // Evaluate quantities dependent on penalty and interior-point parameters
     evalSlacks(z, p, i);
@@ -83,7 +118,7 @@ namespace Pipal
   }
 
   // Function evaluator
-  void evalFunctions(struct Iterate & z, struct Input & i, struct Counter & c)
+  void evalFunctions(Iterate & z, Input & i, Counter & c)
   {
     // Evaluate x in original space
     Vector x_orig;
@@ -157,7 +192,7 @@ namespace Pipal
   }
 
   // Gradient evaluator
-  void evalGradients(struct Iterate & z, struct Input & i, struct Counter & c)
+  void evalGradients(Iterate & z, Input & i, Counter & c)
   {
     // Evaluate x in original space
     Vector x_orig;
@@ -189,7 +224,7 @@ namespace Pipal
     }
 
     // Set objective gradient
-    z.g << g_orig(i.I1); g_orig(i.I3); g_orig(i.I4); g_orig(i.I5);
+    z.g << g_orig(i.I1), g_orig(i.I3), g_orig(i.I4), g_orig(i.I5);
 
     // Set equality constraint Jacobian
     if (i.nE > 0) {
@@ -229,22 +264,12 @@ namespace Pipal
     z.g *= z.fs;
 
     // Scale constraint Jacobians
-    if (i.nE > 0) {z.JE = z.cEs.asDiagonal() * z.JE;}
-      //for (Integer k{0}; k < z.JE.outerSize(); ++k) {
-      //  for (typename SparseMatrix::InnerIterator it(z.JE, k); it; ++it) {
-      //    it.valueRef() *= z.cEs(it.row());
-      //  }
-      //}
-    if (i.nI > 0) {z.JI = z.cIs.asDiagonal() * z.JI;}
-      //for (Integer k{0}; k < z.JI.outerSize(); ++k) {
-      //  for (typename SparseMatrix::InnerIterator it(z.JI, k); it; ++it) {
-      //    it.valueRef() *= z.cEs(it.row());
-      //  }
-      //}
+    if (i.nE > 0) {z.JE = z.cEs.asDiagonal() * z.JE;} // SPARSE
+    if (i.nI > 0) {z.JI = z.cIs.asDiagonal() * z.JI;} // SPARSE
   }
 
   // Hessian evaluator
-  void evalHessian(struct Iterate & z, struct Input & i, struct Counter & c)
+  void evalHessian(Iterate & z, Input & i, Counter & c)
   {
     // Evaluate lambda in original space
     Vector l_orig, x_orig;
@@ -284,7 +309,7 @@ namespace Pipal
   }
 
   // Infeasibility evaluator
-  void evalInfeasibility(struct Iterate & z, struct Input & i)
+  void evalInfeasibility(Iterate & z, Input & i)
   {
     // Evaluate scaled and unscaled feasibility violations
     z.v  = evalViolation(i, z.cE, z.cI) / std::max(1.0, z.v0);
@@ -292,7 +317,7 @@ namespace Pipal
   }
 
   // KKT error evaluator
-  Real evalKKTError(struct Iterate & z, struct Input & i, Real const rho, Real const mu)
+  Real evalKKTError(Iterate & z, Input & i, Real const rho, Real const mu)
   {
     // Initialize optimality vector
     Vector kkt(i.nV+2*i.nE+2*i.nI);
@@ -318,23 +343,23 @@ namespace Pipal
     }
 
     // Scale complementarity
-    if (rho > 0) {kkt = (1.0 / std::max(1.0, (rho*z.g).array().abs().maxCoeff()))*kkt;}
+    if (rho > 0) {kkt = (1.0 / std::max(1.0, (rho*z.g).template lpNorm<Eigen::Infinity>()))*kkt;}
 
     // Evaluate optimality error
-    return kkt.array().abs().maxCoeff();
+    return kkt.template lpNorm<Eigen::Infinity>();
   }
 
   // KKT errors evaluator
-  void evalKKTErrors(struct Iterate & z, struct Input & i)
+  void evalKKTErrors(Iterate & z, Input & i)
   {
     // Loop to compute optimality errors
-    z.kkt(1) = evalKKTError(z, i, 0, 0);
-    z.kkt(2) = evalKKTError(z, i, z.rho, 0);
-    z.kkt(3) = evalKKTError(z, i, z.rho, z.mu);
+    z.kkt(0) = evalKKTError(z, i, 0, 0);
+    z.kkt(1) = evalKKTError(z, i, z.rho, 0);
+    z.kkt(2) = evalKKTError(z, i, z.rho, z.mu);
   }
 
   // Evaluator of lambda in original space
-  void evalLambdaOriginal(struct Iterate & z, struct Input & i, Vector & l)
+  void evalLambdaOriginal(Iterate & z, Input & i, Vector & l)
   {
     // Initialize multipliers in original space
     l.setZero(i.nE+i.n7+i.n8+i.n9);
@@ -355,16 +380,16 @@ namespace Pipal
       l(i.I7) = -lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5, i.n3+i.n4+i.n5+i.n5+i.n7-1));
     }
     if (i.n8 > 0) {
-      l(i.I8) =  lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8-1));
+      l(i.I8) = lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8-1));
     }
     if (i.n9 > 0) {
-      l(i.I9) = -lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9-1))
-                +lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9+i.n9-1));
+      l(i.I9) = lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9+i.n9-1))
+                -lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9-1));
     }
   }
 
   // Matrices evaluator
-  void evalMatrices(struct Iterate & z, struct Parameter & p, struct Input & i, struct Counter & c)
+  void evalMatrices(Iterate & z, Parameter & p, Input & i, Counter & c)
   {
     // Evaluate Hessian and Newton matrices
     evalHessian(z, i, c);
@@ -372,7 +397,7 @@ namespace Pipal
   }
 
   // Merit evaluator
-  void evalMerit(struct Iterate & z, struct Input & i)
+  void evalMerit(Iterate & z, Input & i)
   {
     // Initialize merit for objective
     z.phi = z.rho*z.f;
@@ -389,7 +414,7 @@ namespace Pipal
   }
 
   // Newton matrix evaluator
-  void evalNewtonMatrix(struct Iterate & z, struct Parameter & p, struct Input & i, struct Counter & c)
+  void evalNewtonMatrix(Iterate & z, Parameter & p, Input & i, Counter & c)
   {
     // Check for equality constraints
     if (i.nE > 0)
@@ -448,18 +473,10 @@ namespace Pipal
       z.Annz = nnz<MatrixView::TRIL>(z.A);
 
       // Factor primal-dual matrix
-      //Eigen::SimplicialLDLT<SparseMatrix> ldl;
-      Eigen::LDLT<Eigen::MatrixXd> ldl;
-      ldl.compute(z.A.selfadjointView<Eigen::Lower>());
-
-      z.AL = ldl.matrixL();                          // Lower factor (unit lower-triangular)
-      z.AD = ldl.vectorD().asDiagonal();             // Diagonal matrix (D)
-      //FIXME z.AP = ldl.transpositionsP().indices();        // Permutation vector
-      //FIXME z.AS = ldl.transpositionsP().indices();  // Permutation matrix
+      z.ldlt.compute(z.A);
 
       // Approximate number of negative pivots (inertia)
-      Integer neig{static_cast<Integer>((ldl.vectorD().array() < 0).count())};
-
+      Integer neig{static_cast<Integer>((z.ldlt.vectorD().array() < 0.0).count())};
 
       // Increment factorization counter
       incrementFactorizationCount(c);
@@ -478,7 +495,7 @@ namespace Pipal
   }
 
   // Newton right-hand side evaluator
-  void evalNewtonRhs(struct Iterate & z, struct Input & i)
+  void evalNewtonRhs(Iterate & z, Input & i)
   {
     // Initialize right-hand side vector
     z.b.setZero(i.nA);
@@ -510,7 +527,7 @@ namespace Pipal
   }
 
   // Scalings evaluator
-  void evalScalings(struct Iterate & z, struct Parameter & p, struct Input & i, struct Counter & c)
+  void evalScalings(Iterate & z, Parameter & p, Input & i, Counter & c)
   {
     // Initialize scalings
     z.fs = 1;
@@ -518,28 +535,28 @@ namespace Pipal
     z.cIs.setOnes(i.nI);
 
     // Evaluate gradients
-    evalGradients(z, i,c);
+    evalGradients(z, i, c);
 
     // Scale down objective if norm of gradient is too large
-    z.fs = p.grad_max / std::max(z.g.array().abs().maxCoeff(), p.grad_max);
+    z.fs = p.grad_max / std::max(z.g.template lpNorm<Eigen::Infinity>(), p.grad_max);
 
     // Loop through equality constraints
     for (Integer j{0}; j < i.nE; ++j)
     {
       // Scale down equality constraint j if norm of gradient is too large
-      z.cEs(j) = p.grad_max / std::max(z.JE.row(j).array().abs().maxCoeff(), p.grad_max);
+      z.cEs(j) = p.grad_max / std::max(z.JE.row(j).template lpNorm<Eigen::Infinity>(), p.grad_max);
     }
 
     // Loop through inequality constraints
     for (Integer j{0}; j < i.nI; ++j)
     {
       // Scale down inequality constraint j if norm of gradient is too large
-      z.cIs(j) = p.grad_max / std::max(z.JI.row(j).array().abs().maxCoeff(), p.grad_max);
+      z.cIs(j) = p.grad_max / std::max(z.JI.row(j).template lpNorm<Eigen::Infinity>(), p.grad_max);
     }
   }
 
   // Slacks evaluator
-  void evalSlacks(struct Iterate & z, struct Parameter & p, struct Input & i)
+  void evalSlacks(Iterate & z, Parameter & p, Input & i)
   {
     // Check for equality constraints
     if (i.nE > 0)
@@ -567,7 +584,7 @@ namespace Pipal
   }
 
   // Evaluator of x in original space
-  void evalXOriginal(struct Iterate & z, struct Input & i, Vector & x)
+  void evalXOriginal(Iterate & z, Input & i, Vector & x)
   {
     // Initialize x in original space
     x.setZero(i.n0);
@@ -581,14 +598,14 @@ namespace Pipal
   }
 
   // Gets primal-dual point
-  void getSolution(struct Iterate & z, struct Input & i, Vector & x, Vector & l)
+  void getSolution(Iterate & z, Input & i, Vector & x, Vector & l)
   {
     evalXOriginal(z, i, x);
     evalLambdaOriginal(z, i, l);
   }
 
   // Initializes Newton matrix
-  void initNewtonMatrix(struct Iterate & z, struct Input & i)
+  void initNewtonMatrix(Iterate & z, Input & i)
   {
     // Allocate memory
     z.A.resize(i.nA, i.nA);// FIXME, z.Hnnz+5*i.nE+5*i.nI+z.JEnnz+z.JInnz);
@@ -615,10 +632,10 @@ namespace Pipal
   }
 
   // Set interior-point parameter
-  void setMu(struct Iterate & z, Real const mu) {z.mu = mu;}
+  void setMu(Iterate & z, Real const mu) {z.mu = mu;}
 
   // Set primal variables
-  void setPrimals(struct Iterate & z, struct Input & i, Vector & x, Vector & r1, Vector & r2,
+  void setPrimals(Iterate & z, Input & i, Vector & x, Vector & r1, Vector & r2,
     Vector & s1, Vector & s2, Vector & lE, Vector & lI, Real const f,
     Vector & cE, Vector & cI, Real const phi)
   {
@@ -630,13 +647,13 @@ namespace Pipal
   }
 
   // Set penalty parameter
-  void setRho(struct Iterate & z, Real const rho) {z.rho = rho;}
+  void setRho(Iterate & z, Real const rho) {z.rho = rho;}
 
   // Set last penalty parameter
-  void setRhoLast(struct Iterate & z, Real const rho) {z.rho_ = rho;}
+  void setRhoLast(Iterate & z, Real const rho) {z.rho_ = rho;}
 
   // Iterate updater
-  void updateIterate(struct Iterate & z, struct Parameter & p, struct Input & i, struct Counter & c,
+  void updateIterate(Iterate & z, Parameter & p, Input & i, Counter & c,
     Direction & d, Acceptance & a)
   {
     // Update last quantities
@@ -655,7 +672,7 @@ namespace Pipal
   }
 
   // Parameter updater
-  void updateParameters(struct Iterate & z, struct Parameter & p, struct Input & i)
+  void updateParameters(Iterate & z, Parameter & p, Input & i)
   {
     // Check for interior-point parameter update based on optimality error
     while (z.mu > p.mu_min && z.kkt(2) <= std::max({z.mu, p.opt_err_tol-z.mu}))
@@ -691,7 +708,7 @@ namespace Pipal
   }
 
   // Primal point updater
-  void updatePoint(struct Iterate & z, struct Input & i, Direction & d, Acceptance & a)
+  void updatePoint(Iterate & z, Input & i, Direction & d, Acceptance & a)
   {
     // Update primal and dual variables
     z.x += a.p*d.x ;
@@ -702,7 +719,7 @@ namespace Pipal
   }
 
   // Feasibility violation evaluator
-  Real evalViolation(struct Input & i, Vector & cE, Vector & cI)
+  Real evalViolation(Input & i, Vector & cE, Vector & cI)
   {
     // Initialize violation vector
     Vector vec;

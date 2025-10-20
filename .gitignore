@@ -45,4 +45,5 @@
 
 # Directories
 build/
+build_xcode/
 third_party/

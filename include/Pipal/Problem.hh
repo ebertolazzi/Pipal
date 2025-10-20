@@ -32,6 +32,8 @@ namespace Pipal
     static_assert(std::is_floating_point<Real>::value,
       "Pipal::Problem: template argument 'Real' must be a floating-point type.");
 
+    std::string m_name{"(Unnamed Pipal Problem)"};
+
   public:
     using Vector = Eigen::Vector<Real, Eigen::Dynamic>;
     using Matrix = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
@@ -44,6 +46,12 @@ namespace Pipal
      * and Jacobian functions.
      */
     Problem() {};
+
+    /**
+     * \brief Problem constructor.
+     * \param[in] t_name Name of the optimization problem.
+     */
+    Problem(std::string const & t_name) : m_name(t_name) {};
 
     /**
      * \brief Deleted copy constructor.
@@ -73,6 +81,18 @@ namespace Pipal
      * \brief Default destructor.
      */
     virtual ~Problem() = default;
+
+    /**
+     * \brief Get the name of the optimization problem.
+     * \return The name of the optimization problem.
+     */
+    std::string const & name() const {return this->m_name;}
+
+    /**
+     * \brief Set the name of the optimization problem.
+     * \param[in] t_name The name of the optimization problem.
+     */
+    void name(std::string const & t_name) {this->m_name = t_name;}
 
     /**
      * \brief Evaluate the objective function.
@@ -196,52 +216,54 @@ namespace Pipal
      *
      * Initializes the problem with the provided objective, gradient, constraints, and Jacobian
      * functions.
-     * \param[in] objective Objective function handle.
-     * \param[in] objective_gradient Gradient of the objective function handle.
-     * \param[in] constraints Constraints function handle.
-     * \param[in] constraints_jacobian Jacobian of the constraints function handle.
-     * \param[in] lagrangian_hessian Hessian of the Lagrangian function handle.
-     * \param[in] primal_lower_bounds Lower bounds on the primal variables function handle.
-     * \param[in] primal_upper_bounds Upper bounds on the primal variables function handle.
-     * \param[in] constraints_lower_bounds Lower bounds on the constraints function handle.
-     * \param[in] constraints_upper_bounds Upper bounds on the constraints function handle.
+     * \param[in] t_name Name of the optimization problem.
+     * \param[in] t_objective Objective function handle.
+     * \param[in] t_objective_gradient Gradient of the objective function handle.
+     * \param[in] t_constraints Constraints function handle.
+     * \param[in] t_constraints_jacobian Jacobian of the constraints function handle.
+     * \param[in] t_lagrangian_hessian Hessian of the Lagrangian function handle.
+     * \param[in] t_primal_lower_bounds Lower bounds on the primal variables function handle.
+     * \param[in] t_primal_upper_bounds Upper bounds on the primal variables function handle.
+     * \param[in] t_constraints_lower_bounds Lower bounds on the constraints function handle.
+     * \param[in] t_constraints_upper_bounds Upper bounds on the constraints function handle.
      */
-    ProblemWrapper(ObjectiveFunc const & objective, ObjectiveGradientFunc const & objective_gradient,
-      ConstraintsFunc const & constraints, ConstraintsJacobianFunc const & constraints_jacobian,
-      LagrangianHessianFunc const & lagrangian_hessian, BoundsFunc const & primal_lower_bounds,
-      BoundsFunc const & primal_upper_bounds, BoundsFunc const & constraints_lower_bounds,
-      BoundsFunc const & constraints_upper_bounds)
-      : m_objective(objective), m_objective_gradient(objective_gradient), m_constraints(constraints),
-        m_constraints_jacobian(constraints_jacobian), m_lagrangian_hessian(lagrangian_hessian),
-        m_primal_lower_bounds(primal_lower_bounds), m_primal_upper_bounds(primal_upper_bounds),
-        m_constraints_lower_bounds(constraints_lower_bounds), m_constraints_upper_bounds(constraints_upper_bounds) {}
+    ProblemWrapper(std::string const & t_name, ObjectiveFunc const & t_objective,
+      ObjectiveGradientFunc const & t_objective_gradient, ConstraintsFunc const & t_constraints,
+      ConstraintsJacobianFunc const & t_constraints_jacobian, LagrangianHessianFunc const & t_lagrangian_hessian,
+      BoundsFunc const & t_primal_lower_bounds, BoundsFunc const & t_primal_upper_bounds,
+      BoundsFunc const & t_constraints_lower_bounds, BoundsFunc const & t_constraints_upper_bounds)
+      : Problem<Real>(t_name), m_objective(t_objective), m_objective_gradient(t_objective_gradient), m_constraints(t_constraints),
+        m_constraints_jacobian(t_constraints_jacobian), m_lagrangian_hessian(t_lagrangian_hessian),
+        m_primal_lower_bounds(t_primal_lower_bounds), m_primal_upper_bounds(t_primal_upper_bounds),
+        m_constraints_lower_bounds(t_constraints_lower_bounds), m_constraints_upper_bounds(t_constraints_upper_bounds) {}
 
     /**
      * \brief Constructor for the ProblemWrapper class (with the Hessian of the Lagrangian).
      *
      * Initializes the problem with the provided objective, gradient, constraints, Jacobian, and
      * Hessian functions.
-     * \param[in] objective Objective function handle.
-     * \param[in] objective_gradient Gradient of the objective function handle.
-     * \param[in] objective_hessian Hessian of the objective function handle.
-     * \param[in] constraints Constraints function handle.
-     * \param[in] constraints_jacobian Jacobian of the constraints function handle.
-     * \param[in] lagrangian_hessian Hessian of the Lagrangian function handle.
-     * \param[in] lower_bounds Lower bounds on the primal variables function handle.
-     * \param[in] upper_bounds Upper bounds on the primal variables function handle.
-     * \param[in] constraints_lower_bounds Lower bounds on the constraints function handle.
-     * \param[in] constraints_upper_bounds Upper bounds on the constraints function handle.
+     * \param[in] t_name Name of the optimization problem.
+     * \param[in] t_objective Objective function handle.
+     * \param[in] t_objective_gradient Gradient of the objective function handle.
+     * \param[in] t_objective_hessian Hessian of the objective function handle.
+     * \param[in] t_constraints Constraints function handle.
+     * \param[in] t_constraints_jacobian Jacobian of the constraints function handle.
+     * \param[in] t_lagrangian_hessian Hessian of the Lagrangian function handle.
+     * \param[in] t_lower_bounds Lower bounds on the primal variables function handle.
+     * \param[in] t_upper_bounds Upper bounds on the primal variables function handle.
+     * \param[in] t_constraints_lower_bounds Lower bounds on the constraints function handle.
+     * \param[in] t_constraints_upper_bounds Upper bounds on the constraints function handle.
      */
-    ProblemWrapper(ObjectiveFunc const & objective, ObjectiveGradientFunc const & objective_gradient,
-      ObjectiveHessianFunc const & objective_hessian, ConstraintsFunc const & constraints,
-      ConstraintsJacobianFunc const & constraints_jacobian, LagrangianHessianFunc const & lagrangian_hessian,
-      BoundsFunc const & primal_lower_bounds, BoundsFunc const & primal_upper_bounds,
-      BoundsFunc const & constraints_lower_bounds, BoundsFunc const & constraints_upper_bounds)
-      : m_objective(objective), m_objective_gradient(objective_gradient),
-        m_objective_hessian(objective_hessian), m_constraints(constraints),
-        m_constraints_jacobian(constraints_jacobian), m_lagrangian_hessian(lagrangian_hessian),
-        m_primal_lower_bounds(primal_lower_bounds), m_primal_upper_bounds(primal_upper_bounds),
-        m_constraints_lower_bounds(constraints_lower_bounds), m_constraints_upper_bounds(constraints_upper_bounds) {}
+    ProblemWrapper(std::string const & t_name, ObjectiveFunc const & t_objective, ObjectiveGradientFunc const & t_objective_gradient,
+      ObjectiveHessianFunc const & t_objective_hessian, ConstraintsFunc const & t_constraints,
+      ConstraintsJacobianFunc const & t_constraints_jacobian, LagrangianHessianFunc const & t_lagrangian_hessian,
+      BoundsFunc const & t_primal_lower_bounds, BoundsFunc const & t_primal_upper_bounds,
+      BoundsFunc const & t_constraints_lower_bounds, BoundsFunc const & t_constraints_upper_bounds)
+      : m_objective(t_objective), m_objective_gradient(t_objective_gradient),
+        m_objective_hessian(t_objective_hessian), m_constraints(t_constraints),
+        m_constraints_jacobian(t_constraints_jacobian), m_lagrangian_hessian(t_lagrangian_hessian),
+        m_primal_lower_bounds(t_primal_lower_bounds), m_primal_upper_bounds(t_primal_upper_bounds),
+        m_constraints_lower_bounds(t_constraints_lower_bounds), m_constraints_upper_bounds(t_constraints_upper_bounds) {}
 
     /**
      * \brief Default destructor for the ProblemWrapper class.

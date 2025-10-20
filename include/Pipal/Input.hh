@@ -21,7 +21,7 @@ namespace Pipal
 {
 
   // Constructor
-  void buildInput(struct Input & i, struct Parameter & p, String const & name, ObjectiveFunc const & f_orig,
+  void buildInput(Input & i, Parameter & p, String const & name, ObjectiveFunc const & f_orig,
     ConstraintsFunc const & c_orig, ObjectiveGradientFunc const & g_orig,
     ConstraintsJacobianFunc const & J_orig, LagrangianHessianFunc const & H_orig,
     Vector const & x0, Vector const & bl, Vector const & bu, Vector const & cl, Vector const & cu)
@@ -39,26 +39,27 @@ namespace Pipal
     i.H_fun = H_orig;
 
     // Set number of original formulation variables
-    i.n0 = x0.size();
+    i.n0 = static_cast<Integer>(x0.size());
 
     // Find indices sets
     Real const tolerance{Eigen::NumTraits<Real>::epsilon()};
     Mask const cond_bl(bl.array() <= -p.rhs_bnd);
-    Mask const cond_bu(bu.array() >=  p.rhs_bnd);
+    Mask const cond_bu(bu.array() >= p.rhs_bnd);
     Mask const cond_cl(cl.array() <= -p.rhs_bnd);
-    Mask const cond_cu(cu.array() >=  p.rhs_bnd);
-    Mask const cond_bq((bl.array() - bu.array()).abs() > tolerance);
-    Mask const cond_cq((cl.array() - cu.array()).abs() > tolerance);
+    Mask const cond_cu(cu.array() >= p.rhs_bnd);
+    Mask const cond_beq((bl.array() - bu.array()).abs() <= tolerance);
+    Mask const cond_ceq((cl.array() - cu.array()).abs() <= tolerance);
 
+    // Now the index sets
     i.I1 = find(cond_bl && cond_bu);
-    i.I2 = find(cond_bq);
-    i.I3 = find(!cond_bl &&  cond_bu);
+    i.I2 = find(cond_beq);
+    i.I3 = find(!cond_bl && cond_bu);
     i.I4 = find(cond_bl && !cond_bu);
-    i.I5 = find(!cond_bl && !cond_bu && !cond_bq);
-    i.I6 = find(cond_cq);
-    i.I7 = find(!cond_cl &&  cond_cu);
+    i.I5 = find(!cond_bl && !cond_bu && !cond_beq);
+    i.I6 = find(cond_ceq);
+    i.I7 = find(!cond_cl && cond_cu);
     i.I8 = find(cond_cl && !cond_cu);
-    i.I9 = find(!cond_cl && !cond_cu && !cond_cq);
+    i.I9 = find(!cond_cl && !cond_cu && !cond_ceq);
 
     // Set right-hand side values
     i.b2 = bl(i.I2);
@@ -73,15 +74,15 @@ namespace Pipal
     i.u9 = cu(i.I9);
 
     // Set sizes of indices sets
-    i.n1 = i.I1.count();
-    i.n2 = i.I2.count();
-    i.n3 = i.I3.count();
-    i.n4 = i.I4.count();
-    i.n5 = i.I5.count();
-    i.n6 = i.I6.count();
-    i.n7 = i.I7.count();
-    i.n8 = i.I8.count();
-    i.n9 = i.I9.count();
+    i.n1 = static_cast<Integer>(i.I1.size());
+    i.n2 = static_cast<Integer>(i.I2.size());
+    i.n3 = static_cast<Integer>(i.I3.size());
+    i.n4 = static_cast<Integer>(i.I4.size());
+    i.n5 = static_cast<Integer>(i.I5.size());
+    i.n6 = static_cast<Integer>(i.I6.size());
+    i.n7 = static_cast<Integer>(i.I7.size());
+    i.n8 = static_cast<Integer>(i.I8.size());
+    i.n9 = static_cast<Integer>(i.I9.size());
 
     // Initialize number of invalid bounds
     i.vi = 0;

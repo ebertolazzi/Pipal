@@ -29,7 +29,7 @@
 #include "Pipal/Direction.hh"
 #include "Pipal/Input.hh"
 #include "Pipal/Iterate.hh"
-//#include "Pipal/Output.hh"
+#include "Pipal/Output.hh"
 #include "Pipal/Parameter.hh"
 #include "Pipal/Problem.hh"
 
@@ -66,13 +66,13 @@ namespace Pipal
 
   private:
     Acceptance m_acceptance; /*!< Acceptance criteria for trial points. */
-    Counter         m_counter; /*!< Internal counters for solver statistics. */
-    Input     m_input;  /*!< Input structure for the solver. */
-    Direction m_direction; /*!< Current search direction of the solver. */
-    Iterate   m_iterate; /*!< Current iterate of the solver. */
-    //Output<Real>    m_output;  /*!< Output class for managing solver output. */
-    Parameter m_parameter;   /*!< Internal parameters for the solver algorithm. */
-    ProblemPtr      m_problem; /*!< Problem object pointer. */
+    Counter    m_counter;    /*!< Internal counters for solver statistics. */
+    Input      m_input;      /*!< Input structure for the solver. */
+    Direction  m_direction;  /*!< Current search direction of the solver. */
+    Iterate    m_iterate;    /*!< Current iterate of the solver. */
+    Output     m_output;     /*!< Output class for managing solver output. */
+    Parameter  m_parameter;  /*!< Internal parameters for the solver algorithm. */
+    ProblemPtr m_problem;    /*!< Problem object pointer. */
 
     // Some options for the solver
     bool      m_verbose{false};      /*!< Verbosity flag. */
@@ -91,6 +91,7 @@ namespace Pipal
      * \brief Constructor for the Pipal class.
      *
      * Initializes the solver with the provided objective, gradient, constraints, and Jacobian functions.
+     * \param[in] name Name of the optimization problem.
      * \param[in] objective Objective function handle.
      * \param[in] objective_gradient Gradient of the objective function handle.
      * \param[in] constraints Constraints function handle.
@@ -101,12 +102,12 @@ namespace Pipal
      * \param[in] constraints_lower_bounds Lower bounds on the constraints handle.
      * \param[in] constraints_upper_bounds Upper bounds on the constraints handle.
      */
-    Solver(ObjectiveFunc const & objective, ObjectiveGradientFunc const & objective_gradient,
+    Solver(std::string const & name, ObjectiveFunc const & objective, ObjectiveGradientFunc const & objective_gradient,
       ConstraintsFunc const & constraints, ConstraintsJacobianFunc const & constraints_jacobian,
       LagrangianHessianFunc const & lagrangian_hessian, BoundsFunc const & primal_lower_bounds,
       BoundsFunc const & primal_upper_bounds, BoundsFunc const & constraints_lower_bounds,
       BoundsFunc const & constraints_upper_bounds)
-      : m_problem(std::make_unique<ProblemWrapper<Real>>(objective, objective_gradient,
+      : m_problem(std::make_unique<ProblemWrapper<Real>>(name, objective, objective_gradient,
         constraints, constraints_jacobian, lagrangian_hessian, primal_lower_bounds, primal_upper_bounds,
         constraints_lower_bounds, constraints_upper_bounds)) {}
 
@@ -114,6 +115,7 @@ namespace Pipal
      * \brief Constructor for the Pipal class (with Hessian).
      *
      * Initializes the solver with the provided objective, gradient, constraints, Jacobian, and Hessian functions.
+     * \param[in] name Name of the optimization problem.
      * \param[in] objective Objective function handle.
      * \param[in] objective_gradient Gradient of the objective function handle.
      * \param[in] objective_hessian Hessian of the objective function handle.
@@ -125,12 +127,12 @@ namespace Pipal
      * \param[in] constraints_lower_bounds Lower bounds on the constraints handle.
      * \param[in] constraints_upper_bounds Upper bounds on the constraints handle.
      */
-    Solver(ObjectiveFunc const & objective, ObjectiveGradientFunc const & objective_gradient,
+    Solver(std::string const & name, ObjectiveFunc const & objective, ObjectiveGradientFunc const & objective_gradient,
       ObjectiveHessianFunc const & objective_hessian, ConstraintsFunc const & constraints,
       ConstraintsJacobianFunc const & constraints_jacobian, LagrangianHessianFunc const & lagrangian_hessian,
       BoundsFunc const & primal_lower_bounds, BoundsFunc const & primal_upper_bounds,
       BoundsFunc const & constraints_lower_bounds, BoundsFunc const & constraints_upper_bounds)
-      : m_problem(std::make_unique<ProblemWrapper<Real>>(objective, objective_gradient, objective_hessian,
+      : m_problem(std::make_unique<ProblemWrapper<Real>>(name, objective, objective_gradient, objective_hessian,
         constraints, constraints_jacobian, lagrangian_hessian, primal_lower_bounds, primal_upper_bounds,
         constraints_lower_bounds, constraints_upper_bounds)) {}
 
@@ -287,58 +289,58 @@ namespace Pipal
       Iterate    & z{this->m_iterate};
       Direction  & d{this->m_direction};
       Acceptance & a{this->m_acceptance};
-      Problem<Real>    * problem{this->m_problem.get()};
+
+      // Check that the problem is set
+      PIPAL_ASSERT(this->m_problem.get() != nullptr,
+        CMD "problem not set, use 'problem(...)' method to set it");
 
       // Get variable bounds
-      Vector bl(i.nV), bu(i.nV);
-      PIPAL_ASSERT(problem->primal_lower_bounds(bl),
+      Vector bl, bu;
+      PIPAL_ASSERT(this->m_problem->primal_lower_bounds(bl),
         CMD "error in evaluating lower bounds on primal variables");
-      PIPAL_ASSERT(problem->primal_upper_bounds(bu),
+      PIPAL_ASSERT(this->m_problem->primal_upper_bounds(bu),
         CMD "error in evaluating upper bounds on primal variables");
 
       // Get constraint bounds
-      Vector cl(i.nI), cu(i.nI);
-      PIPAL_ASSERT(problem->constraints_lower_bounds(cl),
+      Vector cl, cu;
+      PIPAL_ASSERT(this->m_problem->constraints_lower_bounds(cl),
         CMD "error in evaluating lower bounds on constraints");
-      PIPAL_ASSERT(problem->constraints_upper_bounds(cu),
+      PIPAL_ASSERT(this->m_problem->constraints_upper_bounds(cu),
         CMD "error in evaluating upper bounds on constraints");
 
       // Reset counters
       buildCounter(c);
 
-      // Check that the problem is set
-      PIPAL_ASSERT(problem != nullptr,
-        CMD "problem not set, use 'problem(...)' method to set it");
+      // Build function handles
+      auto f_fun = [this](Vector const & x, Real & out) -> bool {return this->m_problem->objective(x, out);};
+      auto c_fun = [this](Vector const & x, Vector & out) -> bool {return this->m_problem->constraints(x, out);};
+      auto g_fun = [this](Vector const & x, Vector & out) -> bool {return this->m_problem->objective_gradient(x, out);};
+      auto J_fun = [this](Vector const & x, Matrix & out) -> bool {return this->m_problem->constraints_jacobian(x, out);};
+      auto H_fun = [this](Vector const & x, Vector const & z, Matrix & out) -> bool {return this->m_problem->lagrangian_hessian(x, z, out);};
 
-    // Fill input structure
-    std::string name{"Pipal Problem FIXME"};
-    auto * problem_rapper = static_cast<ProblemWrapper<Real>*>(problem);
-    auto f_fun = problem_rapper->objective();
-    auto c_fun = problem_rapper->constraints();
-    auto g_fun = problem_rapper->objective_gradient();
-    auto J_fun = problem_rapper->constraints_jacobian();
-    auto H_fun = problem_rapper->lagrangian_hessian();
-    buildInput(i, p, name, f_fun, c_fun, g_fun, J_fun, H_fun, x_guess, bl, bu, cl, cu);
+      // Fill input structure
+      buildInput(i, p, this->m_problem->name(), f_fun, c_fun, g_fun, J_fun, H_fun, x_guess, bl, bu, cl, cu);
+      buildIterate(z, p, i, c);
 
       // Print header and break line
-      //if (this->m_verbose) {output = Output(input) o.print_header(); o.print_break(c);}
+      if (this->m_verbose) {this->m_output.printHeader(i, z); this->m_output.printBreak(c);}
 
       // Iterations loop
       while (!checkTermination(z, p, i, c))
       {
         // Print iterate
-        //if (this->m_verbose) {o.print_iterate(c, i);}
+        if (this->m_verbose) {this->m_output.printIterate(c, z);}
 
         // Evaluate the step
         evalStep(d, p, i, c, z, a);
 
         // Print direction
-        //if (this->m_verbose) {o.print_direction(d);}
+        if (this->m_verbose) {this->m_output.printDirection(z, d);}
 
         lineSearch(a, p, i, c, z, d);
 
         // Print accepted
-        //if (this->m_verbose) {o.print_acceptance(a);}
+        if (this->m_verbose) {this->m_output.printAcceptance(a);}
 
         updateIterate(z, p, i, c, d, a);
 
@@ -346,13 +348,11 @@ namespace Pipal
         incrementIterationCount(c);
 
         // Print break
-        //if (this->m_verbose) {o.print_break(c);}
+        if (this->m_verbose) {this->m_output.printBreak(c);}
       }
-
       // Print footer and terminate
-      //if (this->m_verbose) {o.print_footer(p, i, c, i);o.terminate();}
+      if (this->m_verbose) {this->m_output.printFooter(p, i, c, z);}
       x_sol = x_guess;
-
       return true;
 
       #undef CMD

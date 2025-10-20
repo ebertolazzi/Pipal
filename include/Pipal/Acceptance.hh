@@ -25,8 +25,8 @@ namespace Pipal
 {
 
   // Backtracking line search
-  void backtracking(struct Acceptance & a, struct Parameter & p, struct Input & i, struct Counter & c,
-    struct Iterate & z, struct Direction & d)
+  void backtracking(Acceptance & a, Parameter & p, Input & i, Counter & c,
+    Iterate & z, Direction & d)
   {
     // Store current values
     Vector x(z.x);
@@ -82,8 +82,8 @@ namespace Pipal
     }
   }
   // Fraction-to-boundary line search
-  void fractionToBoundary(struct Acceptance & a, struct Parameter & p, struct Input & i, struct Iterate & z,
-    struct Direction & d)
+  void fractionToBoundary(Acceptance & a, Parameter & p, Input & i, Iterate & z,
+    Direction & d)
   {
 
     // Initialize primal fraction-to-boundary
@@ -168,8 +168,8 @@ namespace Pipal
   }
 
   // Full step search for trial penalty parameters
-  Integer fullStepCheck(struct Acceptance & a, struct Parameter & p, struct Input & i, struct Counter & c,
-    struct Iterate & z, struct Direction & d)
+  Integer fullStepCheck(Acceptance & a, Parameter & p, Input & i, Counter & c,
+    Iterate & z, Direction & d)
   {
     // Initialize boolean
     Integer b{0};
@@ -248,15 +248,14 @@ namespace Pipal
   }
 
   // Line search
-  void lineSearch(struct Acceptance & a, struct Parameter & p, struct Input & i, struct Counter & c,
-    struct Iterate & z, struct Direction & d)
+  void lineSearch(Acceptance & a, Parameter & p, Input & i, Counter & c,
+    Iterate & z, Direction & d)
   {
     // Check fraction-to-boundary rule
     fractionToBoundary(a, p, i, z, d);
 
     // Check for full step for trial penalty parameters
     Integer b{fullStepCheck(a, p, i, c, z, d)};
-
     // Run second-order correction
     a.s = 0;
     if (b == 0) {
@@ -269,8 +268,8 @@ namespace Pipal
   }
 
   // Second-order Correction
-  Integer secondOrderCorrection(struct Acceptance & a, struct Parameter & p, struct Input & i, struct Counter & c,
-    struct Iterate & z, struct Direction & d)
+  Integer secondOrderCorrection(Acceptance & a, Parameter & p, Input & i, Counter & c,
+    Iterate & z, Direction & d)
   {
     // Initialize flag
     Integer b{0};

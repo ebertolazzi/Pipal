@@ -23,8 +23,8 @@ namespace Pipal
 {
 
   // Evaluate linear combination of directions
-  void evalLinearCombination(struct Direction & d, struct Input & i, struct Direction & d1, struct Direction & d2,
-    struct Direction & d3, Real const a0, Real const a1, Real const a2)
+  void evalLinearCombination(Direction & d, Input & i, Direction & d1, Direction & d2,
+    Direction & d3, Real const a0, Real const a1, Real const a2)
   {
     // Evaluate linear combinations
     d.x = a0*d1.x  + a1*d2.x  + a2*d3.x;
@@ -51,7 +51,7 @@ namespace Pipal
   }
 
   // Evaluate model and model reductions
-  void evalModels(struct Direction & d, struct Input & i, struct Iterate & z)
+  void evalModels(Direction & d, Input & i, Iterate & z)
   {
     // Evaluate reduction in linear model of penalty-interior-point objective for zero penalty parameter
     d.lred0 = 0;
@@ -135,19 +135,10 @@ namespace Pipal
   }
 
   // Evaluate Newton step
-  void evalNewtonStep(struct Direction & d, struct Input & i, struct Iterate & z)
+  void evalNewtonStep(Direction & d, Input & i, Iterate & z)
   {
-    // Select submatrices and vectors
-    Matrix AS_col(z.AS(Eigen::all, z.AP));
-    Matrix AS_row(z.AS(z.AP, Eigen::all));
-
-    // Compute nested solves
-    Vector tmp_1(z.AL.template triangularView<Eigen::Lower>().solve(AS_row * (-z.b)));
-    Vector tmp_2(z.AD.template triangularView<Eigen::Lower>().solve(tmp_1));
-    Vector tmp_3(z.AL.transpose().template triangularView<Eigen::Upper>().solve(tmp_2));
-
     // Evaluate direction
-    Vector dir(AS_col * tmp_3);
+    Vector dir(z.ldlt.solve(-z.b));
 
     // Parse direction
     d.x = dir(Eigen::seq(0, i.nV-1));
@@ -174,8 +165,8 @@ namespace Pipal
   }
 
   // Evaluate search direction quantities
-  void evalStep(struct Direction & d, Parameter & p, Input & i, Counter & c,
-    Iterate & z, struct Acceptance & a)
+  void evalStep(Direction & d, Parameter & p, Input & i, Counter & c,
+    Iterate & z, Acceptance & a)
   {
     // Reset maximum exponent for interior-point parameter increases
     resetMuMaxExp(p);
@@ -204,7 +195,7 @@ namespace Pipal
 
       // Set trial interior-point parameter values
       Array exponents(p.mu_trials);
-      for (Integer i{0}; i < p.mu_trials; ++i) {exponents[i] = (p.mu_trials - 1 - i) - p.mu_max_exp;}
+      for (Integer i{0}; i < p.mu_trials; ++i) {exponents[i] = (p.mu_trials - 1.0 - i) - p.mu_max_exp;}
 
       Array Mu(mu_curr * exponents.unaryExpr([&p](Real e){return std::pow(p.mu_factor, e);}));
       Mu = Mu.min(p.mu_max).max(p.mu_min);
@@ -217,11 +208,11 @@ namespace Pipal
       for (Integer j{0}; j < p.mu_trials; ++j)
       {
         // Set penalty and interior-point parameters
-        setRho(z, 0);
+        setRho(z, 0.0);
         setMu(z, Mu(j));
 
         // Evaluate direction
-        evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1), (1-z.mu/mu_curr), (1-z.rho/rho_curr));
+        evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1.0), (1.0-z.mu/mu_curr), (1.0-z.rho/rho_curr));
 
         // Cut length
         d.x = std::min(d.x_norm_/std::max(d.x_norm, 1.0), 1.0)*d.x;
@@ -331,7 +322,7 @@ namespace Pipal
   }
 
   // Evaluate and store trial step
-  void evalTrialStep(struct Direction & d, struct Input & i, struct Direction & v)
+  void evalTrialStep(Direction & d, Input & i, Direction & v)
   {
     // Set direction components
     v.x = d.x;
@@ -342,7 +333,7 @@ namespace Pipal
   }
 
   // Evaluate trial step cut by fraction-to-boundary rule
-  void evalTrialStepCut(struct Direction & d, struct Input & i, struct Acceptance & a)
+  void evalTrialStepCut(Direction & d, Input & i, Acceptance & a)
   {
     // Set direction components
     d.x = a.p*d.x ;
@@ -353,8 +344,8 @@ namespace Pipal
   }
 
   // Evaluate and store directions for parameter combinations
-  void evalTrialSteps(struct Direction & d, struct Input & i, struct Iterate & z, struct Direction & d1,
-    struct Direction & d2, struct Direction & d3)
+  void evalTrialSteps(Direction & d, Input & i, Iterate & z, Direction & d1,
+    Direction & d2, Direction & d3)
   {
     // Store current penalty and interior-point parameters
     Real rho_curr{z.rho}, mu_curr{z.mu};
@@ -382,7 +373,7 @@ namespace Pipal
   }
 
   // Set direction
-  void setDirection(struct Direction & d, struct Input & i, Vector const & dx, Vector const & dr1, Vector const & dr2,
+  void setDirection(Direction & d, Input & i, Vector const & dx, Vector const & dr1, Vector const & dr2,
     Vector const & ds1, Vector const & ds2, Vector const & dlE, Vector const & dlI, Real const dx_norm, Real const dl_norm)
   {
     // Set primal variables
