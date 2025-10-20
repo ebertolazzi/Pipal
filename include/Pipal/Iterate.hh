@@ -404,12 +404,12 @@ namespace Pipal
 
     // Update merit for slacks
     if (i.nE > 0) {
-      Vector r_all(z.r1.size() + z.r2.size()); r_all << z.r1, z.r2;
-      z.phi -= z.mu * r_all.array().log().sum() + r_all.sum();
+      Vector r_all(2*i.nE); r_all << z.r1, z.r2;
+      z.phi -= z.mu * r_all.array().log().sum() - r_all.sum();
     }
     if (i.nI > 0) {
-      Eigen::VectorXd s_all(z.s1.size() + z.s2.size()); s_all << z.s1, z.s2;
-      z.phi -= z.mu * s_all.array().log().sum() + z.s2.sum();
+      Vector s_all(2*i.nI); s_all << z.s1, z.s2;
+      z.phi -= z.mu * s_all.array().log().sum() - z.s2.sum();
     }
   }
 
@@ -653,8 +653,7 @@ namespace Pipal
   void setRhoLast(Iterate & z, Real const rho) {z.rho_ = rho;}
 
   // Iterate updater
-  void updateIterate(Iterate & z, Parameter & p, Input & i, Counter & c,
-    Direction & d, Acceptance & a)
+  void updateIterate(Iterate & z, Parameter & p, Input & i, Counter & c, Direction & d, Acceptance & a)
   {
     // Update last quantities
     z.v_   = z.v;
@@ -675,7 +674,7 @@ namespace Pipal
   void updateParameters(Iterate & z, Parameter & p, Input & i)
   {
     // Check for interior-point parameter update based on optimality error
-    while (z.mu > p.mu_min && z.kkt(2) <= std::max({z.mu, p.opt_err_tol-z.mu}))
+    while (z.mu > p.mu_min && z.kkt(2) <= std::max(z.mu, p.opt_err_tol-z.mu))
     {
       // Restrict interior-point parameter increase
       setMuMaxExpZero(p);

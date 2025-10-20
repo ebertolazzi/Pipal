@@ -23,24 +23,20 @@ namespace Pipal
 {
 
   // Evaluate linear combination of directions
-  void evalLinearCombination(Direction & d, Input & i, Direction & d1, Direction & d2,
-    Direction & d3, Real const a0, Real const a1, Real const a2)
+  void evalLinearCombination(Direction & d, Input const & i, Direction const & d1, Direction const & d2,
+    Direction const & d3, Real const a1, Real const a2, Real const a3)
   {
     // Evaluate linear combinations
-    d.x = a0*d1.x  + a1*d2.x  + a2*d3.x;
+    d.x = a1*d1.x  + a2*d2.x  + a3*d3.x;
     if (i.nE > 0) {
-      d.r1 = a0*d1.r1 + a1*d2.r1 + a2*d3.r1;
-      d.r2 = a0*d1.r2 + a1*d2.r2 + a2*d3.r2;
+      d.r1 = a1*d1.r1 + a2*d2.r1 + a3*d3.r1;
+      d.r2 = a1*d1.r2 + a2*d2.r2 + a3*d3.r2;
+      d.lE = a1*d1.lE + a2*d2.lE + a3*d3.lE;
     }
     if (i.nI > 0) {
-      d.s1 = a0*d1.s1 + a1*d2.s1 + a2*d3.s1;
-      d.s2 = a0*d1.s2 + a1*d2.s2 + a2*d3.s2;
-    }
-    if (i.nE > 0) {
-      d.lE = a0*d1.lE + a1*d2.lE + a2*d3.lE;
-    }
-    if (i.nI > 0) {
-      d.lI = a0*d1.lI + a1*d2.lI + a2*d3.lI;
+      d.s1 = a1*d1.s1 + a2*d2.s1 + a3*d3.s1;
+      d.s2 = a1*d1.s2 + a2*d2.s2 + a3*d3.s2;
+      d.lI = a1*d1.lI + a2*d2.lI + a3*d3.lI;
     }
 
     // Evaluate primal direction norm
@@ -56,40 +52,36 @@ namespace Pipal
     // Evaluate reduction in linear model of penalty-interior-point objective for zero penalty parameter
     d.lred0 = 0;
     if (i.nE > 0) {
-      Vector tmp1(1.0 - z.mu / z.r1.array());
-      Vector tmp2(1.0 - z.mu / z.r2.array());
-      Vector tmp3(tmp1.size() + tmp2.size());
-      tmp3 << tmp1, tmp2;
-      Vector tmp4(d.r1.size() + d.r2.size());
-      tmp4 << d.r1, d.r2;
-      d.lred0 -= (tmp3.array()*tmp4.array()).sum();
+      Vector tmp1(2*i.nE);
+      tmp1 << 1.0 - z.mu / z.r1.array(), 1.0 - z.mu / z.r2.array();
+      Vector tmp2(2*i.nE);
+      tmp2 << d.r1, d.r2;
+      d.lred0 -= (tmp1.array() * tmp2.array()).sum();
     }
     if (i.nI > 0) {
-      Vector tmp1(0.0 - z.mu / z.s1.array());
-      Vector tmp2(1.0 - z.mu / z.s2.array());
-      Vector tmp3(tmp1.size() + tmp2.size());
-      tmp3 << tmp1, tmp2;
-      Vector tmp4(d.s1.size() + d.s2.size());
-      tmp4 << d.s1, d.s2;
-      d.lred0 -= (tmp3.array()*tmp4.array()).sum();
+      Vector tmp1(2*i.nI);
+      tmp1 << 0.0 - z.mu / z.s1.array(), 1.0 - z.mu / z.s2.array();
+      Vector tmp2(2*i.nI);
+      tmp2 << d.s1, d.s2;
+      d.lred0 -= (tmp1.array() * tmp2.array()).sum();
     }
 
     // Evaluate remaining quantities only for nonzero penalty parameter
-    if (z.rho > 0)
+    if (z.rho > 0.0)
     {
       // Evaluate reduction in linear model of merit function for zero penalty parameter
-      d.ltred0 = 0;
+      d.ltred0 = 0.0;
       if (i.nE > 0) {
         Array sqrt_term((z.cE.array().square() + z.mu*z.mu).sqrt());
-        Array expr = ((1.0 - z.mu / z.r1.array()) * (-1.0 + z.cE.array() / sqrt_term) +
-          (1.0 - z.mu / z.r2.array()) * (1.0 + z.cE.array() / sqrt_term)) * (z.JE * d.x).array();
-        d.ltred0 -= 0.5 * expr.sum();
+        Array tmp(((1.0 - z.mu / z.r1.array()) * (-1.0 + z.cE.array() / sqrt_term) +
+          (1.0 - z.mu / z.r2.array()) * (1.0 + z.cE.array() / sqrt_term)) * (z.JE * d.x).array());
+        d.ltred0 -= 0.5*tmp.sum();
       }
       if (i.nI > 0) {
-        Array sqrt_term((z.cI.array().square() + z.mu*z.mu).sqrt());
-        Array expr = ((1.0 - z.mu / z.s1.array()) * (-1.0 + z.cI.array() / sqrt_term) +
-          (1.0 - z.mu / z.s2.array()) * (1.0 + z.cI.array() / sqrt_term)) * (z.JI * d.x).array();
-        d.ltred0 -= 0.5 * expr.sum();
+        Array sqrt_term((z.cI.array().square() + 4.0*z.mu*z.mu).sqrt());
+        Array tmp(((0.0 - z.mu / z.s1.array()) * (-1.0 + z.cI.array() / sqrt_term) +
+          (1.0 - z.mu / z.s2.array()) * (1.0 + z.cI.array() / sqrt_term)) * (z.JI * d.x).array());
+        d.ltred0 -= 0.5*tmp.sum();
       }
 
       // Evaluate reduction in linear model of merit function
@@ -99,13 +91,13 @@ namespace Pipal
       d.qtred = d.ltred - 0.5*d.x.transpose()*z.H*d.x;
       if (i.nE > 0) {
         Vector Jd(z.JE*d.x);
-        Matrix Dinv((z.r1.array()/(1.0+z.lE.array()).array() + z.r2.array()/(1.0-z.lE.array()).array()).matrix());
-        d.qtred -= 0.5*Jd.transpose()*((Jd.array()/Dinv.array()).matrix());
+        Vector Dinv((z.r1.array()/(1.0+z.lE.array()) + z.r2.array()/(1.0-z.lE.array())).matrix());
+        d.qtred -= 0.5*Jd.transpose() * ((Jd.array()/Dinv.array()).matrix());
       }
       if (i.nI > 0) {
         Vector Jd(z.JI*d.x);
-        Matrix Dinv((z.s1.array()/(0.0+z.lI.array()).array() + z.s2.array()/(1.0-z.lI.array()).array()).matrix());
-        d.qtred -= 0.5*Jd.transpose()*((Jd.array()/Dinv.array()).matrix());
+        Vector Dinv((z.s1.array()/(0.0+z.lI.array()) + z.s2.array()/(1.0-z.lI.array())).matrix());
+        d.qtred -= 0.5*Jd.transpose() * ((Jd.array()/Dinv.array()).matrix());
       }
 
       // Initialize quality function vector
@@ -116,21 +108,23 @@ namespace Pipal
       vec(Eigen::seq(0, i.nV-1)) = z.rho*z.g;
 
       // Set gradient of Lagrangian for constraints
-      if (i.nE > 0) {vec(Eigen::seq(0, i.nV-1)) = vec(Eigen::seq(0, i.nV-1)) + ((z.lE+d.lE).transpose()*z.JE).transpose();}
-      if (i.nI > 0) {vec(Eigen::seq(0, i.nV-1)) = vec(Eigen::seq(0, i.nV-1)) + ((z.lI+d.lI).transpose()*z.JI).transpose();}
+      if (i.nE > 0) {vec(Eigen::seq(0, i.nV-1)) += ((z.lE+d.lE).transpose()*z.JE).transpose();}
+      if (i.nI > 0) {vec(Eigen::seq(0, i.nV-1)) += ((z.lI+d.lI).transpose()*z.JI).transpose();}
 
       // Set complementarity for constraint slacks
-      if (i.nE > 0) {vec(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
-        ((z.r1+d.r1).array() * (1.0 + (z.lE+d.lE).array()).array()).matrix(),
-        ((z.r2+d.r2).array() * (1.0 - (z.lE+d.lE).array()).array()).matrix();
+      if (i.nE > 0) {
+          vec(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
+           ((z.r1+d.r1).array() * (1.0 + (z.lE+d.lE).array()).array()).matrix(),
+           ((z.r2+d.r2).array() * (1.0 - (z.lE+d.lE).array()).array()).matrix();
       }
-      if (i.nI > 0) {vec(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
-        ((z.s1+d.s1).array() * (0.0 + (z.lI+d.lI).array()).array()).matrix(),
-        ((z.s2+d.s2).array() * (1.0 - (z.lI+d.lI).array()).array()).matrix();
+      if (i.nI > 0) {
+          vec(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
+           ((z.s1+d.s1).array() * (0.0 + (z.lI+d.lI).array()).array()).matrix(),
+           ((z.s2+d.s2).array() * (1.0 - (z.lI+d.lI).array()).array()).matrix();
       }
 
       // Evaluate quality function
-      d.m = vec.array().abs().maxCoeff();
+      d.m = vec.template lpNorm<Eigen::Infinity>();
     }
   }
 
@@ -145,15 +139,11 @@ namespace Pipal
     if (i.nE > 0) {
       d.r1 = dir(Eigen::seq(i.nV, i.nV+i.nE-1));
       d.r2 = dir(Eigen::seq(i.nV+i.nE, i.nV+i.nE+i.nE-1));
+      d.lE = dir(Eigen::seq(i.nV+i.nE+i.nE+i.nI+i.nI, i.nV+i.nE+i.nE+i.nI+i.nI+i.nE-1));
     }
     if (i.nI > 0) {
       d.s1 = dir(Eigen::seq(i.nV+i.nE+i.nE, i.nV+i.nE+i.nE+i.nI-1));
       d.s2 = dir(Eigen::seq(i.nV+i.nE+i.nE+i.nI, i.nV+i.nE+i.nE+i.nI+i.nI-1));
-    }
-    if (i.nE > 0) {
-      d.lE = dir(Eigen::seq(i.nV+i.nE+i.nE+i.nI+i.nI, i.nV+i.nE+i.nE+i.nI+i.nI+i.nE-1));
-    }
-    if (i.nI > 0) {
       d.lI = dir(Eigen::seq(i.nV+i.nE+i.nE+i.nI+i.nI+i.nE, i.nV+i.nE+i.nE+i.nI+i.nI+i.nE+i.nI-1));
     }
 
@@ -195,8 +185,7 @@ namespace Pipal
 
       // Set trial interior-point parameter values
       Array exponents(p.mu_trials);
-      for (Integer i{0}; i < p.mu_trials; ++i) {exponents[i] = (p.mu_trials - 1.0 - i) - p.mu_max_exp;}
-
+      for (Integer j{0}; j < p.mu_trials; ++j) {exponents[j] = (p.mu_trials - 1.0 - j) - p.mu_max_exp;}
       Array Mu(mu_curr * exponents.unaryExpr([&p](Real e){return std::pow(p.mu_factor, e);}));
       Mu = Mu.min(p.mu_max).max(p.mu_min);
 
@@ -257,7 +246,7 @@ namespace Pipal
           setMu(z, Mu(j));
 
           // Evaluate direction
-          evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1), (1-z.mu/mu_curr), (1-z.rho/rho_curr));
+          evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1.0), (1.0-z.mu/mu_curr), (1.0-z.rho/rho_curr));
 
           // Run fraction-to-boundary
           fractionToBoundary(a, p, i, z, d);

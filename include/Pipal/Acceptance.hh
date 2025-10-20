@@ -87,89 +87,54 @@ namespace Pipal
   {
 
     // Initialize primal fraction-to-boundary
-    a.p0 = 1;
-
-    // Precompute fraction
-    Real frac = std::min(p.ls_frac, z.mu);
+    a.p0 = 1.0;
 
     // Update primal fraction-to-boundary for constraint slacks
+    Real frac{std::min(p.ls_frac, z.mu)};
     if (i.nE > 0) {
-      // r1 negative directions
-      if ((d.r1.array() < 0.0).any()) {
-        auto mask = (d.r1.array() < 0.0);
-        auto tmp = (((frac - 1.0) * z.r1.array()) / d.r1.array());
-        Real minval = (mask.select(tmp, tmp*INFINITY)).minCoeff();
-        a.p0 = std::min(a.p0, minval);
-      }
-      // r2 negative directions
-      if ((d.r2.array() < 0.0).any()) {
-        auto mask = (d.r2.array() < 0.0);
-        auto tmp = (((frac - 1.0) * z.r2.array()) / d.r2.array());
-        Real minval = (mask.select(tmp, tmp*INFINITY)).minCoeff();
-        a.p0 = std::min(a.p0, minval);
-      }
+      Indices const idx_r1(find(d.r1.array() < 0.0));
+      Indices const idx_r2(find(d.r1.array() < 0.0));
+      Real min_1{INFINITY}, min_2{INFINITY};
+      if (idx_r1.size() > 0) {min_1 = (((frac - 1.0) * z.r1(idx_r1).array()) / d.r1(idx_r1).array()).minCoeff();}
+      if (idx_r2.size() > 0) {min_2 = (((frac - 1.0) * z.r2(idx_r2).array()) / d.r2(idx_r2).array()).minCoeff();}
+      a.p0 = std::min({a.p0, min_1, min_2});
     }
     if (i.nI > 0) {
-      // s1 negative directions
-      if ((d.s1.array() < 0.0).any()) {
-        auto mask = (d.s1.array() < 0.0);
-        auto tmp = (((frac - 1.0) * z.s1.array()) / d.s1.array());
-        Real minval = (mask.select(tmp, tmp*INFINITY)).minCoeff();
-        a.p0 = std::min(a.p0, minval);
-      }
-      // s2 negative directions
-      if ((d.s2.array() < 0.0).any()) {
-        auto mask = (d.s2.array() < 0.0);
-        auto tmp = (((frac - 1.0) * z.s2.array()) / d.s2.array());
-        Real minval = (mask.select(tmp, tmp*INFINITY)).minCoeff();
-        a.p0 = std::min(a.p0, minval);
-      }
+      Indices const idx_s1(find(d.s1.array() < 0.0));
+      Indices const idx_s2(find(d.s1.array() < 0.0));
+      Real min_1{INFINITY}, min_2{INFINITY};
+      if (idx_s1.size() > 0) {min_1 = (((frac - 1.0) * z.s1(idx_s1).array()) / d.s1(idx_s1).array()).minCoeff();}
+      if (idx_s2.size() > 0) {min_2 = (((frac - 1.0) * z.s2(idx_s2).array()) / d.s2(idx_s2).array()).minCoeff();}
+      a.p0 = std::min({a.p0, min_1, min_2});
     }
 
     // Initialize primal steplength
     a.p = a.p0;
 
     // Initialize dual fraction-to-boundary
-    a.d = 1;
+    a.d = 1.0;
 
     // Update dual fraction-to-boundary for constraint multipliers
     if (i.nE > 0) {
-      // lE negative directions
-      if ((d.lE.array() < 0.0).any()) {
-        auto mask = (d.lE.array() < 0.0);
-        auto tmp = (((frac - 1.0) * (1.0 + z.lE.array())) / d.lE.array());
-        Real minval = (mask.select(tmp, tmp*INFINITY)).minCoeff();
-        a.d = std::min(a.d, minval);
-      }
-      // lE positive directions
-      if ((d.lE.array() > 0.0).any()) {
-        auto mask = (d.lE.array() > 0.0);
-        auto tmp = (((1.0 - frac) * (1.0 - z.lE.array())) / d.lE.array());
-        Real minval = (mask.select(tmp, tmp*INFINITY)).minCoeff();
-        a.d = std::min(a.d, minval);
-      }
+      Indices const idx_l(find(d.lE.array() < 0.0));
+      Indices const idx_g(find(d.lE.array() > 0.0));
+      Real min_1{INFINITY}, min_2{INFINITY};
+      if (idx_l.size() > 0) {min_1 = (((frac - 1.0) * (1.0 + z.lE(idx_l).array())) / d.lE(idx_l).array()).minCoeff();}
+      if (idx_g.size() > 0) {min_2 = (((1.0 - frac) * (1.0 - z.lE(idx_g).array())) / d.lE(idx_g).array()).minCoeff();}
+      a.d = std::min({a.d, min_1, min_2});
     }
     if (i.nI > 0) {
-      // lI negative directions
-      if ((d.lI.array() < 0.0).any()) {
-        auto mask = (d.lI.array() < 0.0);
-        auto tmp = (((frac - 1.0) * (0.0 + z.lI.array())) / d.lI.array());
-        Real minval = (mask.select(tmp, tmp*INFINITY)).minCoeff();
-        a.d = std::min(a.d, minval);
-      }
-      // lI positive directions
-      if ((d.lI.array() > 0.0).any()) {
-        auto mask = (d.lI.array() > 0.0);
-        auto tmp = (((1.0 - frac) * (1.0 - z.lI.array())) / d.lI.array());
-        Real minval = (mask.select(tmp, tmp*INFINITY)).minCoeff();
-        a.d = std::min(a.d, minval);
-      }
+      Indices const idx_l(find(d.lI.array() < 0.0));
+      Indices const idx_g(find(d.lI.array() > 0.0));
+      Real min_1{INFINITY}, min_2{INFINITY};
+      if (idx_l.size() > 0) {min_1 = (((frac - 1.0) * (0.0 + z.lI(idx_l).array())) / d.lI(idx_l).array()).minCoeff();}
+      if (idx_g.size() > 0) {min_2 = (((1.0 - frac) * (1.0 - z.lI(idx_g).array())) / d.lI(idx_g).array()).minCoeff();}
+      a.d = std::min({a.d, min_1, min_2});
     }
   }
 
   // Full step search for trial penalty parameters
-  Integer fullStepCheck(Acceptance & a, Parameter & p, Input & i, Counter & c,
-    Iterate & z, Direction & d)
+  Integer fullStepCheck(Acceptance & a, Parameter & p, Input & i, Counter & c, Iterate & z, Direction & d)
   {
     // Initialize boolean
     Integer b{0};
@@ -233,9 +198,7 @@ namespace Pipal
       }
 
       // Decrease rho
-      rho_temp = p.rho_factor*rho_temp;
-
-      return b;
+      rho_temp *= p.rho_factor;
     }
 
     // Set rho

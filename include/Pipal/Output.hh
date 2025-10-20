@@ -67,14 +67,14 @@ namespace Pipal
       this->s << "Problem name" << std::endl << "============" << std::endl << "  " << i.id << std::endl << std::endl;
 
       this->s << "Problem size" << std::endl << "============" << std::endl;
-      this->s << "  Number of variables....................... : " << std::setw(7) << i.nV << std::endl;
-      this->s << "  Number of equality constraints............ : " << std::setw(7) << i.nE << std::endl;
-      this->s << "  Number of inequality constraints.......... : " << std::setw(7) << i.nI << std::endl << std::endl;
+      this->s << "  Number of variables....................... : " << std::setw(8) << i.nV << std::endl;
+      this->s << "  Number of equality constraints............ : " << std::setw(8) << i.nE << std::endl;
+      this->s << "  Number of inequality constraints.......... : " << std::setw(8) << i.nI << std::endl << std::endl;
 
       this->s << "Problem sparsity" << std::endl << "================" << std::endl;
-      this->s << "  Nonzeros in Hessian of Lagrangian......... : " << std::setw(7) << z.Hnnz << std::endl;
-      this->s << "  Nonzeros in equality constraint Jacobian.. : " << std::setw(7) << z.JEnnz << std::endl;
-      this->s << "  Nonzeros in inequality constraint Jacobian : " << std::setw(7) << z.JInnz << std::endl << std::endl;
+      this->s << "  Nonzeros in Hessian of Lagrangian......... : " << std::setw(8) << z.Hnnz << std::endl;
+      this->s << "  Nonzeros in equality constraint Jacobian.. : " << std::setw(8) << z.JEnnz << std::endl;
+      this->s << "  Nonzeros in inequality constraint Jacobian : " << std::setw(8) << z.JInnz << std::endl << std::endl;
     }
 
     // Break printing (every 20 iterations)
