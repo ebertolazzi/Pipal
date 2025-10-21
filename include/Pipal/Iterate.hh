@@ -255,7 +255,7 @@ namespace Pipal
     }
     if (i.n9 > 0) {
       z.JI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9-1), Eigen::seq(0, i.n1+i.n3+i.n4+i.n5-1)) <<
-        -J_orig(i.I9,i.I1), J_orig(i.I9,i.I3), J_orig(i.I9,i.I4), J_orig(i.I9,i.I5);
+        -J_orig(i.I9,i.I1), -J_orig(i.I9,i.I3), -J_orig(i.I9,i.I4), -J_orig(i.I9,i.I5);
       z.JI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9+i.n9-1), Eigen::seq(0, i.n1+i.n3+i.n4+i.n5-1)) <<
         J_orig(i.I9,i.I1), J_orig(i.I9,i.I3), J_orig(i.I9,i.I4), J_orig(i.I9,i.I5);
     }
@@ -333,17 +333,19 @@ namespace Pipal
     // Set complementarity for constraint slacks
     if (i.nE > 0) {
       kkt(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
-        (z.r1.array() * (1.0 + z.lE.array()).array()) - mu,
-        (z.r2.array() * (1.0 - z.lE.array()).array()) - mu;
+        z.r1.array() * (1.0 + z.lE.array()) - mu,
+        z.r2.array() * (1.0 - z.lE.array()) - mu;
     }
     if (i.nI > 0) {
       kkt(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
-        (z.s1.array() * (0.0 + z.lI.array()).array()) - mu,
-        (z.s2.array() * (1.0 - z.lI.array()).array()) - mu;
+        z.s1.array() * (0.0 + z.lI.array()) - mu,
+        z.s2.array() * (1.0 - z.lI.array()) - mu;
     }
 
     // Scale complementarity
-    if (rho > 0) {kkt = (1.0 / std::max(1.0, (rho*z.g).template lpNorm<Eigen::Infinity>()))*kkt;}
+    if (rho > 0.0) {
+      kkt *= (1.0 / std::max(1.0, (rho*z.g).template lpNorm<Eigen::Infinity>()));
+    }
 
     // Evaluate optimality error
     return kkt.template lpNorm<Eigen::Infinity>();
@@ -365,15 +367,11 @@ namespace Pipal
     l.setZero(i.nE+i.n7+i.n8+i.n9);
 
     // Scale equality constraint multipliers
-    Vector lE;
-    if (i.nE > 0) {lE = (z.lE.array()*(z.cEs/(z.rho*z.fs)).array()).matrix();}
-
-    // Set equality constraint multipliers in original space
-    if (i.nE > 0) {l(i.I6) = lE;}
+    if (i.nE > 0) {l(i.I6) = z.lE.array()*(z.cEs.array()/(z.rho*z.fs));}
 
     // Scale inequality constraint multipliers
     Vector lI;
-    if (i.n7+i.n8+i.n9 > 0) {lI = (z.lI.array()*(z.cIs/(z.rho*z.fs)).array()).matrix();}
+    if (i.n7+i.n8+i.n9 > 0) {lI = z.lI.array()*(z.cIs.array()/(z.rho*z.fs));}
 
     // Set inequality constraint multipliers in original space
     if (i.n7 > 0) {

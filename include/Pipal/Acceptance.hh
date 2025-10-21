@@ -93,19 +93,19 @@ namespace Pipal
     Real frac{std::min(p.ls_frac, z.mu)};
     if (i.nE > 0) {
       Indices const idx_r1(find(d.r1.array() < 0.0));
-      Indices const idx_r2(find(d.r1.array() < 0.0));
+      Indices const idx_r2(find(d.r2.array() < 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
       if (idx_r1.size() > 0) {min_1 = (((frac - 1.0) * z.r1(idx_r1).array()) / d.r1(idx_r1).array()).minCoeff();}
       if (idx_r2.size() > 0) {min_2 = (((frac - 1.0) * z.r2(idx_r2).array()) / d.r2(idx_r2).array()).minCoeff();}
-      a.p0 = std::min({a.p0, min_1, min_2});
+      a.p0 = std::min(a.p0, std::min(min_1, min_2));
     }
     if (i.nI > 0) {
       Indices const idx_s1(find(d.s1.array() < 0.0));
-      Indices const idx_s2(find(d.s1.array() < 0.0));
+      Indices const idx_s2(find(d.s2.array() < 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
       if (idx_s1.size() > 0) {min_1 = (((frac - 1.0) * z.s1(idx_s1).array()) / d.s1(idx_s1).array()).minCoeff();}
       if (idx_s2.size() > 0) {min_2 = (((frac - 1.0) * z.s2(idx_s2).array()) / d.s2(idx_s2).array()).minCoeff();}
-      a.p0 = std::min({a.p0, min_1, min_2});
+      a.p0 = std::min(a.p0, std::min(min_1, min_2));
     }
 
     // Initialize primal steplength
@@ -182,8 +182,8 @@ namespace Pipal
         if (ftb == 0 && z.phi - phi <= -p.ls_thresh*a.p*std::max(d.qtred, 0.0))
         {
           // Reset variables, set boolean, and return
-          setPrimals(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi); b = 1;
-          return b;
+          setPrimals(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
+          b = 1; return b;
         }
         else
         {
@@ -220,10 +220,10 @@ namespace Pipal
     // Check for full step for trial penalty parameters
     Integer b{fullStepCheck(a, p, i, c, z, d)};
     // Run second-order correction
-    a.s = 0;
+    a.s = false;
     if (b == 0) {
       b = secondOrderCorrection(a, p, i, c, z, d);
-      if (b == 2) {a.s = 1;}
+      if (b == 2) {a.s = true;}
     }
 
     // Run backtracking line search

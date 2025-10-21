@@ -22,6 +22,22 @@
 namespace Pipal
 {
 
+  // Reset direction
+  void resetDirection(Direction & d, Input & i)
+  {
+    d.x.setZero(i.nV);
+    d.r1.setZero(i.nE);
+    d.r2.setZero(i.nE);
+    d.lE.setZero(i.nE);
+    d.s1.setZero(i.nI);
+    d.s2.setZero(i.nI);
+    d.lI.setZero(i.nI);
+    d.x_norm  = 0.0;
+    d.x_norm_ = INFTY;
+    d.l_norm  = 0.0;
+    d.lred0 = d.ltred0 = d.ltred = d.qtred = d.m = 0.0;
+  }
+
   // Evaluate linear combination of directions
   void evalLinearCombination(Direction & d, Input const & i, Direction const & d1, Direction const & d2,
     Direction const & d3, Real const a1, Real const a2, Real const a3)
@@ -53,14 +69,14 @@ namespace Pipal
     d.lred0 = 0;
     if (i.nE > 0) {
       Vector tmp1(2*i.nE);
-      tmp1 << 1.0 - z.mu / z.r1.array(), 1.0 - z.mu / z.r2.array();
+      tmp1 << 1.0 - z.mu/z.r1.array(), 1.0 - z.mu/z.r2.array();
       Vector tmp2(2*i.nE);
       tmp2 << d.r1, d.r2;
       d.lred0 -= (tmp1.array() * tmp2.array()).sum();
     }
     if (i.nI > 0) {
       Vector tmp1(2*i.nI);
-      tmp1 << 0.0 - z.mu / z.s1.array(), 1.0 - z.mu / z.s2.array();
+      tmp1 << 0.0 - z.mu/z.s1.array(), 1.0 - z.mu/z.s2.array();
       Vector tmp2(2*i.nI);
       tmp2 << d.s1, d.s2;
       d.lred0 -= (tmp1.array() * tmp2.array()).sum();
@@ -73,14 +89,14 @@ namespace Pipal
       d.ltred0 = 0.0;
       if (i.nE > 0) {
         Array sqrt_term((z.cE.array().square() + z.mu*z.mu).sqrt());
-        Array tmp(((1.0 - z.mu / z.r1.array()) * (-1.0 + z.cE.array() / sqrt_term) +
-          (1.0 - z.mu / z.r2.array()) * (1.0 + z.cE.array() / sqrt_term)) * (z.JE * d.x).array());
+        Array tmp(((1.0 - z.mu/z.r1.array()) * (-1.0 + z.cE.array()/sqrt_term) +
+          (1.0 - z.mu/z.r2.array()) * (1.0 + z.cE.array()/sqrt_term)) * (z.JE * d.x).array());
         d.ltred0 -= 0.5*tmp.sum();
       }
       if (i.nI > 0) {
         Array sqrt_term((z.cI.array().square() + 4.0*z.mu*z.mu).sqrt());
-        Array tmp(((0.0 - z.mu / z.s1.array()) * (-1.0 + z.cI.array() / sqrt_term) +
-          (1.0 - z.mu / z.s2.array()) * (1.0 + z.cI.array() / sqrt_term)) * (z.JI * d.x).array());
+        Array tmp(((0.0 - z.mu/z.s1.array()) * (-1.0 + z.cI.array()/sqrt_term) +
+          (1.0 - z.mu/z.s2.array()) * (1.0 + z.cI.array()/sqrt_term)) * (z.JI * d.x).array());
         d.ltred0 -= 0.5*tmp.sum();
       }
 
@@ -114,13 +130,13 @@ namespace Pipal
       // Set complementarity for constraint slacks
       if (i.nE > 0) {
           vec(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
-           ((z.r1+d.r1).array() * (1.0 + (z.lE+d.lE).array()).array()).matrix(),
-           ((z.r2+d.r2).array() * (1.0 - (z.lE+d.lE).array()).array()).matrix();
+            (z.r1+d.r1).array() * (1.0 + (z.lE+d.lE).array()),
+            (z.r2+d.r2).array() * (1.0 - (z.lE+d.lE).array());
       }
       if (i.nI > 0) {
           vec(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
-           ((z.s1+d.s1).array() * (0.0 + (z.lI+d.lI).array()).array()).matrix(),
-           ((z.s2+d.s2).array() * (1.0 - (z.lI+d.lI).array()).array()).matrix();
+            (z.s1+d.s1).array() * (0.0 + (z.lI+d.lI).array()),
+            (z.s2+d.s2).array() * (1.0 - (z.lI+d.lI).array());
       }
 
       // Evaluate quality function
@@ -181,6 +197,9 @@ namespace Pipal
 
       // Evaluate trial steps
       Direction d1, d2, d3;
+      resetDirection(d1, i);
+      resetDirection(d2, i);
+      resetDirection(d3, i);
       evalTrialSteps(d, i, z, d1, d2, d3);
 
       // Set trial interior-point parameter values
@@ -231,7 +250,7 @@ namespace Pipal
       bool check{false};
 
       // Loop through penalty parameter values
-      for (Integer k{0}; k < p.rho_trials; ++k)
+      for (Integer k{1}; k <= p.rho_trials; ++k)
       {
         // Set penalty parameter
         setRho(z, std::max(p.rho_min, std::pow(p.rho_factor, k-1)*rho_curr));
@@ -333,8 +352,7 @@ namespace Pipal
   }
 
   // Evaluate and store directions for parameter combinations
-  void evalTrialSteps(Direction & d, Input & i, Iterate & z, Direction & d1,
-    Direction & d2, Direction & d3)
+  void evalTrialSteps(Direction & d, Input & i, Iterate & z, Direction & d1, Direction & d2, Direction & d3)
   {
     // Store current penalty and interior-point parameters
     Real rho_curr{z.rho}, mu_curr{z.mu};
