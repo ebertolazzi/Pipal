@@ -14,14 +14,9 @@
 #define INCLUDE_PIPAL_DEFINES_HH
 
 // Standard libraries
-#include <iostream>
-#include <sstream>
-#include <stdexcept>
 #include <functional>
-#include <type_traits>
 #include <string>
 #include <limits>
-#include <chrono>
 #include <cmath>
 #include <numeric>
 #include <memory>
@@ -124,9 +119,9 @@ namespace Pipal
 
   using Algorithm = enum class Algorithm : Integer {CONSERVATIVE = 0, ADAPTIVE = 1}; // Algorithm choice
 
-  static constexpr Real INFTY{std::numeric_limits<Real>::infinity()}; /*!< Infinity value. */
+  static constexpr Real INFTY{Eigen::NumTraits<Real>::infinity()}; /*!< Infinity value. */
   static constexpr Real QUIET_NAN{std::numeric_limits<Real>::quiet_NaN()}; /*!< Not-a-number value. */
-  static constexpr Real EPSILON{std::numeric_limits<Real>::epsilon()}; /*!< Machine epsilon value. */
+  static constexpr Real EPSILON{Eigen::NumTraits<Real>::epsilon()}; /*!< Machine epsilon value. */
 
   /**
    * \brief Enumeration for matrix view types.
@@ -139,9 +134,6 @@ namespace Pipal
 
   /**
    * \brief Select elements from a vector based on a boolean mask.
-   * \tparam Indices The type of the output indices.
-   * \tparam Mask The type of the boolean mask.
-   * \param[in] vector The input vector.
    * \param[in] mask The boolean mask.
    * \return The selected elements from the input vector.
    */
@@ -157,7 +149,6 @@ namespace Pipal
   /**
    * \brief Count the number of non-zero elements in a matrix.
    * \tparam View The matrix view type (FULL, TRIL, TRIU).
-   * \tparam Real The floating-point type.
    * \tparam Matrix The matrix type.
    * \param[in] mat The input matrix.
    * \param[in] tol The tolerance for considering an element as non-zero.
@@ -181,7 +172,6 @@ namespace Pipal
 
   /**
    * \brief Internal parameters for the solver algorithm.
-   * \tparam Real The floating-point type.
    */
   using Parameter = struct Parameter {
     static constexpr Real    opt_err_tol{1.0e-10};   // Default optimality tolerance
@@ -232,7 +222,6 @@ namespace Pipal
 
   /**
    * \brief Input structure holding all the data defining the optimization problem.
-   * \tparam Real The floating-point type.
    * \tparam Integer The integer type.
    */
   using Input = struct Input {
@@ -282,7 +271,6 @@ namespace Pipal
 
   /**
    * \brief Class for managing the current iterate of the solver.
-   * \tparam Real The floating-point type.
    * \tparam Integer The integer type.
    */
   using Iterate = struct Iterate {
@@ -293,18 +281,18 @@ namespace Pipal
     Real         f;     // Objective function value (scaled)
     Real         fu;    // Objective function value (unscaled)
     Vector       g;     // Objective gradient value
-    Vector       r1;    // Equality constraint slack value
-    Vector       r2;    // Equality constraint slack value
-    Vector       cE;    // Equality constraint value (scaled)
+    Array        r1;    // Equality constraint slack value
+    Array        r2;    // Equality constraint slack value
+    Array        cE;    // Equality constraint value (scaled)
     SparseMatrix JE;    // Equality constraint Jacobian value
     Integer      JEnnz; // Equality constraint Jacobian nonzeros
-    Vector       lE;    // Equality constraint multipliers
-    Vector       s1;    // Inequality constraint slack value
-    Vector       s2;    // Inequality constraint slack value
-    Vector       cI;    // Inequality constraint value (scaled)
+    Array        lE;    // Equality constraint multipliers
+    Array        s1;    // Inequality constraint slack value
+    Array        s2;    // Inequality constraint slack value
+    Array        cI;    // Inequality constraint value (scaled)
     SparseMatrix JI;    // Inequality constraint Jacobian value
     Integer      JInnz; // Inequality constraint Jacobian nonzeros
-    Vector       lI;    // Inequality constraint multipliers
+    Array        lI;    // Inequality constraint multipliers
     SparseMatrix H;     // Hessian of Lagrangian
     Integer      Hnnz;  // Hessian of Lagrangian nonzeros
     Real         v;     // Feasibility violation measure value (scaled)
@@ -320,10 +308,10 @@ namespace Pipal
     Integer      err;   // Function evaluation error flag
 
     Real         fs;      // Objective scaling factor
-    Vector       cEs;     // Equality constraint scaling factors
-    Vector       cEu;     // Equality constraint value (unscaled)
-    Vector       cIs;     // Inequality constraint scaling factors
-    Vector       cIu;     // Inequality constraint value (unscaled)
+    Array        cEs;     // Equality constraint scaling factors
+    Array        cEu;     // Equality constraint value (unscaled)
+    Array        cIs;     // Inequality constraint scaling factors
+    Array        cIu;     // Inequality constraint value (unscaled)
     SparseMatrix A;       // Newton matrix
     Integer      shift22; // Newton matrix (2,2)-block shift value
     Real         v_;      // Feasibility violation measure last value
@@ -332,19 +320,18 @@ namespace Pipal
 
   /**
    * \brief Class for managing the current search direction of the solver.
-   * \tparam Real The floating-point type.
    * \tparam Integer The integer type.
    */
   using Direction = struct Direction {
     Vector x;       // Primal direction
     Real   x_norm;  // Primal direction norm value
-    Real   x_norm_{INFTY}; // Primal direction norm last value
-    Vector r1;      // Equality constraint slack direction
-    Vector r2;      // Equality constraint slack direction
-    Vector lE;      // Equality constraint multiplier direction
-    Vector s1;      // Inequality constraint slack direction
-    Vector s2;      // Inequality constraint slack direction
-    Vector lI;      // Inequality constraint multiplier direction
+    Real   x_norm_; // Primal direction norm last value
+    Array  r1;      // Equality constraint slack direction
+    Array  r2;      // Equality constraint slack direction
+    Array  lE;      // Equality constraint multiplier direction
+    Array  s1;      // Inequality constraint slack direction
+    Array  s2;      // Inequality constraint slack direction
+    Array  lI;      // Inequality constraint multiplier direction
     Real   l_norm;  // Constraint multiplier direction norm
     Real   lred0;   // Penalty-interior-point linear model value for zero penalty parameter
     Real   ltred0;  // Penalty-interior-point linear model reduction value for zero penalty parameter
@@ -360,32 +347,27 @@ namespace Pipal
     bool s{false}; // Bool for second-order correction
   }; // struct Acceptance
 
-  void fractionToBoundary(Acceptance & a, Parameter & p, Input & i, Iterate & z,Direction & d);
-  void evalTrialSteps(Direction & d, Input & i, Iterate & z, Direction & d1, Direction & d2, Direction & d3);
-  void evalTrialStepCut(Direction & d, Input & i, Acceptance & a);
-
-  void evalScalings(Iterate & z, Parameter & p, Input & i, Counter & c);
-  void evalFunctions(Iterate & z, Input & i, Counter & c);
-  void evalGradients(Iterate & z, Input & i, Counter & c);
-  void evalDependent(Iterate & z, Parameter & p, Input & i);
-  void evalInfeasibility(Iterate & z, Input & i);
-  void evalHessian(Iterate & z, Input & i, Counter & c);
-  void initNewtonMatrix(Iterate & z, Input & i);
-  void evalNewtonMatrix(Iterate & z, Parameter & p, Input & i, Counter & c);
-  void evalSlacks(Iterate & z, Parameter & p, Input & i);
-  void evalMerit(Iterate & z, Input & i);
-  void evalKKTErrors(Iterate & z, Input & i);
-  void evalXOriginal(Iterate & z, Input & i, Vector & x);
-  void evalLambdaOriginal(Iterate & z, Input & i, Vector & l);
-  Real evalViolation(Input & i, Vector & cE, Vector & cI);
-  void updatePoint(Iterate & z, Input & i, Direction & d, Acceptance & a);
-
-  Real evalViolation(Input & i, Vector & cE, Vector & cI);
-
-  Integer secondOrderCorrection(Acceptance & a, Parameter & p, Input & i, Counter & c,
-    Iterate & z, Direction & d);
-
-  Integer checkTermination(Iterate & z, Parameter & p, Input & i, Counter & c);
+  // Function
+  inline void    fractionToBoundary(Acceptance & a, Parameter & p, Input const & i, Iterate & z, Direction & d);
+  inline void    evalTrialSteps(Direction & d, Input const & i, Iterate & z, Direction & d1, Direction & d2, Direction & d3);
+  inline void    evalTrialStepCut(Direction & d, Input const & i, Acceptance const & a);
+  inline void    evalScalings(Iterate & z, Parameter & p, Input & i, Counter & c);
+  inline void    evalFunctions(Iterate & z, Input & i, Counter & c);
+  inline void    evalGradients(Iterate & z, Input & i, Counter & c);
+  inline void    evalDependent(Iterate & z, Parameter & p, Input & i);
+  inline void    evalInfeasibility(Iterate & z, Input const & i);
+  inline void    evalHessian(Iterate & z, Input & i, Counter & c);
+  inline void    initNewtonMatrix(Iterate & z, Input const & i);
+  inline void    evalNewtonMatrix(Iterate & z, Parameter & p, Input const & i, Counter & c);
+  inline void    evalSlacks(Iterate & z, Parameter & p, Input const & i);
+  inline void    evalMerit(Iterate & z, Input const & i);
+  inline void    evalKKTErrors(Iterate & z, Input const & i);
+  inline void    evalXOriginal(Iterate & z, Input const & i, Vector & x);
+  inline void    evalLambdaOriginal(Iterate const & z, Input const & i, Vector & l);
+  inline Real    evalViolation(Input const & i, Array const & cE, Array const & cI);
+  inline void    updatePoint(Iterate & z, Input const & i, Direction const & d, Acceptance const& a);
+  inline Integer secondOrderCorrection(Acceptance & a, Parameter & p, Input & i, Counter & c, Iterate & z, Direction & d);
+  inline Integer checkTermination(Iterate const & z, Parameter const & p, Input const& i, Counter const & c);
 
 } // namespace Pipal
 

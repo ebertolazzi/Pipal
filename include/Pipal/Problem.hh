@@ -24,20 +24,13 @@ namespace Pipal
    * The Problem class serves as a base class for defining optimization problems in the Pipal library.
    * It provides a structure for encapsulating the problem's objective function, constraints, and
    * other necessary components.
-   * \tparam Real The floating-point type.
    */
-  template<typename Real>
   class Problem
   {
-    static_assert(std::is_floating_point<Real>::value,
-      "Pipal::Problem: template argument 'Real' must be a floating-point type.");
-
     std::string m_name{"(Unnamed Pipal Problem)"};
 
   public:
-    using Vector = Eigen::Vector<Real, Eigen::Dynamic>;
-    using Matrix = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
-    using UniquePtr = std::unique_ptr<Problem<Real>>;
+    using UniquePtr = std::unique_ptr<Problem>;
 
     /**
      * \brief Default constructor.
@@ -45,13 +38,13 @@ namespace Pipal
      * Initializes the problem with default values for the objective, gradient, hessian, constraints
      * and Jacobian functions.
      */
-    Problem() {};
+    Problem() = default;
 
     /**
      * \brief Problem constructor.
      * \param[in] t_name Name of the optimization problem.
      */
-    Problem(std::string const & t_name) : m_name(t_name) {};
+    Problem(std::string t_name) : m_name(std::move(t_name)) {};
 
     /**
      * \brief Deleted copy constructor.
@@ -86,7 +79,7 @@ namespace Pipal
      * \brief Get the name of the optimization problem.
      * \return The name of the optimization problem.
      */
-    std::string const & name() const {return this->m_name;}
+    [[nodiscard]] std::string const & name() const {return this->m_name;}
 
     /**
      * \brief Set the name of the optimization problem.
@@ -178,15 +171,10 @@ namespace Pipal
   *
   * The ProblemWrapper class is a simple wrapper around the Problem class. It inherits from the
   * Problem class and can be used to define optimization problems through function handles.
-  * \tparam Real The floating-point type.
   */
-  template<typename Real>
-  class ProblemWrapper : public Problem<Real>
+  class ProblemWrapper : public Problem
   {
   public:
-    using Vector = typename Problem<Real>::Vector;
-    using Matrix = typename Problem<Real>::Matrix;
-
     using ObjectiveFunc           = std::function<bool(Vector const &, Real &)>;
     using ObjectiveGradientFunc   = std::function<bool(Vector const &, Vector &)>;
     using ObjectiveHessianFunc    = std::function<bool(Vector const &, Matrix &)>;
@@ -232,7 +220,7 @@ namespace Pipal
       ConstraintsJacobianFunc const & t_constraints_jacobian, LagrangianHessianFunc const & t_lagrangian_hessian,
       BoundsFunc const & t_primal_lower_bounds, BoundsFunc const & t_primal_upper_bounds,
       BoundsFunc const & t_constraints_lower_bounds, BoundsFunc const & t_constraints_upper_bounds)
-      : Problem<Real>(t_name), m_objective(t_objective), m_objective_gradient(t_objective_gradient), m_constraints(t_constraints),
+      : Problem(t_name), m_objective(t_objective), m_objective_gradient(t_objective_gradient), m_constraints(t_constraints),
         m_constraints_jacobian(t_constraints_jacobian), m_lagrangian_hessian(t_lagrangian_hessian),
         m_primal_lower_bounds(t_primal_lower_bounds), m_primal_upper_bounds(t_primal_upper_bounds),
         m_constraints_lower_bounds(t_constraints_lower_bounds), m_constraints_upper_bounds(t_constraints_upper_bounds) {}
@@ -249,8 +237,8 @@ namespace Pipal
      * \param[in] t_constraints Constraints function handle.
      * \param[in] t_constraints_jacobian Jacobian of the constraints function handle.
      * \param[in] t_lagrangian_hessian Hessian of the Lagrangian function handle.
-     * \param[in] t_lower_bounds Lower bounds on the primal variables function handle.
-     * \param[in] t_upper_bounds Upper bounds on the primal variables function handle.
+     * \param[in] t_primal_lower_bounds Lower bounds on the primal variables function handle.
+     * \param[in] t_primal_upper_bounds Upper bounds on the primal variables function handle.
      * \param[in] t_constraints_lower_bounds Lower bounds on the constraints function handle.
      * \param[in] t_constraints_upper_bounds Upper bounds on the constraints function handle.
      */
@@ -259,7 +247,7 @@ namespace Pipal
       ConstraintsJacobianFunc const & t_constraints_jacobian, LagrangianHessianFunc const & t_lagrangian_hessian,
       BoundsFunc const & t_primal_lower_bounds, BoundsFunc const & t_primal_upper_bounds,
       BoundsFunc const & t_constraints_lower_bounds, BoundsFunc const & t_constraints_upper_bounds)
-      : m_objective(t_objective), m_objective_gradient(t_objective_gradient),
+      : Problem(t_name), m_objective(t_objective), m_objective_gradient(t_objective_gradient),
         m_objective_hessian(t_objective_hessian), m_constraints(t_constraints),
         m_constraints_jacobian(t_constraints_jacobian), m_lagrangian_hessian(t_lagrangian_hessian),
         m_primal_lower_bounds(t_primal_lower_bounds), m_primal_upper_bounds(t_primal_upper_bounds),
@@ -268,7 +256,7 @@ namespace Pipal
     /**
      * \brief Default destructor for the ProblemWrapper class.
      */
-    ~ProblemWrapper() {};
+    ~ProblemWrapper() override {};
 
     /**
      * \brief Get the objective function.
@@ -434,8 +422,7 @@ namespace Pipal
 
     /**
      * \brief Get the Hessian of the Lagrangian function.
-     * \param[out] out The Hessian of the Lagrangian function.
-     * \return True if the evaluation was successful, false otherwise.
+     * \return The Hessian of the Lagrangian function.
      */
     LagrangianHessianFunc & lagrangian_hessian()
     {

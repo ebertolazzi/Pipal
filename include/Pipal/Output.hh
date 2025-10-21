@@ -14,7 +14,6 @@
 #define INCLUDE_PIPAL_OUTPUT_HH
 
 // Standard libraries
-#include <chrono>
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -22,17 +21,12 @@
 
 // Pipal includes
 #include "Pipal/Types.hh"
-#include "Pipal/Iterate.hh"
 
 namespace Pipal
 {
 
   class Output
   {
-    static_assert(std::is_floating_point<Real>::value,
-      "Pipal::Output: template argument 'Real' must be a floating-point type.");
-
-  private:
     using String      = std::string;
     using Ostream     = std::ostream;
     using Seconds     = std::chrono::seconds;
@@ -59,60 +53,65 @@ namespace Pipal
     // FIXME Output(Ostream & stream) : Output() {this->s = &stream;}
 
     // Destructor closes stream
-    ~Output() {}
+    ~Output() = default;
 
     // Header printing
-    void printHeader(Input & i, Iterate & z)
-    {
-      this->s << "Problem name" << std::endl << "============" << std::endl << "  " << i.id << std::endl << std::endl;
+    void printHeader(Input const & i, Iterate const & z) const {
+      this->s
+        << "Problem name" << std::endl
+        << "============" << std::endl
+        << "  " << i.id << std::endl
+        << std::endl;
 
-      this->s << "Problem size" << std::endl << "============" << std::endl;
-      this->s << "  Number of variables....................... : " << std::setw(8) << i.nV << std::endl;
-      this->s << "  Number of equality constraints............ : " << std::setw(8) << i.nE << std::endl;
-      this->s << "  Number of inequality constraints.......... : " << std::setw(8) << i.nI << std::endl << std::endl;
+      this->s
+        << "Problem size" << std::endl << "============" << std::endl
+        << "  Number of variables....................... : " << i.nV << std::endl
+        << "  Number of equality constraints............ : " << i.nE << std::endl
+        << "  Number of inequality constraints.......... : " << i.nI << std::endl
+        << std::endl;
 
-      this->s << "Problem sparsity" << std::endl << "================" << std::endl;
-      this->s << "  Nonzeros in Hessian of Lagrangian......... : " << std::setw(8) << z.Hnnz << std::endl;
-      this->s << "  Nonzeros in equality constraint Jacobian.. : " << std::setw(8) << z.JEnnz << std::endl;
-      this->s << "  Nonzeros in inequality constraint Jacobian : " << std::setw(8) << z.JInnz << std::endl << std::endl;
+      this->s
+        << "Problem sparsity" << std::endl << "================" << std::endl
+        << "  Nonzeros in Hessian of Lagrangian......... : " << z.Hnnz << std::endl
+        << "  Nonzeros in equality constraint Jacobian.. : " << z.JEnnz << std::endl
+        << "  Nonzeros in inequality constraint Jacobian : " << z.JInnz << std::endl
+        << std::endl;
     }
 
     // Break printing (every 20 iterations)
-    void printBreak(Counter & c)
-    {
+    void printBreak(Counter const & c) const {
       if (c.k % 20 == 0) {
         this->s << this->l << std::endl << this->q << std::endl << this->l << std::endl;
       }
     }
 
     // Direction info
-    void printDirection(Iterate & z, Direction & d)
-    {
-      this->s << std::showpos << std::scientific << std::setprecision(4)
-        << z.phi << "  " << z.kkt[2] << " | " << z.shift << "  " << d.x_norm << "  " << d.l_norm << "  "
-        << d.ltred << "  " << d.qtred << "  " << d.m << " | ";
+    void printDirection(Iterate const & z, Direction const & d) const {
+      this->s
+        << std::scientific << std::setprecision(4)
+        << std::showpos << z.phi << "  " << std::noshowpos << z.kkt[2] << " | " << z.shift << "  " << d.x_norm << "  " << d.l_norm << "  "
+        << std::showpos << d.ltred << "  " << d.qtred << "  " << d.m << std::noshowpos << " | ";
     }
 
     // Iterate info
-    void printIterate(Counter & c, Iterate & z)
-    {
-      this->s << std::setw(5) << c.k << " | " << std::showpos << std::scientific << std::setprecision(4)
-        << z.f << "  " << z.v << " | " << z.rho << "  " << z.mu << "  " << z.kkt[1] << " | ";
+    void printIterate(Counter const & c, Iterate const & z) const {
+      this->s << std::setw(5) << c.k << " | " << std::scientific << std::setprecision(4)
+        << std::showpos << z.f << std::noshowpos << "  " << z.v << " | " << z.rho << "  " << z.mu << "  " << z.kkt[1] << " | ";
     }
 
     // Acceptance info
-    void printAcceptance(Acceptance & a)
-    {
+    void printAcceptance(Acceptance const & a) const {
       this->s << std::scientific << std::setprecision(4) << a.p << "  " << a.d;
         if (a.s == 1) {this->s << " SOC";}
       this->s << std::endl;
     }
 
     // Footer printing
-    void printFooter(Parameter & p, Input & i, Counter & c, Iterate & z)
-    {
+    void printFooter(Parameter const & p, Input const & i, Counter const & c, Iterate const & z) const {
       this->printIterate(c, z);
-      this->s << this->n << std::endl << this->l << std::endl << std::endl;
+      this->s
+        << this->n << std::endl << this->l << std::endl
+        << std::endl;
 
       const Integer b{checkTermination(z, p, i, c)};
 
@@ -127,22 +126,25 @@ namespace Pipal
         default: this->s << "  EXIT: Unknown termination" << std::endl; break;
       }
 
-      this->s << "\nFinal values" << std::endl << "============" << std::endl;
-      this->s << "  Objective function........................ : " << z.fu << std::endl;
-      this->s << "  Feasibility violation..................... : " << z.vu << std::endl;
-      this->s << "  Optimality error (feasibility)............ : " << z.kkt(0) << std::endl;
-      this->s << "  Optimality error (penalty)................ : " << z.kkt(1) << std::endl;
-      this->s << "  Optimality error (penalty-interior-point). : " << z.kkt(2) << std::endl;
-      this->s << "  Penalty parameter......................... : " << z.rho << std::endl;
-      this->s << "  Interior-point parameter.................. : " << z.mu << std::endl << std::endl;
+      this->s
+        << "\nFinal values" << std::endl << "============" << std::showpos << std::endl
+        << "  Objective function........................ : " << z.fu << std::endl
+        << "  Feasibility violation..................... : " << z.vu << std::endl
+        << "  Optimality error (feasibility)............ : " << z.kkt(0) << std::endl
+        << "  Optimality error (penalty)................ : " << z.kkt(1) << std::endl
+        << "  Optimality error (penalty-interior-point). : " << z.kkt(2) << std::endl
+        << "  Penalty parameter......................... : " << z.rho << std::endl
+        << "  Interior-point parameter.................. : " << z.mu << std::noshowpos << std::endl
+        << std::endl;
 
-      this->s << "Final counters" << std::endl << "==============" << std::endl;
-      this->s << "  Iterations................................ : " << c.k << std::endl;
-      this->s << "  Function evaluations...................... : " << c.f << std::endl;
-      this->s << "  Gradient evaluations...................... : " << c.g << std::endl;
-      this->s << "  Hessian evaluations....................... : " << c.H << std::endl;
-      this->s << "  Matrix factorizations..................... : " << c.M << std::endl;
-      this->s << "  CPU seconds............................... : " <<
+      this->s
+        << "Final counters" << std::endl << "==============" << std::endl
+        << "  Iterations................................ : " << c.k << std::endl
+        << "  Function evaluations...................... : " << c.f << std::endl
+        << "  Gradient evaluations...................... : " << c.g << std::endl
+        << "  Hessian evaluations....................... : " << c.H << std::endl
+        << "  Matrix factorizations..................... : " << c.M << std::endl
+        << "  CPU seconds............................... : " <<
           std::chrono::duration_cast<Seconds>(SteadyClock::now() - this->t).count() << std::endl;
     }
 

@@ -15,7 +15,6 @@
 
 // Pipal includes
 #include "Pipal/Types.hh"
-#include "Pipal/Input.hh"
 #include "Pipal/Parameter.hh"
 #include "Pipal/Counter.hh"
 
@@ -23,7 +22,7 @@ namespace Pipal
 {
 
   // Constructor
-  void buildIterate(Iterate & z, Parameter & p, Input & i, Counter & c)
+  inline void buildIterate(Iterate & z, Parameter & p, Input & i, Counter & c)
   {
     // Initialize quantities
     z.rho_ = p.rho_init;
@@ -52,7 +51,7 @@ namespace Pipal
     z.shift = 0.0;
     z.b.setZero(i.nA);
     z.kkt.setZero(3);
-    z.kkt_.setConstant(INFTY, 1, p.opt_err_mem);
+    z.kkt_.setConstant(p.opt_err_mem, INFTY);
     z.err = 0;
     z.fs = 1.0;
     z.cEs.setOnes(i.nE);
@@ -88,7 +87,7 @@ namespace Pipal
   }
 
   // Termination checker
-  Integer checkTermination(Iterate & z, Parameter & p, Input & i, Counter & c)
+  inline Integer checkTermination(Iterate const & z, Parameter const & p, Input const & i, Counter const & c)
   {
     // Update termination based on optimality error of nonlinear optimization problem
     if (z.kkt(1) <= p.opt_err_tol && z.v <= p.opt_err_tol) {return 1;}
@@ -109,7 +108,7 @@ namespace Pipal
   }
 
   // Dependent quantity evaluator
-  void evalDependent(Iterate & z, Parameter & p, Input & i)
+  inline void evalDependent(Iterate & z, Parameter & p, Input & i)
   {
     // Evaluate quantities dependent on penalty and interior-point parameters
     evalSlacks(z, p, i);
@@ -118,7 +117,7 @@ namespace Pipal
   }
 
   // Function evaluator
-  void evalFunctions(Iterate & z, Input & i, Counter & c)
+  inline void evalFunctions(Iterate & z, Input & i, Counter & c)
   {
     // Evaluate x in original space
     Vector x_orig;
@@ -186,13 +185,13 @@ namespace Pipal
 
     // Scale quantities
     z.f *= z.fs;
-    if (i.nE > 0) {z.cE = (z.cEs.array()*z.cE.array()).matrix();}
-    if (i.nI > 0) {z.cI = (z.cIs.array()*z.cI.array()).matrix();}
+    if (i.nE > 0) {z.cE = (z.cEs*z.cE).matrix();}
+    if (i.nI > 0) {z.cI = (z.cIs*z.cI).matrix();}
 
   }
 
   // Gradient evaluator
-  void evalGradients(Iterate & z, Input & i, Counter & c)
+  inline void evalGradients(Iterate & z, Input & i, Counter & c)
   {
     // Evaluate x in original space
     Vector x_orig;
@@ -264,12 +263,12 @@ namespace Pipal
     z.g *= z.fs;
 
     // Scale constraint Jacobians
-    if (i.nE > 0) {z.JE = z.cEs.asDiagonal() * z.JE;} // SPARSE
-    if (i.nI > 0) {z.JI = z.cIs.asDiagonal() * z.JI;} // SPARSE
+    if (i.nE > 0) {z.JE = z.cEs.matrix().asDiagonal() * z.JE;} // SPARSE
+    if (i.nI > 0) {z.JI = z.cIs.matrix().asDiagonal() * z.JI;} // SPARSE
   }
 
   // Hessian evaluator
-  void evalHessian(Iterate & z, Input & i, Counter & c)
+  inline void evalHessian(Iterate & z, Input & i, Counter & c)
   {
     // Evaluate lambda in original space
     Vector l_orig, x_orig;
@@ -309,7 +308,7 @@ namespace Pipal
   }
 
   // Infeasibility evaluator
-  void evalInfeasibility(Iterate & z, Input & i)
+  inline void evalInfeasibility(Iterate & z, Input const & i)
   {
     // Evaluate scaled and unscaled feasibility violations
     z.v  = evalViolation(i, z.cE, z.cI) / std::max(1.0, z.v0);
@@ -317,7 +316,7 @@ namespace Pipal
   }
 
   // KKT error evaluator
-  Real evalKKTError(Iterate & z, Input & i, Real const rho, Real const mu)
+  inline Real evalKKTError(Iterate & z, Input const & i, Real const rho, Real const mu)
   {
     // Initialize optimality vector
     Vector kkt(i.nV+2*i.nE+2*i.nI);
@@ -327,19 +326,15 @@ namespace Pipal
     kkt(Eigen::seq(0, i.nV-1)) = rho*z.g;
 
     // Set gradient of Lagrangian for constraints
-    if (i.nE > 0) {kkt(Eigen::seq(0, i.nV-1)) = kkt(Eigen::seq(0, i.nV-1)) + (z.lE.transpose()*z.JE).transpose();} // OPTMIZE
-    if (i.nI > 0) {kkt(Eigen::seq(0, i.nV-1)) = kkt(Eigen::seq(0, i.nV-1)) + (z.lI.transpose()*z.JI).transpose();} // OPTMIZE
+    if (i.nE > 0) {kkt(Eigen::seq(0, i.nV-1)) += (z.lE.matrix().transpose()*z.JE.matrix()).transpose();}
+    if (i.nI > 0) {kkt(Eigen::seq(0, i.nV-1)) += (z.lI.matrix().transpose()*z.JI.matrix()).transpose();}
 
     // Set complementarity for constraint slacks
     if (i.nE > 0) {
-      kkt(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
-        z.r1.array() * (1.0 + z.lE.array()) - mu,
-        z.r2.array() * (1.0 - z.lE.array()) - mu;
+      kkt(Eigen::seq(i.nV, i.nV+2*i.nE-1)) << z.r1*(1.0 + z.lE) - mu, z.r2*(1.0 - z.lE) - mu;
     }
     if (i.nI > 0) {
-      kkt(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
-        z.s1.array() * (0.0 + z.lI.array()) - mu,
-        z.s2.array() * (1.0 - z.lI.array()) - mu;
+      kkt(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) << z.s1*(0.0 + z.lI) - mu, z.s2*(1.0 - z.lI) - mu;
     }
 
     // Scale complementarity
@@ -352,7 +347,7 @@ namespace Pipal
   }
 
   // KKT errors evaluator
-  void evalKKTErrors(Iterate & z, Input & i)
+  inline void evalKKTErrors(Iterate & z, Input const & i)
   {
     // Loop to compute optimality errors
     z.kkt(0) = evalKKTError(z, i, 0, 0);
@@ -361,17 +356,17 @@ namespace Pipal
   }
 
   // Evaluator of lambda in original space
-  void evalLambdaOriginal(Iterate & z, Input & i, Vector & l)
+  inline void evalLambdaOriginal(Iterate const & z, Input const & i, Vector & l)
   {
     // Initialize multipliers in original space
     l.setZero(i.nE+i.n7+i.n8+i.n9);
 
     // Scale equality constraint multipliers
-    if (i.nE > 0) {l(i.I6) = z.lE.array()*(z.cEs.array()/(z.rho*z.fs));}
+    if (i.nE > 0) {l(i.I6) = z.lE*(z.cEs/(z.rho*z.fs));}
 
     // Scale inequality constraint multipliers
-    Vector lI;
-    if (i.n7+i.n8+i.n9 > 0) {lI = z.lI.array()*(z.cIs.array()/(z.rho*z.fs));}
+    Array lI;
+    if (i.n7+i.n8+i.n9 > 0) {lI = z.lI*(z.cIs/(z.rho*z.fs));}
 
     // Set inequality constraint multipliers in original space
     if (i.n7 > 0) {
@@ -387,7 +382,7 @@ namespace Pipal
   }
 
   // Matrices evaluator
-  void evalMatrices(Iterate & z, Parameter & p, Input & i, Counter & c)
+  inline void evalMatrices(Iterate & z, Parameter & p, Input & i, Counter & c)
   {
     // Evaluate Hessian and Newton matrices
     evalHessian(z, i, c);
@@ -395,24 +390,24 @@ namespace Pipal
   }
 
   // Merit evaluator
-  void evalMerit(Iterate & z, Input & i)
+  inline void evalMerit(Iterate & z, Input const & i)
   {
     // Initialize merit for objective
     z.phi = z.rho*z.f;
 
     // Update merit for slacks
     if (i.nE > 0) {
-      Vector r_all(2*i.nE); r_all << z.r1, z.r2;
-      z.phi -= z.mu * r_all.array().log().sum() - r_all.sum();
+      Array r_all(2*i.nE); r_all << z.r1, z.r2;
+      z.phi -= z.mu * r_all.log().sum() - r_all.sum();
     }
     if (i.nI > 0) {
-      Vector s_all(2*i.nI); s_all << z.s1, z.s2;
-      z.phi -= z.mu * s_all.array().log().sum() - z.s2.sum();
+      Array s_all(2*i.nI); s_all << z.s1, z.s2;
+      z.phi -= z.mu * s_all.log().sum() - z.s2.sum();
     }
   }
 
   // Newton matrix evaluator
-  void evalNewtonMatrix(Iterate & z, Parameter & p, Input & i, Counter & c)
+  inline void evalNewtonMatrix(Iterate & z, Parameter & p, Input const & i, Counter & c)
   {
     // Check for equality constraints
     if (i.nE > 0)
@@ -493,7 +488,7 @@ namespace Pipal
   }
 
   // Newton right-hand side evaluator
-  void evalNewtonRhs(Iterate & z, Input & i)
+  inline void evalNewtonRhs(Iterate & z, Input const & i)
   {
     // Initialize right-hand side vector
     z.b.setZero(i.nA);
@@ -502,20 +497,20 @@ namespace Pipal
     z.b(Eigen::seq(0, i.nV-1)) = z.rho*z.g;
 
     // Set gradient of Lagrangian for constraints
-    if (i.nE > 0) {z.b(Eigen::seq(0, i.nV-1)) = z.b(Eigen::seq(0, i.nV-1)) + (z.lE.transpose()*z.JE).transpose();}
-    if (i.nI > 0) {z.b(Eigen::seq(0, i.nV-1)) = z.b(Eigen::seq(0, i.nV-1)) + (z.lI.transpose()*z.JI).transpose();}
+    if (i.nE > 0) {z.b(Eigen::seq(0, i.nV-1)) += (z.lE.matrix().transpose()*z.JE.matrix()).transpose();}
+    if (i.nI > 0) {z.b(Eigen::seq(0, i.nV-1)) += (z.lI.matrix().transpose()*z.JI.matrix()).transpose();}
 
     // Set complementarity for constraint slacks
     if (i.nE > 0) {
       // compute element-wise complementarity terms with safe element-wise division
-      Vector tmpE1((1.0 + z.lE.array() - z.mu * z.r1.cwiseInverse().array()).matrix());
-      Vector tmpE2((1.0 - z.lE.array() - z.mu * z.r2.cwiseInverse().array()).matrix());
+      Array tmpE1(1.0 + z.lE - z.mu * z.r1.cwiseInverse());
+      Array tmpE2(1.0 - z.lE - z.mu * z.r2.cwiseInverse());
       z.b(Eigen::seq(i.nV, i.nV+2*i.nE-1)) << tmpE1, tmpE2;
     }
     if (i.nI > 0) {
       // compute element-wise complementarity terms with safe element-wise division
-      Vector tmpI1((z.lI.array() - z.mu * z.s1.cwiseInverse().array()).matrix());
-      Vector tmpI2((1.0 - z.lI.array() - z.mu * z.s2.cwiseInverse().array()).matrix());
+      Array tmpI1(z.lI - z.mu * z.s1.cwiseInverse());
+      Array tmpI2(1.0 - z.lI - z.mu * z.s2.cwiseInverse());
       z.b(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) << tmpI1, tmpI2;
     }
 
@@ -525,7 +520,7 @@ namespace Pipal
   }
 
   // Scalings evaluator
-  void evalScalings(Iterate & z, Parameter & p, Input & i, Counter & c)
+  inline void evalScalings(Iterate & z, Parameter & p, Input & i, Counter & c)
   {
     // Initialize scalings
     z.fs = 1;
@@ -554,14 +549,14 @@ namespace Pipal
   }
 
   // Slacks evaluator
-  void evalSlacks(Iterate & z, Parameter & p, Input & i)
+  inline void evalSlacks(Iterate & z, Parameter & p, Input const & i)
   {
     // Check for equality constraints
     if (i.nE > 0)
     {
       // Set slacks
-      z.r1 = 0.5*((z.mu - z.cE.array()) + (z.cE.array().square() + z.mu*z.mu).sqrt()).matrix();
-      z.r2 = 0.5*((z.mu + z.cE.array()) + (z.cE.array().square() + z.mu*z.mu).sqrt()).matrix();
+      z.r1 = 0.5*((z.mu - z.cE) + (z.cE.square() + z.mu*z.mu).sqrt());
+      z.r2 = 0.5*((z.mu + z.cE) + (z.cE.square() + z.mu*z.mu).sqrt());
 
       // Adjust for numerical error
       z.r1.cwiseMax(p.slack_min);
@@ -572,8 +567,8 @@ namespace Pipal
     if (i.nI > 0)
     {
       // Set slacks
-      z.s1 = 0.5*((2.0*z.mu - z.cI.array()) + (z.cI.array().square() + 4.0*z.mu*z.mu).sqrt()).matrix();
-      z.s2 = 0.5*((2.0*z.mu + z.cI.array()) + (z.cI.array().square() + 4.0*z.mu*z.mu).sqrt()).matrix();
+      z.s1 = 0.5*((2.0*z.mu - z.cI) + (z.cI.square() + 4.0*z.mu*z.mu).sqrt());
+      z.s2 = 0.5*((2.0*z.mu + z.cI) + (z.cI.square() + 4.0*z.mu*z.mu).sqrt());
 
       // Adjust for numerical error
       z.s1.cwiseMax(p.slack_min);
@@ -582,7 +577,7 @@ namespace Pipal
   }
 
   // Evaluator of x in original space
-  void evalXOriginal(Iterate & z, Input & i, Vector & x)
+  inline void evalXOriginal(Iterate & z, Input const & i, Vector & x)
   {
     // Initialize x in original space
     x.setZero(i.n0);
@@ -596,14 +591,14 @@ namespace Pipal
   }
 
   // Gets primal-dual point
-  void getSolution(Iterate & z, Input & i, Vector & x, Vector & l)
+  inline void getSolution(Iterate & z, Input & i, Vector & x, Vector & l)
   {
     evalXOriginal(z, i, x);
     evalLambdaOriginal(z, i, l);
   }
 
   // Initializes Newton matrix
-  void initNewtonMatrix(Iterate & z, Input & i)
+  inline void initNewtonMatrix(Iterate & z, Input const & i)
   {
     // Allocate memory
     z.A.resize(i.nA, i.nA);// FIXME, z.Hnnz+5*i.nE+5*i.nI+z.JEnnz+z.JInnz);
@@ -630,12 +625,12 @@ namespace Pipal
   }
 
   // Set interior-point parameter
-  void setMu(Iterate & z, Real const mu) {z.mu = mu;}
+  inline void setMu(Iterate & z, Real const mu) {z.mu = mu;}
 
   // Set primal variables
-  void setPrimals(Iterate & z, Input & i, Vector & x, Vector & r1, Vector & r2,
-    Vector & s1, Vector & s2, Vector & lE, Vector & lI, Real const f,
-    Vector & cE, Vector & cI, Real const phi)
+  inline void setPrimals(Iterate & z, Input const & i, Vector const & x, Array const & r1,
+    Array const & r2, Array const  & s1, Array const & s2, Array const  & lE, Array const & lI,
+    Real const f, Array const  & cE, Array const & cI, Real const phi)
   {
     // Set primal variables
     z.x = x; z.f = f;
@@ -645,13 +640,13 @@ namespace Pipal
   }
 
   // Set penalty parameter
-  void setRho(Iterate & z, Real const rho) {z.rho = rho;}
+  inline void setRho(Iterate & z, Real const rho) {z.rho = rho;}
 
   // Set last penalty parameter
-  void setRhoLast(Iterate & z, Real const rho) {z.rho_ = rho;}
+  inline void setRhoLast(Iterate & z, Real const rho) {z.rho_ = rho;}
 
   // Iterate updater
-  void updateIterate(Iterate & z, Parameter & p, Input & i, Counter & c, Direction & d, Acceptance & a)
+  inline void updateIterate(Iterate & z, Parameter & p, Input & i, Counter & c, Direction const & d, Acceptance const  & a)
   {
     // Update last quantities
     z.v_   = z.v;
@@ -669,7 +664,7 @@ namespace Pipal
   }
 
   // Parameter updater
-  void updateParameters(Iterate & z, Parameter & p, Input & i)
+  inline void updateParameters(Iterate & z, Parameter & p, Input & i)
   {
     // Check for interior-point parameter update based on optimality error
     while (z.mu > p.mu_min && z.kkt(2) <= std::max(z.mu, p.opt_err_tol-z.mu))
@@ -705,7 +700,7 @@ namespace Pipal
   }
 
   // Primal point updater
-  void updatePoint(Iterate & z, Input & i, Direction & d, Acceptance & a)
+  inline void updatePoint(Iterate & z, Input const & i, Direction const & d, Acceptance const & a)
   {
     // Update primal and dual variables
     z.x += a.p*d.x ;
@@ -716,7 +711,7 @@ namespace Pipal
   }
 
   // Feasibility violation evaluator
-  Real evalViolation(Input & i, Vector & cE, Vector & cI)
+  inline Real evalViolation(Input const & i, Array const & cE, Array const & cI)
   {
     // Initialize violation vector
     Vector vec;

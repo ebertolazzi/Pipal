@@ -20,13 +20,13 @@ namespace Pipal
 {
 
   // Constructor
-  void buildParameter(Parameter & p, Algorithm a) {p.algorithm = a;}
+  inline void buildParameter(Parameter & p, Algorithm a) {p.algorithm = a;}
 
   // Reset interior-point parameter maximum exponent in increases to default
-  void resetMuMaxExp(Parameter & p) {p.mu_max_exp = p.mu_max_exp0;}
+  inline void resetMuMaxExp(Parameter & p) {p.mu_max_exp = p.mu_max_exp0;}
 
   // Set interior-point parameter maximum exponent in increases to zero
-  void setMuMaxExpZero(Parameter & p) {p.mu_max_exp = 0.0;}
+  inline void setMuMaxExpZero(Parameter & p) {p.mu_max_exp = 0.0;}
 
 } // namespace Pipal
 

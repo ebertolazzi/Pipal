@@ -19,20 +19,18 @@
 #include "Pipal.hh"
 
 using Pipal::Integer;
+using Pipal::Real;
+using Pipal::Vector;
+using Pipal::Matrix;
 
 constexpr bool VERBOSE{true};
-constexpr double SOLVER_TOLERANCE{1.0e-9};
-constexpr double APPROX_TOLERANCE{1.0e-6};
+constexpr Real SOLVER_TOLERANCE{1.0e-9};
+constexpr Real APPROX_TOLERANCE{1.0e-6};
 constexpr Integer MAX_ITERATIONS{100};
 
 // Quadratic program class
-template<typename Real>
-class QuadraticProgram : public Pipal::Problem<Real>
+class QuadraticProgram : public Pipal::Problem
 {
-public:
-  using typename Pipal::Problem<Real>::Vector;
-  using typename Pipal::Problem<Real>::Matrix;
-
 private:
   Matrix m_Q;
   Vector m_c;
@@ -42,7 +40,7 @@ private:
 public:
   // Constructor
   QuadraticProgram(Matrix const & Q, Vector const & c, Matrix const & A, Vector const & b)
-    : m_Q(Q), m_c(c), m_A(A), m_b(b) {}
+    : Problem("test_linear"), m_Q(Q), m_c(c), m_A(A), m_b(b) {}
 
   // Objective function
   bool objective(Vector const & x, Real & out) const override
@@ -118,15 +116,10 @@ public:
 // Test fixture for Pipal with QuadraticProgram
 class LinearRegression : public testing::Test {
 protected:
-  using TestType = double;
-
   static constexpr Integer N{2};
   static constexpr Integer M{5};
 
-  using Vector = typename Pipal::Problem<TestType>::Vector;
-  using Matrix = typename Pipal::Problem<TestType>::Matrix;
-
-  std::unique_ptr<QuadraticProgram<TestType>> problem;
+  std::unique_ptr<QuadraticProgram> problem;
   Vector x_guess, sol;
 
   void SetUp() override {
@@ -144,12 +137,12 @@ protected:
     x_guess.resize(N); x_guess << 0.5, 0.5;
     sol.resize(N); sol << 1.4, 1.7;
 
-    problem = std::make_unique<QuadraticProgram<TestType>>(Q, c, A, b);
+    problem = std::make_unique<QuadraticProgram>(Q, c, A, b);
   }
 };
 
 TEST_F(LinearRegression, Problem) {
-  Pipal::Solver<TestType> solver(std::move(problem));
+  Pipal::Solver solver(std::move(problem));
   solver.verbose_mode(VERBOSE);
   solver.tolerance(SOLVER_TOLERANCE);
   solver.max_iterations(MAX_ITERATIONS);
@@ -159,35 +152,30 @@ TEST_F(LinearRegression, Problem) {
   EXPECT_TRUE(x_sol.isApprox(sol, APPROX_TOLERANCE));
 }
 
-// TEST_F(LinearRegression, ProblemWrapper) {
-//   Pipal::ProblemWrapper<TestType> problem_wrapper(
-//     [this] (const Vector & x, TestType & out) {return this->problem->objective(x, out);},
-//     [this] (const Vector & x, Vector & out) {return this->problem->objective_gradient(x, out);},
-//     [this] (const Vector & x, Matrix & out) {return this->problem->objective_hessian(x, out);},
-//     [this] (const Vector & x, Vector & out) {return this->problem->constraints(x, out);},
-//     [this] (const Vector & x, Matrix & out) {return this->problem->constraints_jacobian(x, out);},
-//     [this] (const Vector & x, const Vector & z, Matrix & out) {return this->problem->lagrangian_hessian(x, z, out);},
-//     [this] (Vector & out) {return this->problem->primal_lower_bounds(out);},
-//     [this] (Vector & out) {return this->problem->primal_upper_bounds(out);},
-//     [this] (Vector & out) {return this->problem->constraints_lower_bounds(out);},
-//     [this] (Vector & out) {return this->problem->constraints_upper_bounds(out);}
-//   );
+TEST_F(LinearRegression, ProblemWrapper) {
+  Pipal::ProblemWrapper problem_wrapper("test_linear",
+    [this] (const Vector & x, Real & out) {return this->problem->objective(x, out);},
+    [this] (const Vector & x, Vector & out) {return this->problem->objective_gradient(x, out);},
+    [this] (const Vector & x, Matrix & out) {return this->problem->objective_hessian(x, out);},
+    [this] (const Vector & x, Vector & out) {return this->problem->constraints(x, out);},
+    [this] (const Vector & x, Matrix & out) {return this->problem->constraints_jacobian(x, out);},
+    [this] (const Vector & x, const Vector & z, Matrix & out) {return this->problem->lagrangian_hessian(x, z, out);},
+    [this] (Vector & out) {return this->problem->primal_lower_bounds(out);},
+    [this] (Vector & out) {return this->problem->primal_upper_bounds(out);},
+    [this] (Vector & out) {return this->problem->constraints_lower_bounds(out);},
+    [this] (Vector & out) {return this->problem->constraints_upper_bounds(out);}
+  );
 
-//   Pipal::Solver<TestType> solver(
-//     problem_wrapper.objective(), problem_wrapper.objective_gradient(), problem_wrapper.objective_hessian(),
-//     problem_wrapper.constraints(), problem_wrapper.constraints_jacobian(), problem_wrapper.lagrangian_hessian(),
-//     problem_wrapper.primal_lower_bounds(), problem_wrapper.primal_upper_bounds(),
-//     problem_wrapper.constraints_lower_bounds(), problem_wrapper.constraints_upper_bounds()
-//   );
-//   solver.verbose_mode(VERBOSE);
-//   solver.tolerance(SOLVER_TOLERANCE);
-//   solver.max_iterations(MAX_ITERATIONS);
-//   Vector x_sol;
-//   EXPECT_TRUE(solver.optimize(x_guess, x_sol));
-//   EXPECT_TRUE(x_sol.isApprox(sol, APPROX_TOLERANCE));
-// }
-
-int main(int argc, char **argv) {
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+ Pipal::Solver solver(problem_wrapper.name(),
+   problem_wrapper.objective(), problem_wrapper.objective_gradient(), problem_wrapper.objective_hessian(),
+   problem_wrapper.constraints(), problem_wrapper.constraints_jacobian(), problem_wrapper.lagrangian_hessian(),
+   problem_wrapper.primal_lower_bounds(), problem_wrapper.primal_upper_bounds(),
+   problem_wrapper.constraints_lower_bounds(), problem_wrapper.constraints_upper_bounds()
+ );
+ solver.verbose_mode(VERBOSE);
+ solver.tolerance(SOLVER_TOLERANCE);
+ solver.max_iterations(MAX_ITERATIONS);
+ Vector x_sol;
+ EXPECT_TRUE(solver.optimize(x_guess, x_sol));
+ EXPECT_TRUE(x_sol.isApprox(sol, APPROX_TOLERANCE));
 }

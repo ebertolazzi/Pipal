@@ -14,7 +14,6 @@
 #define INCLUDE_PIPAL_SOLVER_HH
 
 // Standard libraries
-#include <iostream>
 #include <iomanip>
 #include <algorithm>
 #include <type_traits>
@@ -30,7 +29,6 @@
 #include "Pipal/Input.hh"
 #include "Pipal/Iterate.hh"
 #include "Pipal/Output.hh"
-#include "Pipal/Parameter.hh"
 #include "Pipal/Problem.hh"
 
 namespace Pipal
@@ -42,27 +40,18 @@ namespace Pipal
    * The Solver class provides an interface for solving the optimization problems using Frank E.
    * Curtis Pipal algorithm. It utilizes the Problem class to define the optimization problem and
    * implements various methods for solving it.
-   * \tparam Real The floating-point type.
    */
-  template<typename Real>
   class Solver
   {
-    static_assert(std::is_floating_point<Real>::value,
-      "Pipal::Solver: template argument 'Real' must be a floating-point type.");
-
   public:
-    using Vector = typename Problem<Real>::Vector;
-    using Matrix = typename Problem<Real>::Matrix;
-    using Mask   = Eigen::Array<bool, Eigen::Dynamic, 1>;
-
-    using ProblemPtr              = typename Problem<Real>::UniquePtr;
-    using ObjectiveFunc           = typename ProblemWrapper<Real>::ObjectiveFunc;
-    using ObjectiveGradientFunc   = typename ProblemWrapper<Real>::ObjectiveGradientFunc;
-    using ObjectiveHessianFunc    = typename ProblemWrapper<Real>::ObjectiveHessianFunc;
-    using ConstraintsFunc         = typename ProblemWrapper<Real>::ConstraintsFunc;
-    using ConstraintsJacobianFunc = typename ProblemWrapper<Real>::ConstraintsJacobianFunc;
-    using LagrangianHessianFunc   = typename ProblemWrapper<Real>::LagrangianHessianFunc;
-    using BoundsFunc              = typename ProblemWrapper<Real>::BoundsFunc;
+    using ProblemPtr              = typename Problem::UniquePtr;
+    using ObjectiveFunc           = typename ProblemWrapper::ObjectiveFunc;
+    using ObjectiveGradientFunc   = typename ProblemWrapper::ObjectiveGradientFunc;
+    using ObjectiveHessianFunc    = typename ProblemWrapper::ObjectiveHessianFunc;
+    using ConstraintsFunc         = typename ProblemWrapper::ConstraintsFunc;
+    using ConstraintsJacobianFunc = typename ProblemWrapper::ConstraintsJacobianFunc;
+    using LagrangianHessianFunc   = typename ProblemWrapper::LagrangianHessianFunc;
+    using BoundsFunc              = typename ProblemWrapper::BoundsFunc;
 
   private:
     Acceptance m_acceptance; /*!< Acceptance criteria for trial points. */
@@ -85,7 +74,7 @@ namespace Pipal
      *
      * Initializes the solver with default values for the objective, gradient, constraints, and Jacobian functions.
      */
-    Solver() {};
+    Solver() = default;
 
     /**
      * \brief Constructor for the Pipal class.
@@ -107,7 +96,7 @@ namespace Pipal
       LagrangianHessianFunc const & lagrangian_hessian, BoundsFunc const & primal_lower_bounds,
       BoundsFunc const & primal_upper_bounds, BoundsFunc const & constraints_lower_bounds,
       BoundsFunc const & constraints_upper_bounds)
-      : m_problem(std::make_unique<ProblemWrapper<Real>>(name, objective, objective_gradient,
+      : m_problem(std::make_unique<ProblemWrapper>(name, objective, objective_gradient,
         constraints, constraints_jacobian, lagrangian_hessian, primal_lower_bounds, primal_upper_bounds,
         constraints_lower_bounds, constraints_upper_bounds)) {}
 
@@ -132,7 +121,7 @@ namespace Pipal
       ConstraintsJacobianFunc const & constraints_jacobian, LagrangianHessianFunc const & lagrangian_hessian,
       BoundsFunc const & primal_lower_bounds, BoundsFunc const & primal_upper_bounds,
       BoundsFunc const & constraints_lower_bounds, BoundsFunc const & constraints_upper_bounds)
-      : m_problem(std::make_unique<ProblemWrapper<Real>>(name, objective, objective_gradient, objective_hessian,
+      : m_problem(std::make_unique<ProblemWrapper>(name, objective, objective_gradient, objective_hessian,
         constraints, constraints_jacobian, lagrangian_hessian, primal_lower_bounds, primal_upper_bounds,
         constraints_lower_bounds, constraints_upper_bounds)) {}
 
@@ -177,16 +166,6 @@ namespace Pipal
     ~Solver() = default;
 
     /**
-     * \brief Set the problem to be solved.
-     *
-     * This method allows the user to specify the problem to be solved.
-     * \param[in] problem The problem to set.
-     */
-    void problem(Problem<Real> const & problem) {
-      this->m_problem = std::make_unique<ProblemWrapper<Real>>(problem);
-    }
-
-    /**
      * \brief Set the problem to be solved using a unique pointer.
      *
      * This method allows the user to specify the problem to be solved using a unique pointer.
@@ -198,13 +177,13 @@ namespace Pipal
      * \brief Get the problem being solved.
      * \return A reference to the problem.
      */
-    Problem<Real> const & problem() const {return *this->m_problem;}
+    Problem const & problem() const {return *this->m_problem;}
 
     /**
      * \brief Get the verbose mode.
      * \return The verbose mode.
      */
-    bool verbose_mode() {return this->m_verbose;}
+    [[nodiscard]] bool verbose_mode() const {return this->m_verbose;}
 
     /**
      * \brief Set the verbose mode.
@@ -216,7 +195,7 @@ namespace Pipal
      * \brief Get the algorithm mode.
      * \return The algorithm mode.
      */
-    //FIXME: Algorithm algorithm() const {return this->m_parameters.algorithm;}
+    [[nodiscard]] Algorithm algorithm() const {return this->m_parameter.algorithm;}
 
     /**
      * \brief Set the algorithm mode.
@@ -225,7 +204,7 @@ namespace Pipal
      * or \c ADAPTIVE.
      * \param[in] t_algorithm The algorithm mode.
      */
-    //FIXME: void algorithm(Algorithm const t_algorithm) {this->m_parameters.algorithm = t_algorithm;}
+    void algorithm(Algorithm const t_algorithm) {this->m_parameter.algorithm = t_algorithm;}
 
     /**
      * \brief Set the convergence tolerance for the solver.
@@ -237,7 +216,7 @@ namespace Pipal
      */
     void tolerance(Real const t_tolerance)
     {
-      PIPAL_ASSERT(t_tolerance > static_cast<Real>(0.0),
+      PIPAL_ASSERT(t_tolerance > 0.0,
         "Pipal::Solver::tolerance(...): input value must be positive");
       this->m_tolerance = t_tolerance;
     }
@@ -267,7 +246,7 @@ namespace Pipal
      * \brief Get the maximum number of iterations.
      * \return The maximum number of iterations.
      */
-    Integer max_iterations() const {return this->m_max_iterations;}
+    [[nodiscard]] Integer max_iterations() const {return this->m_max_iterations;}
 
     /**
      * \brief Solves the optimization problem using the interior-point method.

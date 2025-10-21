@@ -21,7 +21,7 @@ namespace Pipal
 {
 
   // Constructor
-  void buildInput(Input & i, Parameter & p, String const & name, ObjectiveFunc const & f_orig,
+  inline void buildInput(Input & i, Parameter & p, String const & name, ObjectiveFunc const & f_orig,
     ConstraintsFunc const & c_orig, ObjectiveGradientFunc const & g_orig,
     ConstraintsJacobianFunc const & J_orig, LagrangianHessianFunc const & H_orig,
     Vector const & x0, Vector const & bl, Vector const & bu, Vector const & cl, Vector const & cu)
@@ -42,7 +42,7 @@ namespace Pipal
     i.n0 = static_cast<Integer>(x0.size());
 
     // Find indices sets
-    Real const tolerance{Eigen::NumTraits<Real>::epsilon()};
+    constexpr Real tolerance{Eigen::NumTraits<Real>::epsilon()};
     Mask const cond_bl(bl.array() <= -p.rhs_bnd);
     Mask const cond_bu(bu.array() >= p.rhs_bnd);
     Mask const cond_cl(cl.array() <= -p.rhs_bnd);

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
- * Copyright (counter) 2025, Davide Stocco and Enrico Bertolazzi.                                      *
+ * Copyright (counter) 2025, Davide Stocco and Enrico Bertolazzi.                                *
  *                                                                                               *
  * The Pipal project is distributed under the MIT License.                                       *
  *                                                                                               *
@@ -16,23 +16,19 @@
 // Pipal includes
 #include "Pipal/Types.hh"
 #include "Pipal/Iterate.hh"
-#include "Pipal/Input.hh"
-#include "Pipal/Parameter.hh"
 #include "Pipal/Direction.hh"
-#include "Pipal/Counter.hh"
 
 namespace Pipal
 {
 
   // Backtracking line search
-  void backtracking(Acceptance & a, Parameter & p, Input & i, Counter & c,
-    Iterate & z, Direction & d)
+  inline void backtracking(Acceptance & a, Parameter & p, Input & i, Counter & c, Iterate & z, Direction const & d)
   {
     // Store current values
     Vector x(z.x);
     Real f{z.f};
-    Vector cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE);
-    Vector cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
+    Array cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE);
+    Array cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
     Real phi{z.phi};
 
     // Backtracking loop
@@ -52,10 +48,10 @@ namespace Pipal
         // Check for nonlinear fraction-to-boundary violation
         Integer ftb{0};
         if (i.nE > 0) {
-          ftb += (z.r1.array() < (std::min(p.ls_frac, z.mu)*r1).array()).count() + (z.r2.array() < (std::min(p.ls_frac, z.mu)*r2).array()).count();
+          ftb += (z.r1 < (std::min(p.ls_frac, z.mu)*r1)).count() + (z.r2 < (std::min(p.ls_frac, z.mu)*r2)).count();
         }
         if (i.nI > 0) {
-          ftb += (z.s1.array() < (std::min(p.ls_frac, z.mu)*s1).array()).count() + (z.s2.array() < (std::min(p.ls_frac, z.mu)*s2).array()).count();
+          ftb += (z.s1 < (std::min(p.ls_frac, z.mu)*s1)).count() + (z.s2 < (std::min(p.ls_frac, z.mu)*s2)).count();
         }
 
         // Check Armijo condition
@@ -77,13 +73,12 @@ namespace Pipal
         setPrimals(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
       }
 
-      // Reduce steplength
+      // Reduce step length
       a.p *= p.ls_factor;
     }
   }
   // Fraction-to-boundary line search
-  void fractionToBoundary(Acceptance & a, Parameter & p, Input & i, Iterate & z,
-    Direction & d)
+  inline void fractionToBoundary(Acceptance & a, Parameter & p, Input const & i, Iterate & z, Direction & d)
   {
 
     // Initialize primal fraction-to-boundary
@@ -92,23 +87,23 @@ namespace Pipal
     // Update primal fraction-to-boundary for constraint slacks
     Real frac{std::min(p.ls_frac, z.mu)};
     if (i.nE > 0) {
-      Indices const idx_r1(find(d.r1.array() < 0.0));
-      Indices const idx_r2(find(d.r2.array() < 0.0));
+      Indices const idx_r1(find(d.r1 < 0.0));
+      Indices const idx_r2(find(d.r2 < 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
-      if (idx_r1.size() > 0) {min_1 = (((frac - 1.0) * z.r1(idx_r1).array()) / d.r1(idx_r1).array()).minCoeff();}
-      if (idx_r2.size() > 0) {min_2 = (((frac - 1.0) * z.r2(idx_r2).array()) / d.r2(idx_r2).array()).minCoeff();}
+      if (idx_r1.size() > 0) {min_1 = (((frac - 1.0) * z.r1(idx_r1)) / d.r1(idx_r1)).minCoeff();}
+      if (idx_r2.size() > 0) {min_2 = (((frac - 1.0) * z.r2(idx_r2)) / d.r2(idx_r2)).minCoeff();}
       a.p0 = std::min(a.p0, std::min(min_1, min_2));
     }
     if (i.nI > 0) {
-      Indices const idx_s1(find(d.s1.array() < 0.0));
-      Indices const idx_s2(find(d.s2.array() < 0.0));
+      Indices const idx_s1(find(d.s1 < 0.0));
+      Indices const idx_s2(find(d.s2 < 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
-      if (idx_s1.size() > 0) {min_1 = (((frac - 1.0) * z.s1(idx_s1).array()) / d.s1(idx_s1).array()).minCoeff();}
-      if (idx_s2.size() > 0) {min_2 = (((frac - 1.0) * z.s2(idx_s2).array()) / d.s2(idx_s2).array()).minCoeff();}
+      if (idx_s1.size() > 0) {min_1 = (((frac - 1.0) * z.s1(idx_s1)) / d.s1(idx_s1)).minCoeff();}
+      if (idx_s2.size() > 0) {min_2 = (((frac - 1.0) * z.s2(idx_s2)) / d.s2(idx_s2)).minCoeff();}
       a.p0 = std::min(a.p0, std::min(min_1, min_2));
     }
 
-    // Initialize primal steplength
+    // Initialize primal step length
     a.p = a.p0;
 
     // Initialize dual fraction-to-boundary
@@ -116,25 +111,25 @@ namespace Pipal
 
     // Update dual fraction-to-boundary for constraint multipliers
     if (i.nE > 0) {
-      Indices const idx_l(find(d.lE.array() < 0.0));
-      Indices const idx_g(find(d.lE.array() > 0.0));
+      Indices const idx_l(find(d.lE < 0.0));
+      Indices const idx_g(find(d.lE > 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
-      if (idx_l.size() > 0) {min_1 = (((frac - 1.0) * (1.0 + z.lE(idx_l).array())) / d.lE(idx_l).array()).minCoeff();}
-      if (idx_g.size() > 0) {min_2 = (((1.0 - frac) * (1.0 - z.lE(idx_g).array())) / d.lE(idx_g).array()).minCoeff();}
+      if (idx_l.size() > 0) {min_1 = (((frac - 1.0) * (1.0 + z.lE(idx_l))) / d.lE(idx_l)).minCoeff();}
+      if (idx_g.size() > 0) {min_2 = (((1.0 - frac) * (1.0 - z.lE(idx_g))) / d.lE(idx_g)).minCoeff();}
       a.d = std::min({a.d, min_1, min_2});
     }
     if (i.nI > 0) {
-      Indices const idx_l(find(d.lI.array() < 0.0));
-      Indices const idx_g(find(d.lI.array() > 0.0));
+      Indices const idx_l(find(d.lI < 0.0));
+      Indices const idx_g(find(d.lI > 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
-      if (idx_l.size() > 0) {min_1 = (((frac - 1.0) * (0.0 + z.lI(idx_l).array())) / d.lI(idx_l).array()).minCoeff();}
-      if (idx_g.size() > 0) {min_2 = (((1.0 - frac) * (1.0 - z.lI(idx_g).array())) / d.lI(idx_g).array()).minCoeff();}
+      if (idx_l.size() > 0) {min_1 = (((frac - 1.0) * (0.0 + z.lI(idx_l))) / d.lI(idx_l)).minCoeff();}
+      if (idx_g.size() > 0) {min_2 = (((1.0 - frac) * (1.0 - z.lI(idx_g))) / d.lI(idx_g)).minCoeff();}
       a.d = std::min({a.d, min_1, min_2});
     }
   }
 
   // Full step search for trial penalty parameters
-  Integer fullStepCheck(Acceptance & a, Parameter & p, Input & i, Counter & c, Iterate & z, Direction & d)
+  inline Integer fullStepCheck(Acceptance const & a, Parameter & p, Input & i, Counter & c, Iterate & z, Direction const & d)
   {
     // Initialize boolean
     Integer b{0};
@@ -154,8 +149,8 @@ namespace Pipal
       // Store current values
       Vector x(z.x);
       Real f{z.f};
-      Vector cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE);
-      Vector cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
+      Array cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE);
+      Array cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
       Real phi{z.phi};
 
       // Set trial point
@@ -172,10 +167,10 @@ namespace Pipal
         // Check for nonlinear fraction-to-boundary violation
         Integer ftb{0};
         if (i.nE > 0) {
-          ftb += (z.r1.array() < (std::min(p.ls_frac, z.mu)*r1).array()).count() + (z.r2.array() < (std::min(p.ls_frac, z.mu)*r2).array()).count();
+          ftb += (z.r1 < (std::min(p.ls_frac, z.mu)*r1)).count() + (z.r2 < (std::min(p.ls_frac, z.mu)*r2)).count();
         }
         if (i.nI > 0) {
-          ftb += (z.s1.array() < (std::min(p.ls_frac, z.mu)*s1).array()).count() + (z.s2.array() < (std::min(p.ls_frac, z.mu)*s2).array()).count();
+          ftb += (z.s1 < (std::min(p.ls_frac, z.mu)*s1)).count() + (z.s2 < (std::min(p.ls_frac, z.mu)*s2)).count();
         }
 
         // Check Armijo condition
@@ -211,7 +206,7 @@ namespace Pipal
   }
 
   // Line search
-  void lineSearch(Acceptance & a, Parameter & p, Input & i, Counter & c,
+  inline void lineSearch(Acceptance & a, Parameter & p, Input & i, Counter & c,
     Iterate & z, Direction & d)
   {
     // Check fraction-to-boundary rule
@@ -231,8 +226,7 @@ namespace Pipal
   }
 
   // Second-order Correction
-  Integer secondOrderCorrection(Acceptance & a, Parameter & p, Input & i, Counter & c,
-    Iterate & z, Direction & d)
+  inline Integer secondOrderCorrection(Acceptance & a, Parameter & p, Input & i, Counter & c, Iterate & z, Direction & d)
   {
     // Initialize flag
     Integer b{0};
@@ -240,8 +234,8 @@ namespace Pipal
     // Store current iterate values
     Vector x(z.x);
     Real f{z.f};
-    Vector cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE);
-    Vector cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
+    Array cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE);
+    Array cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
     Real phi{z.phi}, v{z.v};
 
     // Set trial point
@@ -258,10 +252,10 @@ namespace Pipal
       // Check for nonlinear fraction-to-boundary violation
       Integer ftb{0};
       if (i.nE > 0) {
-        ftb += (z.r1.array() < std::min(p.ls_frac, z.mu)*r1.array()).count() + (z.r2.array() < std::min(p.ls_frac, z.mu)*r2.array()).count();
+        ftb += (z.r1 < std::min(p.ls_frac, z.mu)*r1).count() + (z.r2 < std::min(p.ls_frac, z.mu)*r2).count();
       }
       if (i.nI > 0) {
-        ftb += (z.s1.array() < std::min(p.ls_frac, z.mu)*s1.array()).count() + (z.s2.array() < std::min(p.ls_frac, z.mu)*s2.array()).count();
+        ftb += (z.s1 < std::min(p.ls_frac, z.mu)*s1).count() + (z.s2 < std::min(p.ls_frac, z.mu)*s2).count();
       }
 
       // Check Armijo condition
@@ -307,9 +301,9 @@ namespace Pipal
     evalNewtonStep(d, i, z);
 
     // Set trial direction
-    setDirection(d, i, a.p*dx+d.x, a.p*dr1+d.r1, a.p*dr2+d.r2, a.p*ds1+d.s1,
-      a.p*ds2+d.s2, a.d*dlE+d.lE, a.d*dlI+d.lI, (a.p*dx+d.x).norm(),
-      std::sqrt((a.d*dlE+d.lE).squaredNorm() + (a.d*dlI+d.lI).squaredNorm()));
+    setDirection(d, i, a.p*dx+d.x, a.p*dr1+d.r1.matrix(), a.p*dr2+d.r2.matrix(), a.p*ds1+d.s1.matrix(),
+      a.p*ds2+d.s2.matrix(), a.d*dlE+d.lE.matrix(), a.d*dlI+d.lI.matrix(), (a.p*dx+d.x).norm(),
+      std::sqrt((a.d*dlE+d.lE.matrix()).matrix().squaredNorm() + (a.d*dlI+d.lI.matrix()).squaredNorm()));
 
     // Set trial point
     updatePoint(z, i, d, a);
@@ -325,10 +319,10 @@ namespace Pipal
       // Check for nonlinear fraction-to-boundary violation
       Integer ftb{0};
       if (i.nE > 0) {
-        ftb += (z.r1.array() < std::min(p.ls_frac, z.mu)*r1.array()).count() + (z.r2.array() < std::min(p.ls_frac, z.mu)*r2.array()).count();
+        ftb += (z.r1 < std::min(p.ls_frac, z.mu)*r1).count() + (z.r2 < std::min(p.ls_frac, z.mu)*r2).count();
       }
       if (i.nI > 0) {
-        ftb += (z.s1.array() < std::min(p.ls_frac, z.mu)*s1.array()).count() + (z.s2.array() < std::min(p.ls_frac, z.mu)*s2.array()).count();
+        ftb += (z.s1 < std::min(p.ls_frac, z.mu)*s1).count() + (z.s2 < std::min(p.ls_frac, z.mu)*s2).count();
       }
 
       // Check Armijo condition
@@ -353,7 +347,7 @@ namespace Pipal
     // Reset direction
     setDirection(d, i, dx, dr1, dr2, ds1, ds2, dlE, dlI, dx_norm, dl_norm);
 
-    // Reduce steplength
+    // Reduce step length
     a.p *= p.ls_factor;
 
     return b;

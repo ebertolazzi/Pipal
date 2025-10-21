@@ -20,22 +20,22 @@ namespace Pipal
 {
 
   // Reset all internal counters to zero
-  void buildCounter(Counter & c) {c.f = c.g = c.H = c.k = c.M = 0;}
+  inline void buildCounter(Counter & c) {c.f = c.g = c.H = c.k = c.M = 0;}
 
   // Matrix factorization counter incrementor
-  void incrementFactorizationCount(Counter & c) {++c.M;}
+  inline void incrementFactorizationCount(Counter & c) {++c.M;}
 
   // Function evaluation counter incrementor
-  void incrementFunctionCount(Counter & c) {++c.f;}
+  inline void incrementFunctionCount(Counter & c) {++c.f;}
 
   // Gradient evaluation counter incrementor
-  void incrementGradientCount(Counter & c) {++c.g;}
+  inline void incrementGradientCount(Counter & c) {++c.g;}
 
   // Hessian evaluation counter incrementor
-  void incrementHessianCount(Counter & c) {++c.H;}
+  inline void incrementHessianCount(Counter & c) {++c.H;}
 
   // Iteration counter incrementor
-  void incrementIterationCount(Counter & c) {++c.k;}
+  inline void incrementIterationCount(Counter & c) {++c.k;}
 
 } // namespace Pipal
 

@@ -1,5 +1,5 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *\
- * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzinput.                                      *
+ * Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                      *
  *                                                                                               *
  * The Pipal project is distributed under the MIT License.                                       *
  *                                                                                               *
@@ -15,15 +15,13 @@
 
 // Pipal includes
 #include "Pipal/Types.hh"
-#include "Pipal/Acceptance.hh"
-#include "Pipal/Input.hh"
 #include "Pipal/Iterate.hh"
 
 namespace Pipal
 {
 
   // Reset direction
-  void resetDirection(Direction & d, Input & i)
+  inline void resetDirection(Direction & d, Input const & i)
   {
     d.x.setZero(i.nV);
     d.r1.setZero(i.nE);
@@ -33,13 +31,13 @@ namespace Pipal
     d.s2.setZero(i.nI);
     d.lI.setZero(i.nI);
     d.x_norm  = 0.0;
-    d.x_norm_ = INFTY;
+    d.x_norm_ = INFINITY;
     d.l_norm  = 0.0;
     d.lred0 = d.ltred0 = d.ltred = d.qtred = d.m = 0.0;
   }
 
   // Evaluate linear combination of directions
-  void evalLinearCombination(Direction & d, Input const & i, Direction const & d1, Direction const & d2,
+  inline void evalLinearCombination(Direction & d, Input const & i, Direction const & d1, Direction const & d2,
     Direction const & d3, Real const a1, Real const a2, Real const a3)
   {
     // Evaluate linear combinations
@@ -59,27 +57,23 @@ namespace Pipal
     d.x_norm = d.x.norm();
 
     // Evaluate dual direction norm
-    d.l_norm = std::sqrt(d.lE.squaredNorm() + d.lI.squaredNorm());
+    d.l_norm = std::sqrt(d.lE.matrix().squaredNorm() + d.lI.matrix().squaredNorm());
   }
 
   // Evaluate model and model reductions
-  void evalModels(Direction & d, Input & i, Iterate & z)
+  inline void evalModels(Direction & d, Input const & i, Iterate & z)
   {
     // Evaluate reduction in linear model of penalty-interior-point objective for zero penalty parameter
     d.lred0 = 0;
     if (i.nE > 0) {
-      Vector tmp1(2*i.nE);
-      tmp1 << 1.0 - z.mu/z.r1.array(), 1.0 - z.mu/z.r2.array();
-      Vector tmp2(2*i.nE);
-      tmp2 << d.r1, d.r2;
-      d.lred0 -= (tmp1.array() * tmp2.array()).sum();
+      Array tmp1(2*i.nE); tmp1 << 1.0 - z.mu/z.r1, 1.0 - z.mu/z.r2;
+      Array tmp2(2*i.nE); tmp2 << d.r1, d.r2;
+      d.lred0 -= (tmp1 * tmp2).sum();
     }
     if (i.nI > 0) {
-      Vector tmp1(2*i.nI);
-      tmp1 << 0.0 - z.mu/z.s1.array(), 1.0 - z.mu/z.s2.array();
-      Vector tmp2(2*i.nI);
-      tmp2 << d.s1, d.s2;
-      d.lred0 -= (tmp1.array() * tmp2.array()).sum();
+      Array tmp1(2*i.nI); tmp1 << 0.0 - z.mu/z.s1, 1.0 - z.mu/z.s2;
+      Array tmp2(2*i.nI); tmp2 << d.s1, d.s2;
+      d.lred0 -= (tmp1 * tmp2).sum();
     }
 
     // Evaluate remaining quantities only for nonzero penalty parameter
@@ -88,15 +82,13 @@ namespace Pipal
       // Evaluate reduction in linear model of merit function for zero penalty parameter
       d.ltred0 = 0.0;
       if (i.nE > 0) {
-        Array sqrt_term((z.cE.array().square() + z.mu*z.mu).sqrt());
-        Array tmp(((1.0 - z.mu/z.r1.array()) * (-1.0 + z.cE.array()/sqrt_term) +
-          (1.0 - z.mu/z.r2.array()) * (1.0 + z.cE.array()/sqrt_term)) * (z.JE * d.x).array());
+        Array sqrt_term((z.cE.square() + z.mu*z.mu).sqrt());
+        Array tmp(((1.0 - z.mu/z.r1) * (-1.0 + z.cE/sqrt_term) + (1.0 - z.mu/z.r2) * (1.0 + z.cE/sqrt_term) * (z.JE * d.x).array());
         d.ltred0 -= 0.5*tmp.sum();
       }
       if (i.nI > 0) {
-        Array sqrt_term((z.cI.array().square() + 4.0*z.mu*z.mu).sqrt());
-        Array tmp(((0.0 - z.mu/z.s1.array()) * (-1.0 + z.cI.array()/sqrt_term) +
-          (1.0 - z.mu/z.s2.array()) * (1.0 + z.cI.array()/sqrt_term)) * (z.JI * d.x).array());
+        Array sqrt_term((z.cI.square() + 4.0*z.mu*z.mu).sqrt());
+        Array tmp(((0.0 - z.mu/z.s1) * (-1.0 + z.cI/sqrt_term) + (1.0 - z.mu/z.s2) * (1.0 + z.cI/sqrt_term)) * (z.JI * d.x).array());
         d.ltred0 -= 0.5*tmp.sum();
       }
 
@@ -106,46 +98,44 @@ namespace Pipal
       // Evaluate reduction in quadratic model of merit function
       d.qtred = d.ltred - 0.5*d.x.transpose()*z.H*d.x;
       if (i.nE > 0) {
-        Vector Jd(z.JE*d.x);
-        Vector Dinv((z.r1.array()/(1.0+z.lE.array()) + z.r2.array()/(1.0-z.lE.array())).matrix());
-        d.qtred -= 0.5*Jd.transpose() * ((Jd.array()/Dinv.array()).matrix());
+        Array Jd(z.JE*d.x);
+        Array Dinv((z.r1/(1.0+z.lE) + z.r2/(1.0-z.lE)).matrix());
+        d.qtred -= 0.5*Jd.matrix().transpose() * ((Jd/Dinv).matrix());
       }
       if (i.nI > 0) {
-        Vector Jd(z.JI*d.x);
-        Vector Dinv((z.s1.array()/(0.0+z.lI.array()) + z.s2.array()/(1.0-z.lI.array())).matrix());
-        d.qtred -= 0.5*Jd.transpose() * ((Jd.array()/Dinv.array()).matrix());
+        Array Jd(z.JI*d.x);
+        Array Dinv((z.s1/(0.0+z.lI) + z.s2/(1.0-z.lI)).matrix());
+        d.qtred -= 0.5*Jd.matrix().transpose() * ((Jd/Dinv).matrix());
       }
 
       // Initialize quality function vector
-      Vector vec(i.nV+2*i.nE+2*i.nI);
+      Array vec(i.nV+2*i.nE+2*i.nI);
       vec.setZero();
 
       // Set gradient of objective
       vec(Eigen::seq(0, i.nV-1)) = z.rho*z.g;
 
       // Set gradient of Lagrangian for constraints
-      if (i.nE > 0) {vec(Eigen::seq(0, i.nV-1)) += ((z.lE+d.lE).transpose()*z.JE).transpose();}
-      if (i.nI > 0) {vec(Eigen::seq(0, i.nV-1)) += ((z.lI+d.lI).transpose()*z.JI).transpose();}
+      if (i.nE > 0) {vec(Eigen::seq(0, i.nV-1)) += ((z.lE+d.lE).matrix().transpose()*z.JE.matrix()).transpose().array();}
+      if (i.nI > 0) {vec(Eigen::seq(0, i.nV-1)) += ((z.lI+d.lI).matrix().transpose()*z.JI.matrix()).transpose().array();}
 
       // Set complementarity for constraint slacks
       if (i.nE > 0) {
           vec(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
-            (z.r1+d.r1).array() * (1.0 + (z.lE+d.lE).array()),
-            (z.r2+d.r2).array() * (1.0 - (z.lE+d.lE).array());
+            (z.r1+d.r1) * (1.0 + (z.lE+d.lE)), (z.r2+d.r2) * (1.0 - (z.lE+d.lE));
       }
       if (i.nI > 0) {
           vec(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
-            (z.s1+d.s1).array() * (0.0 + (z.lI+d.lI).array()),
-            (z.s2+d.s2).array() * (1.0 - (z.lI+d.lI).array());
+            (z.s1+d.s1) * (0.0 + (z.lI+d.lI)), (z.s2+d.s2) * (1.0 - (z.lI+d.lI));
       }
 
       // Evaluate quality function
-      d.m = vec.template lpNorm<Eigen::Infinity>();
+      d.m = vec.matrix().template lpNorm<Eigen::Infinity>();
     }
   }
 
   // Evaluate Newton step
-  void evalNewtonStep(Direction & d, Input & i, Iterate & z)
+  inline void evalNewtonStep(Direction & d, Input const & i, Iterate const & z)
   {
     // Evaluate direction
     Vector dir(z.ldlt.solve(-z.b));
@@ -167,12 +157,11 @@ namespace Pipal
     d.x_norm = d.x.norm();
 
     // Evaluate dual direction norm
-    d.l_norm = std::sqrt(d.lE.squaredNorm() + d.lI.squaredNorm());
+    d.l_norm = std::sqrt(d.lE.matrix().squaredNorm() + d.lI.matrix().squaredNorm());
   }
 
   // Evaluate search direction quantities
-  void evalStep(Direction & d, Parameter & p, Input & i, Counter & c,
-    Iterate & z, Acceptance & a)
+  inline void evalStep(Direction & d, Parameter & p, Input & i, Counter & c, Iterate & z, Acceptance & a)
   {
     // Reset maximum exponent for interior-point parameter increases
     resetMuMaxExp(p);
@@ -282,17 +271,17 @@ namespace Pipal
           m_rho_mu(j)      = d.m;
 
           // Check updating conditions for infeasible points
-          if (z.v > p.opt_err_tol && (ltred0_rho_mu(j) < p.update_con_1*lred0_0_mu(j) || qtred_rho_mu(j) < p.update_con_2*lred0_0_mu(j) || z.rho > z.kkt(0)*z.kkt(0))) {m_rho_mu(j) = INFTY;}
+          if (z.v > p.opt_err_tol && (ltred0_rho_mu(j) < p.update_con_1*lred0_0_mu(j) || qtred_rho_mu(j) < p.update_con_2*lred0_0_mu(j) || z.rho > z.kkt(0)*z.kkt(0))) {m_rho_mu(j) = INFINITY;}
 
           // Check updating conditions for feasible points
-          if (z.v <= p.opt_err_tol && qtred_rho_mu(j) < 0) {m_rho_mu(j) = INFTY;}
+          if (z.v <= p.opt_err_tol && qtred_rho_mu(j) < 0) {m_rho_mu(j) = INFINITY;}
         }
 
         // Find minimum m for current rho
         Real m_min{m_rho_mu.minCoeff()};
 
         // Check for finite minimum
-        if (m_min < INFTY)
+        if (m_min < INFINITY)
         {
           // Loop through mu values
           for (Integer j{0}; j < p.mu_trials; ++j)
@@ -330,7 +319,7 @@ namespace Pipal
   }
 
   // Evaluate and store trial step
-  void evalTrialStep(Direction & d, Input & i, Direction & v)
+  inline void evalTrialStep(Direction const & d, Input const & i, Direction & v)
   {
     // Set direction components
     v.x = d.x;
@@ -341,7 +330,7 @@ namespace Pipal
   }
 
   // Evaluate trial step cut by fraction-to-boundary rule
-  void evalTrialStepCut(Direction & d, Input & i, Acceptance & a)
+  inline void evalTrialStepCut(Direction & d, Input const & i, Acceptance const & a)
   {
     // Set direction components
     d.x = a.p*d.x ;
@@ -352,7 +341,7 @@ namespace Pipal
   }
 
   // Evaluate and store directions for parameter combinations
-  void evalTrialSteps(Direction & d, Input & i, Iterate & z, Direction & d1, Direction & d2, Direction & d3)
+  inline void evalTrialSteps(Direction & d, Input const & i, Iterate & z, Direction & d1, Direction & d2, Direction & d3)
   {
     // Store current penalty and interior-point parameters
     Real rho_curr{z.rho}, mu_curr{z.mu};
@@ -380,7 +369,7 @@ namespace Pipal
   }
 
   // Set direction
-  void setDirection(Direction & d, Input & i, Vector const & dx, Vector const & dr1, Vector const & dr2,
+  inline void setDirection(Direction & d, Input const & i, Vector const & dx, Vector const & dr1, Vector const & dr2,
     Vector const & ds1, Vector const & ds2, Vector const & dlE, Vector const & dlI, Real const dx_norm, Real const dl_norm)
   {
     // Set primal variables
