@@ -71,7 +71,7 @@ namespace Pipal
       d.lred0 -= (tmp1 * tmp2).sum();
     }
     if (i.nI > 0) {
-      Array tmp1(2*i.nI); tmp1 << 0.0 - z.mu/z.s1, 1.0 - z.mu/z.s2;
+      Array tmp1(2*i.nI); tmp1 << z.mu/z.s1, 1.0 - z.mu/z.s2;
       Array tmp2(2*i.nI); tmp2 << d.s1, d.s2;
       d.lred0 -= (tmp1 * tmp2).sum();
     }
@@ -83,12 +83,12 @@ namespace Pipal
       d.ltred0 = 0.0;
       if (i.nE > 0) {
         Array sqrt_term((z.cE.square() + z.mu*z.mu).sqrt());
-        Array tmp(((1.0 - z.mu/z.r1) * (-1.0 + z.cE/sqrt_term) + (1.0 - z.mu/z.r2) * (1.0 + z.cE/sqrt_term) * (z.JE * d.x).array());
+        Array tmp((1.0 - z.mu/z.r1) * (-1.0 + z.cE/sqrt_term) + (1.0 - z.mu/z.r2) * (1.0 + z.cE/sqrt_term) * (z.JE * d.x).array());
         d.ltred0 -= 0.5*tmp.sum();
       }
       if (i.nI > 0) {
         Array sqrt_term((z.cI.square() + 4.0*z.mu*z.mu).sqrt());
-        Array tmp(((0.0 - z.mu/z.s1) * (-1.0 + z.cI/sqrt_term) + (1.0 - z.mu/z.s2) * (1.0 + z.cI/sqrt_term)) * (z.JI * d.x).array());
+        Array tmp(((z.mu/z.s1) * (-1.0 + z.cI/sqrt_term) + (1.0 - z.mu/z.s2) * (1.0 + z.cI/sqrt_term)) * (z.JI * d.x).array());
         d.ltred0 -= 0.5*tmp.sum();
       }
 
@@ -113,20 +113,20 @@ namespace Pipal
       vec.setZero();
 
       // Set gradient of objective
-      vec(Eigen::seq(0, i.nV-1)) = z.rho*z.g;
+      vec.head(i.nV) = z.rho*z.g;
 
       // Set gradient of Lagrangian for constraints
-      if (i.nE > 0) {vec(Eigen::seq(0, i.nV-1)) += ((z.lE+d.lE).matrix().transpose()*z.JE.matrix()).transpose().array();}
-      if (i.nI > 0) {vec(Eigen::seq(0, i.nV-1)) += ((z.lI+d.lI).matrix().transpose()*z.JI.matrix()).transpose().array();}
+      if (i.nE > 0) {vec.head(i.nV) += ((z.lE+d.lE).matrix().transpose()*z.JE.matrix()).transpose().array();}
+      if (i.nI > 0) {vec.head(i.nV) += ((z.lI+d.lI).matrix().transpose()*z.JI.matrix()).transpose().array();}
 
       // Set complementarity for constraint slacks
       if (i.nE > 0) {
-          vec(Eigen::seq(i.nV, i.nV+2*i.nE-1)) <<
+          vec.segment(i.nV, 2*i.nE) <<
             (z.r1+d.r1) * (1.0 + (z.lE+d.lE)), (z.r2+d.r2) * (1.0 - (z.lE+d.lE));
       }
       if (i.nI > 0) {
-          vec(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) <<
-            (z.s1+d.s1) * (0.0 + (z.lI+d.lI)), (z.s2+d.s2) * (1.0 - (z.lI+d.lI));
+          vec.segment(i.nV+2*i.nE, 2*i.nI) <<
+            (z.s1+d.s1) * (z.lI+d.lI), (z.s2+d.s2) * (1.0 - (z.lI+d.lI));
       }
 
       // Evaluate quality function
@@ -141,16 +141,16 @@ namespace Pipal
     Vector dir(z.ldlt.solve(-z.b));
 
     // Parse direction
-    d.x = dir(Eigen::seq(0, i.nV-1));
+    d.x = dir.head(i.nV);
     if (i.nE > 0) {
-      d.r1 = dir(Eigen::seq(i.nV, i.nV+i.nE-1));
-      d.r2 = dir(Eigen::seq(i.nV+i.nE, i.nV+i.nE+i.nE-1));
-      d.lE = dir(Eigen::seq(i.nV+i.nE+i.nE+i.nI+i.nI, i.nV+i.nE+i.nE+i.nI+i.nI+i.nE-1));
+      d.r1 = dir.segment(i.nV, i.nE);
+      d.r2 = dir.segment(i.nV+i.nE, i.nE);
+      d.lE = dir.segment(i.nV+i.nE+i.nE+i.nI+i.nI, i.nE);
     }
     if (i.nI > 0) {
-      d.s1 = dir(Eigen::seq(i.nV+i.nE+i.nE, i.nV+i.nE+i.nE+i.nI-1));
-      d.s2 = dir(Eigen::seq(i.nV+i.nE+i.nE+i.nI, i.nV+i.nE+i.nE+i.nI+i.nI-1));
-      d.lI = dir(Eigen::seq(i.nV+i.nE+i.nE+i.nI+i.nI+i.nE, i.nV+i.nE+i.nE+i.nI+i.nI+i.nE+i.nI-1));
+      d.s1 = dir.segment(i.nV+i.nE+i.nE, i.nI);
+      d.s2 = dir.segment(i.nV+i.nE+i.nE+i.nI, i.nI);
+      d.lI = dir.segment(i.nV+i.nE+i.nE+i.nI+i.nI+i.nE, i.nI);
     }
 
     // Evaluate primal direction norm
@@ -194,7 +194,7 @@ namespace Pipal
       // Set trial interior-point parameter values
       Array exponents(p.mu_trials);
       for (Integer j{0}; j < p.mu_trials; ++j) {exponents[j] = (p.mu_trials - 1.0 - j) - p.mu_max_exp;}
-      Array Mu(mu_curr * exponents.unaryExpr([&p](Real e){return std::pow(p.mu_factor, e);}));
+      Array Mu(mu_curr * exponents.unaryExpr([&p] (Real e) {return std::pow(p.mu_factor, e);}));
       Mu = Mu.min(p.mu_max).max(p.mu_min);
 
       // Initialize feasibility direction data
@@ -209,7 +209,8 @@ namespace Pipal
         setMu(z, Mu(j));
 
         // Evaluate direction
-        evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1.0), (1.0-z.mu/mu_curr), (1.0-z.rho/rho_curr));
+        evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1.0), (1.0-z.mu/mu_curr),
+          (1.0-z.rho/rho_curr));
 
         // Cut length
         d.x = std::min(d.x_norm_/std::max(d.x_norm, 1.0), 1.0)*d.x;
@@ -254,7 +255,8 @@ namespace Pipal
           setMu(z, Mu(j));
 
           // Evaluate direction
-          evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1.0), (1.0-z.mu/mu_curr), (1.0-z.rho/rho_curr));
+          evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1.0), (1.0-z.mu/mu_curr),
+            (1.0-z.rho/rho_curr));
 
           // Run fraction-to-boundary
           fractionToBoundary(a, p, i, z, d);
@@ -271,10 +273,13 @@ namespace Pipal
           m_rho_mu(j)      = d.m;
 
           // Check updating conditions for infeasible points
-          if (z.v > p.opt_err_tol && (ltred0_rho_mu(j) < p.update_con_1*lred0_0_mu(j) || qtred_rho_mu(j) < p.update_con_2*lred0_0_mu(j) || z.rho > z.kkt(0)*z.kkt(0))) {m_rho_mu(j) = INFINITY;}
+          if (z.v > p.opt_err_tol && (ltred0_rho_mu(j) < p.update_con_1*lred0_0_mu(j) ||
+            qtred_rho_mu(j) < p.update_con_2*lred0_0_mu(j) || z.rho > z.kkt(0)*z.kkt(0))) {
+            m_rho_mu(j) = INFINITY;
+          }
 
           // Check updating conditions for feasible points
-          if (z.v <= p.opt_err_tol && qtred_rho_mu(j) < 0) {m_rho_mu(j) = INFINITY;}
+          if (z.v <= p.opt_err_tol && qtred_rho_mu(j) < 0.0) {m_rho_mu(j) = INFINITY;}
         }
 
         // Find minimum m for current rho
@@ -341,7 +346,8 @@ namespace Pipal
   }
 
   // Evaluate and store directions for parameter combinations
-  inline void evalTrialSteps(Direction & d, Input const & i, Iterate & z, Direction & d1, Direction & d2, Direction & d3)
+  inline void evalTrialSteps(Direction & d, Input const & i, Iterate & z, Direction & d1, Direction & d2,
+    Direction & d3)
   {
     // Store current penalty and interior-point parameters
     Real rho_curr{z.rho}, mu_curr{z.mu};
@@ -369,8 +375,9 @@ namespace Pipal
   }
 
   // Set direction
-  inline void setDirection(Direction & d, Input const & i, Vector const & dx, Vector const & dr1, Vector const & dr2,
-    Vector const & ds1, Vector const & ds2, Vector const & dlE, Vector const & dlI, Real const dx_norm, Real const dl_norm)
+  inline void setDirection(Direction & d, Input const & i, Vector const & dx, Vector const & dr1,
+    Vector const & dr2, Vector const & ds1, Vector const & ds2, Vector const & dlE, Vector const & dlI,
+    Real const dx_norm, Real const dl_norm)
   {
     // Set primal variables
     d.x = dx;

@@ -27,17 +27,16 @@ namespace Pipal
 
   class Output
   {
-    using String      = std::string;
-    using Ostream     = std::ostream;
-    using Seconds     = std::chrono::seconds;
-    using SteadyClock = std::chrono::steady_clock;
-    using TimePoint   = SteadyClock::time_point;
+    using Ostream      = std::ostream;
+    using MicroSeconds = std::chrono::microseconds;
+    using SteadyClock  = std::chrono::steady_clock;
+    using TimePoint    = SteadyClock::time_point;
 
-    Ostream & s{std::cout}; // Output stream (reference to avoid copying std::cout)
-    String    l; // Line break string
-    String    q; // Quantities header
-    String    n; // Footer line
-    TimePoint t; // Timer
+    Ostream &   s{std::cout}; // Output stream (reference to avoid copying std::cout)
+    std::string l; // Line break std::string
+    std::string q; // Quantities header
+    std::string n; // Footer line
+    TimePoint   t; // Timer
 
   public:
     // Constructor
@@ -115,7 +114,9 @@ namespace Pipal
 
       const Integer b{checkTermination(z, p, i, c)};
 
-      this->s << "Final result" << std::endl << "============" << std::endl;
+      this->s
+        << "Final result" << std::endl
+        << "============" << std::endl;
       switch (b) {
         case 0:  this->s << "  EXIT: No termination message set" << std::endl; break;
         case 1:  this->s << "  EXIT: Optimal solution found" << std::endl; break;
@@ -127,7 +128,8 @@ namespace Pipal
       }
 
       this->s
-        << "\nFinal values" << std::endl << "============" << std::showpos << std::endl
+        << "\nFinal values" << std::endl
+        << "============" << std::showpos << std::endl
         << "  Objective function........................ : " << z.fu << std::endl
         << "  Feasibility violation..................... : " << z.vu << std::endl
         << "  Optimality error (feasibility)............ : " << z.kkt(0) << std::endl
@@ -138,14 +140,15 @@ namespace Pipal
         << std::endl;
 
       this->s
-        << "Final counters" << std::endl << "==============" << std::endl
+        << "Final counters" << std::endl
+        << "==============" << std::endl
         << "  Iterations................................ : " << c.k << std::endl
         << "  Function evaluations...................... : " << c.f << std::endl
         << "  Gradient evaluations...................... : " << c.g << std::endl
         << "  Hessian evaluations....................... : " << c.H << std::endl
         << "  Matrix factorizations..................... : " << c.M << std::endl
-        << "  CPU seconds............................... : " <<
-          std::chrono::duration_cast<Seconds>(SteadyClock::now() - this->t).count() << std::endl;
+        << "  CPU millseconds........................... : " << std::scientific << std::setprecision(4)
+        << std::chrono::duration_cast<MicroSeconds>(SteadyClock::now() - this->t).count()/1.0e3 << std::endl;
     }
 
   }; // class Output

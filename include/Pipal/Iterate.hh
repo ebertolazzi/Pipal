@@ -25,43 +25,43 @@ namespace Pipal
   inline void buildIterate(Iterate & z, Parameter & p, Input & i, Counter & c)
   {
     // Initialize quantities
-    z.rho_ = p.rho_init;
-    z.f = 0.0;
-    z.fu = 0.0;
+    // z.rho_ = p.rho_init;
+    // z.f = 0.0;
+    // z.fu = 0.0;
     z.g.setZero(i.nV);
-    z.r1.setZero(i.nE);
-    z.r2.setZero(i.nE);
-    z.cE.setZero(i.nE);
+    // z.r1.setZero(i.nE);
+    // z.r2.setZero(i.nE);
+    // z.cE.setZero(i.nE);
     z.JE.setZero(i.nE, i.nV); // SparseMatrix
-    z.JEnnz = 0;
-    z.lE.setZero(i.nE);
-    z.s1.setZero(i.nI);
-    z.s2.setZero(i.nI);
-    z.cI.setZero(i.nI);
+    // z.JEnnz = 0;
+    // z.lE.setZero(i.nE);
+    // z.s1.setZero(i.nI);
+    // z.s2.setZero(i.nI);
+    // z.cI.setZero(i.nI);
     z.JI.setZero(i.nI, i.nV); // SparseMatrix
-    z.JInnz = 0;
-    z.lI.setConstant(i.nI, 0.5);
+    // z.JInnz = 0;
+    // z.lI.setConstant(i.nI, 0.5);
     z.H.setZero(i.nV, i.nV); // SparseMatrix
-    z.Hnnz = 0;
-    z.v = 0.0;
-    z.vu = 0.0;
-    z.v0 = 1.0;
-    z.phi = 0.0;
-    z.Annz = 0;
-    z.shift = 0.0;
-    z.b.setZero(i.nA);
+    // z.Hnnz = 0;
+    // z.v = 0.0;
+    // z.vu = 0.0;
+    // z.v0 = 1.0;
+    // z.phi = 0.0;
+    // z.Annz = 0;
+    // z.shift = 0.0;
+    // z.b.setZero(i.nA);
     z.kkt.setZero(3);
     z.kkt_.setConstant(p.opt_err_mem, INFTY);
-    z.err = 0;
-    z.fs = 1.0;
-    z.cEs.setOnes(i.nE);
-    z.cEu.setZero(i.nE);
-    z.cIs.setOnes(i.nI);
-    z.cIu.setZero(i.nI);
+    // z.err = 0;
+    // z.fs = 1.0;
+    // z.cEs.setOnes(i.nE);
+    // z.cEu.setZero(i.nE);
+    // z.cIs.setOnes(i.nI);
+    // z.cIu.setZero(i.nI);
     z.A.setZero(i.nA, i.nA);
-    z.shift22 = 0.0;
-    z.v_ = 0.0;
-    z.cut_ = false;
+    // z.shift22 = 0.0;
+    // z.v_ = 0.0;
+    // z.cut_ = false;
 
     z.x     = i.x0;
     z.rho   = p.rho_init;
@@ -158,24 +158,24 @@ namespace Pipal
 
     // Set inequality constraint values
     if (i.n3 > 0) {
-      z.cI(Eigen::seq(0, i.n3-1)) = i.l3 - z.x(Eigen::seq(i.n1, i.n1+i.n3-1));
+      z.cI.head(i.n3) = i.l3 - z.x.segment(i.n1, i.n3);
     }
     if (i.n4 > 0) {
-      z.cI(Eigen::seq(i.n3, i.n3+i.n4-1)) = -i.u4 + z.x(Eigen::seq(i.n1+i.n3, i.n1+i.n3+i.n4-1));
+      z.cI.segment(i.n3, i.n4) = -i.u4 + z.x.segment(i.n1+i.n3, i.n4);
     }
     if (i.n5 > 0) {
-      z.cI(Eigen::seq(i.n3+i.n4, i.n3+i.n4+i.n5-1)) = i.l5 - z.x(Eigen::seq(i.n1+i.n3+i.n4, i.n1+i.n3+i.n4+i.n5-1));
-      z.cI(Eigen::seq(i.n3+i.n4+i.n5, i.n3+i.n4+i.n5+i.n5-1)) = -i.u5 + z.x(Eigen::seq(i.n1+i.n3+i.n4, i.n1+i.n3+i.n4+i.n5-1));
+      z.cI.segment(i.n3+i.n4,      i.n5) =  i.l5 - z.x.segment(i.n1+i.n3+i.n4, i.n5);
+      z.cI.segment(i.n3+i.n4+i.n5, i.n5) = -i.u5 + z.x.segment(i.n1+i.n3+i.n4, i.n5);
     }
     if (i.n7 > 0) {
-      z.cI(Eigen::seq(i.n3+i.n4+i.n5+i.n5, i.n3+i.n4+i.n5+i.n5+i.n7-1)) = i.l7 - c_orig(i.I7);
+      z.cI.segment(i.n3+i.n4+i.n5+i.n5, i.n7) = i.l7 - c_orig(i.I7);
     }
     if (i.n8 > 0) {
-      z.cI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8-1)) = -i.u8 + c_orig(i.I8);
+      z.cI.segment(i.n3+i.n4+i.n5+i.n5+i.n7, i.n8) = -i.u8 + c_orig(i.I8);
     }
     if (i.n9 > 0) {
-      z.cI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9-1)) =  i.l9 - c_orig(i.I9);
-      z.cI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9+i.n9-1)) = -i.u9 + c_orig(i.I9);
+      z.cI.segment(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8,      i.n9) =  i.l9 - c_orig(i.I9);
+      z.cI.segment(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9, i.n9) = -i.u9 + c_orig(i.I9);
     }
 
     // Store unscaled quantities
@@ -204,9 +204,9 @@ namespace Pipal
     incrementGradientCount(c);
 
     // Try AMPL gradients evaluation
-    z.g.resize(i.nV);
-    z.JE.resize(i.nE, i.nV);
-    z.JI.resize(i.nI, i.nV);
+    //z.g.resize(i.nV);
+    //z.JE.resize(i.nE, i.nV);
+    //z.JI.resize(i.nI, i.nV);
     Vector g_orig;
     Matrix J_orig;
     try
@@ -231,31 +231,31 @@ namespace Pipal
     }
 
     // Initialize inequality constraint Jacobian
-    if (i.nI > 0) {z.JI.resize(i.nI, i.nV);}
+    //if (i.nI > 0) {z.JI.resize(i.nI, i.nV);}
 
     // Set inequality constraint Jacobian
     if (i.n3 > 0) {
-      z.JI(Eigen::seq(0, i.n3-1), Eigen::seq(i.n1, i.n1+i.n3-1)) = -SparseMatrix::Identity(i.n3, i.n3);
+      z.JI.block(0, i.n1, i.n3, i.n1+i.n3).diagonal().setConstant(-1.0);
     }
     if (i.n4 > 0) {
-      z.JI(Eigen::seq(i.n3, i.n3+i.n4-1), Eigen::seq(i.n1+i.n3, i.n1+i.n3+i.n4-1)) = SparseMatrix::Identity(i.n4, i.n4);
+      z.JI.block(i.n3, i.n1+i.n3, i.n4, i.n4).setIdentity();
     }
     if (i.n5 > 0) {
-      z.JI(Eigen::seq(i.n3+i.n4, i.n3+i.n4+i.n5-1), Eigen::seq(i.n1+i.n3+i.n4, i.n1+i.n3+i.n4+i.n5-1)) = -SparseMatrix::Identity(i.n5, i.n5);
-      z.JI(Eigen::seq(i.n3+i.n4+i.n5, i.n3+i.n4+i.n5+i.n5-1), Eigen::seq(i.n1+i.n3+i.n4, i.n1+i.n3+i.n4+i.n5-1)) = SparseMatrix::Identity(i.n5, i.n5);
+      z.JI.block(i.n3+i.n4,      i.n1+i.n3+i.n4, i.n5, i.n5).diagonal().setConstant(-1.0);;
+      z.JI.block(i.n3+i.n4+i.n5, i.n1+i.n3+i.n4, i.n5, i.n5).setIdentity();
     }
     if (i.n7 > 0) {
-      z.JI(Eigen::seq(i.n3+i.n4+i.n5+i.n5, i.n3+i.n4+i.n5+i.n5+i.n7-1), Eigen::seq(0, i.n1+i.n3+i.n4+i.n5-1)) <<
+      z.JI.block(i.n3+i.n4+i.n5+i.n5, 0, i.n7, i.n1+i.n3+i.n4+i.n5) <<
         -J_orig(i.I7, i.I1), J_orig(i.I7,i.I3), J_orig(i.I7,i.I4), J_orig(i.I7,i.I5);
     }
     if (i.n8 > 0) {
-      z.JI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8-1), Eigen::seq(0, i.n1+i.n3+i.n4+i.n5-1)) <<
+      z.JI.block(i.n3+i.n4+i.n5+i.n5+i.n7, 0, i.n8, i.n1+i.n3+i.n4+i.n5) <<
         J_orig(i.I8,i.I1), J_orig(i.I8,i.I3), J_orig(i.I8,i.I4), J_orig(i.I8,i.I5);
     }
     if (i.n9 > 0) {
-      z.JI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9-1), Eigen::seq(0, i.n1+i.n3+i.n4+i.n5-1)) <<
+      z.JI.block(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8, 0, i.n9, i.n1+i.n3+i.n4+i.n5) <<
         -J_orig(i.I9,i.I1), -J_orig(i.I9,i.I3), -J_orig(i.I9,i.I4), -J_orig(i.I9,i.I5);
-      z.JI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9+i.n9-1), Eigen::seq(0, i.n1+i.n3+i.n4+i.n5-1)) <<
+      z.JI.block(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9, 0, i.n9, i.n1+i.n3+i.n4+i.n5) <<
         J_orig(i.I9,i.I1), J_orig(i.I9,i.I3), J_orig(i.I9,i.I4), J_orig(i.I9,i.I5);
     }
 
@@ -292,7 +292,7 @@ namespace Pipal
     {
       // Set evaluation flag, default values, and return
       z.err = 1;
-      z.H.resize(i.nV, i.nV);
+      //z.H.resize(i.nV, i.nV);
       return;
     }
 
@@ -323,18 +323,18 @@ namespace Pipal
     kkt.setZero();
 
     // Set gradient of penalty objective
-    kkt(Eigen::seq(0, i.nV-1)) = rho*z.g;
+    kkt.head(i.nV) = rho*z.g;
 
     // Set gradient of Lagrangian for constraints
-    if (i.nE > 0) {kkt(Eigen::seq(0, i.nV-1)) += (z.lE.matrix().transpose()*z.JE.matrix()).transpose();}
-    if (i.nI > 0) {kkt(Eigen::seq(0, i.nV-1)) += (z.lI.matrix().transpose()*z.JI.matrix()).transpose();}
+    if (i.nE > 0) {kkt.head(i.nV) += (z.lE.matrix().transpose()*z.JE.matrix()).transpose();}
+    if (i.nI > 0) {kkt.head(i.nV) += (z.lI.matrix().transpose()*z.JI.matrix()).transpose();}
 
     // Set complementarity for constraint slacks
     if (i.nE > 0) {
-      kkt(Eigen::seq(i.nV, i.nV+2*i.nE-1)) << z.r1*(1.0 + z.lE) - mu, z.r2*(1.0 - z.lE) - mu;
+      kkt.segment(i.nV, 2*i.nE) << z.r1*(1.0 + z.lE) - mu, z.r2*(1.0 - z.lE) - mu;
     }
     if (i.nI > 0) {
-      kkt(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) << z.s1*(0.0 + z.lI) - mu, z.s2*(1.0 - z.lI) - mu;
+      kkt.segment(i.nV+2*i.nE, 2*i.nI) << z.s1*z.lI - mu, z.s2*(1.0 - z.lI) - mu;
     }
 
     // Scale complementarity
@@ -350,9 +350,7 @@ namespace Pipal
   inline void evalKKTErrors(Iterate & z, Input const & i)
   {
     // Loop to compute optimality errors
-    z.kkt(0) = evalKKTError(z, i, 0, 0);
-    z.kkt(1) = evalKKTError(z, i, z.rho, 0);
-    z.kkt(2) = evalKKTError(z, i, z.rho, z.mu);
+    z.kkt << evalKKTError(z, i, 0, 0), evalKKTError(z, i, z.rho, 0), evalKKTError(z, i, z.rho, z.mu);
   }
 
   // Evaluator of lambda in original space
@@ -370,14 +368,14 @@ namespace Pipal
 
     // Set inequality constraint multipliers in original space
     if (i.n7 > 0) {
-      l(i.I7) = -lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5, i.n3+i.n4+i.n5+i.n5+i.n7-1));
+      l(i.I7) = -lI.segment(i.n3+i.n4+i.n5+i.n5, i.n7);
     }
     if (i.n8 > 0) {
-      l(i.I8) = lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8-1));
+      l(i.I8) = lI.segment(i.n3+i.n4+i.n5+i.n5+i.n7, i.n8);
     }
     if (i.n9 > 0) {
-      l(i.I9) = lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9+i.n9-1))
-                -lI(Eigen::seq(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8, i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9-1));
+      l(i.I9) = lI.segment(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9, i.n9)
+                -lI.segment(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8, i.n9);
     }
   }
 
@@ -419,7 +417,7 @@ namespace Pipal
       }
 
       // Set constraint Jacobian
-      z.A(Eigen::seq(i.nV+2*i.nE+2*i.nI, i.nV+3*i.nE+2*i.nI-1), Eigen::seq(0, i.nV-1)) = z.JE;
+      z.A.block(i.nV+2*i.nE+2*i.nI, 0, i.nE, i.nV) = z.JE;
     }
 
     // Check for inequality constraints
@@ -427,12 +425,12 @@ namespace Pipal
     {
       // Set diagonal terms
       for (Integer j{0}; j < i.nI; ++j) {
-        z.A(i.nV+2*i.nE+j, i.nV+2*i.nE+j)           = (0.0 + z.lI(j))/z.s1(j);
+        z.A(i.nV+2*i.nE+j,      i.nV+2*i.nE+j)      = z.lI(j)/z.s1(j);
         z.A(i.nV+2*i.nE+i.nI+j, i.nV+2*i.nE+i.nI+j) = (1.0 - z.lI(j))/z.s2(j);
       }
 
       // Set constraint Jacobian
-      z.A(Eigen::seq(i.nV+3*i.nE+2*i.nI, i.nV+3*i.nE+3*i.nI-1), Eigen::seq(0, i.nV-1)) = z.JI;
+      z.A.block(i.nV+3*i.nE+2*i.nI, 0, i.nI, i.nV) = z.JI;
     }
 
     // Set minimum potential shift
@@ -450,7 +448,7 @@ namespace Pipal
     while (!done && z.shift < p.shift_max)
     {
       // Set Hessian of Lagrangian
-      z.A(Eigen::seq(0, i.nV-1), Eigen::seq(0, i.nV-1)) = z.H+z.shift*SparseMatrix::Identity(i.nV, i.nV);
+      z.A.block(0, 0, i.nV, i.nV) = z.H+z.shift*SparseMatrix::Identity(i.nV, i.nV);
 
       // Set diagonal terms
       for (Integer j{0}; j < i.nE; ++j) {
@@ -494,29 +492,29 @@ namespace Pipal
     z.b.setZero(i.nA);
 
     // Set gradient of objective
-    z.b(Eigen::seq(0, i.nV-1)) = z.rho*z.g;
+    z.b.head(i.nV) = z.rho*z.g;
 
     // Set gradient of Lagrangian for constraints
-    if (i.nE > 0) {z.b(Eigen::seq(0, i.nV-1)) += (z.lE.matrix().transpose()*z.JE.matrix()).transpose();}
-    if (i.nI > 0) {z.b(Eigen::seq(0, i.nV-1)) += (z.lI.matrix().transpose()*z.JI.matrix()).transpose();}
+    if (i.nE > 0) {z.b.head(i.nV) += (z.lE.matrix().transpose()*z.JE.matrix()).transpose();}
+    if (i.nI > 0) {z.b.head(i.nV) += (z.lI.matrix().transpose()*z.JI.matrix()).transpose();}
 
     // Set complementarity for constraint slacks
     if (i.nE > 0) {
       // compute element-wise complementarity terms with safe element-wise division
       Array tmpE1(1.0 + z.lE - z.mu * z.r1.cwiseInverse());
       Array tmpE2(1.0 - z.lE - z.mu * z.r2.cwiseInverse());
-      z.b(Eigen::seq(i.nV, i.nV+2*i.nE-1)) << tmpE1, tmpE2;
+      z.b.segment(i.nV, 2*i.nE) << tmpE1, tmpE2;
     }
     if (i.nI > 0) {
       // compute element-wise complementarity terms with safe element-wise division
       Array tmpI1(z.lI - z.mu * z.s1.cwiseInverse());
       Array tmpI2(1.0 - z.lI - z.mu * z.s2.cwiseInverse());
-      z.b(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) << tmpI1, tmpI2;
+      z.b.segment(i.nV+2*i.nE, 2*i.nI) << tmpI1, tmpI2;
     }
 
     // Set penalty-interior-point constraint values
-    if (i.nE > 0) {z.b(Eigen::seq(i.nV+2*i.nE+2*i.nI, i.nV+3*i.nE+2*i.nI-1)) = z.cE + z.r1 - z.r2;}
-    if (i.nI > 0) {z.b(Eigen::seq(i.nV+3*i.nE+2*i.nI, i.nV+3*i.nE+3*i.nI-1)) = z.cI + z.s1 - z.s2;}
+    if (i.nE > 0) {z.b.segment(i.nV+2*i.nE+2*i.nI, i.nE) = z.cE + z.r1 - z.r2;}
+    if (i.nI > 0) {z.b.segment(i.nV+3*i.nE+2*i.nI, i.nI) = z.cI + z.s1 - z.s2;}
   }
 
   // Scalings evaluator
@@ -583,11 +581,11 @@ namespace Pipal
     x.setZero(i.n0);
 
     // Evaluate x in original space
-    x(i.I1) = z.x(Eigen::seq(0, i.n1-1));
+    x(i.I1) = z.x.head(i.n1);
     x(i.I2) = i.b2;
-    x(i.I3) = z.x(Eigen::seq(i.n1, i.n1+i.n3-1));
-    x(i.I4) = z.x(Eigen::seq(i.n1+i.n3, i.n1+i.n3+i.n4-1));
-    x(i.I5) = z.x(Eigen::seq(i.n1+i.n3+i.n4, i.n1+i.n3+i.n4+i.n5-1));
+    x(i.I3) = z.x.segment(i.n1, i.n3);
+    x(i.I4) = z.x.segment(i.n1+i.n3, i.n4);
+    x(i.I5) = z.x.segment(i.n1+i.n3+i.n4, i.n5);
   }
 
   // Gets primal-dual point
@@ -601,26 +599,26 @@ namespace Pipal
   inline void initNewtonMatrix(Iterate & z, Input const & i)
   {
     // Allocate memory
-    z.A.resize(i.nA, i.nA);// FIXME, z.Hnnz+5*i.nE+5*i.nI+z.JEnnz+z.JInnz);
+    //z.A.resize(i.nA, i.nA);// FIXME, z.Hnnz+5*i.nE+5*i.nI+z.JEnnz+z.JInnz);
 
     // Initialize interior-point Hessians
-    z.A(Eigen::seq(i.nV, i.nV+2*i.nE-1), Eigen::seq(i.nV, i.nV+2*i.nE-1)) = SparseMatrix::Identity(2*i.nE, 2*i.nE);
-    z.A(Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1), Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+2*i.nI-1)) = SparseMatrix::Identity(2*i.nI, 2*i.nI);
+    z.A.block(i.nV,        i.nV,        2*i.nE, 2*i.nE).setIdentity();
+    z.A.block(i.nV+2*i.nE, i.nV+2*i.nE, 2*i.nI, 2*i.nI).setIdentity();
 
     // Check for equality constraints
     if (i.nE > 0)
     {
       // Initialize constraint Jacobian
-      z.A(Eigen::seq(i.nV+2*i.nE+2*i.nI, i.nV+3*i.nE+2*i.nI-1), Eigen::seq(i.nV, i.nV+i.nE-1)) =  SparseMatrix::Identity(i.nE, i.nE);
-      z.A(Eigen::seq(i.nV+2*i.nE+2*i.nI, i.nV+3*i.nE+2*i.nI-1), Eigen::seq(i.nV+i.nE, i.nV+2*i.nE-1)) = -SparseMatrix::Identity(i.nE, i.nE);
+      z.A.block(i.nV+2*i.nE+2*i.nI, i.nV,      i.nE, i.nE).setIdentity();
+      z.A.block(i.nV+2*i.nE+2*i.nI, i.nV+i.nE, i.nE, i.nE).diagonal().setConstant(-1.0);
     }
 
     // Check for inequality constraints
     if (i.nI > 0)
     {
       // Initialize constraint Jacobian
-      z.A(Eigen::seq(i.nV+3*i.nE+2*i.nI, i.nV+3*i.nE+3*i.nI-1), Eigen::seq(i.nV+2*i.nE, i.nV+2*i.nE+i.nI-1)) =  SparseMatrix::Identity(i.nI, i.nI);
-      z.A(Eigen::seq(i.nV+3*i.nE+2*i.nI, i.nV+3*i.nE+3*i.nI-1), Eigen::seq(i.nV+2*i.nE+i.nI, i.nV+2*i.nE+2*i.nI-1)) = -SparseMatrix::Identity(i.nI, i.nI);
+      z.A.block(i.nV+3*i.nE+2*i.nI, i.nV+2*i.nE,      i.nI, i.nI).setIdentity();
+      z.A.block(i.nV+3*i.nE+2*i.nI, i.nV+2*i.nE+i.nI, i.nI, i.nI).diagonal().setConstant(-1.0);
     }
   }
 
@@ -659,8 +657,8 @@ namespace Pipal
     evalDependent(z, p, i);
 
     // Update last KKT errors
-    z.kkt_.resize(p.opt_err_mem);
-    z.kkt_ << z.kkt(1), z.kkt_(Eigen::seq(0, p.opt_err_mem-2));
+    //z.kkt_.resize(p.opt_err_mem);
+    z.kkt_ << z.kkt(1), z.kkt_.head(p.opt_err_mem-1);
   }
 
   // Parameter updater

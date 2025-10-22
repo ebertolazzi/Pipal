@@ -22,14 +22,13 @@ namespace Pipal
 {
 
   // Backtracking line search
-  inline void backtracking(Acceptance & a, Parameter & p, Input & i, Counter & c, Iterate & z, Direction const & d)
+  inline void backtracking(Acceptance & a, Parameter & p, Input & i, Counter & c, Iterate & z,
+    Direction const & d)
   {
     // Store current values
+    Real f{z.f}, phi{z.phi};
+    Array cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE), cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
     Vector x(z.x);
-    Real f{z.f};
-    Array cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE);
-    Array cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
-    Real phi{z.phi};
 
     // Backtracking loop
     while (a.p >= EPSILON)
@@ -47,11 +46,12 @@ namespace Pipal
 
         // Check for nonlinear fraction-to-boundary violation
         Integer ftb{0};
+        const Real tmp_min{std::min(p.ls_frac, z.mu)};
         if (i.nE > 0) {
-          ftb += (z.r1 < (std::min(p.ls_frac, z.mu)*r1)).count() + (z.r2 < (std::min(p.ls_frac, z.mu)*r2)).count();
+          ftb += (z.r1 < tmp_min*r1).count() + (z.r2 < tmp_min*r2).count();
         }
         if (i.nI > 0) {
-          ftb += (z.s1 < (std::min(p.ls_frac, z.mu)*s1)).count() + (z.s2 < (std::min(p.ls_frac, z.mu)*s2)).count();
+          ftb += (z.s1 < tmp_min*s1).count() + (z.s2 < tmp_min*s2).count();
         }
 
         // Check Armijo condition
@@ -87,16 +87,14 @@ namespace Pipal
     // Update primal fraction-to-boundary for constraint slacks
     Real frac{std::min(p.ls_frac, z.mu)};
     if (i.nE > 0) {
-      Indices const idx_r1(find(d.r1 < 0.0));
-      Indices const idx_r2(find(d.r2 < 0.0));
+      const Indices idx_r1(find(d.r1 < 0.0)), idx_r2(find(d.r2 < 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
       if (idx_r1.size() > 0) {min_1 = (((frac - 1.0) * z.r1(idx_r1)) / d.r1(idx_r1)).minCoeff();}
       if (idx_r2.size() > 0) {min_2 = (((frac - 1.0) * z.r2(idx_r2)) / d.r2(idx_r2)).minCoeff();}
       a.p0 = std::min(a.p0, std::min(min_1, min_2));
     }
     if (i.nI > 0) {
-      Indices const idx_s1(find(d.s1 < 0.0));
-      Indices const idx_s2(find(d.s2 < 0.0));
+      const Indices idx_s1(find(d.s1 < 0.0)), idx_s2(find(d.s2 < 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
       if (idx_s1.size() > 0) {min_1 = (((frac - 1.0) * z.s1(idx_s1)) / d.s1(idx_s1)).minCoeff();}
       if (idx_s2.size() > 0) {min_2 = (((frac - 1.0) * z.s2(idx_s2)) / d.s2(idx_s2)).minCoeff();}
@@ -111,29 +109,25 @@ namespace Pipal
 
     // Update dual fraction-to-boundary for constraint multipliers
     if (i.nE > 0) {
-      Indices const idx_l(find(d.lE < 0.0));
-      Indices const idx_g(find(d.lE > 0.0));
+      const Indices idx_l(find(d.lE < 0.0)), idx_g(find(d.lE > 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
       if (idx_l.size() > 0) {min_1 = (((frac - 1.0) * (1.0 + z.lE(idx_l))) / d.lE(idx_l)).minCoeff();}
       if (idx_g.size() > 0) {min_2 = (((1.0 - frac) * (1.0 - z.lE(idx_g))) / d.lE(idx_g)).minCoeff();}
-      a.d = std::min({a.d, min_1, min_2});
+      a.d = std::min(a.d, std::min(min_1, min_2));
     }
     if (i.nI > 0) {
-      Indices const idx_l(find(d.lI < 0.0));
-      Indices const idx_g(find(d.lI > 0.0));
+      const Indices idx_l(find(d.lI < 0.0)), idx_g(find(d.lI > 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
-      if (idx_l.size() > 0) {min_1 = (((frac - 1.0) * (0.0 + z.lI(idx_l))) / d.lI(idx_l)).minCoeff();}
+      if (idx_l.size() > 0) {min_1 = (((frac - 1.0) *        z.lI(idx_l))  / d.lI(idx_l)).minCoeff();}
       if (idx_g.size() > 0) {min_2 = (((1.0 - frac) * (1.0 - z.lI(idx_g))) / d.lI(idx_g)).minCoeff();}
-      a.d = std::min({a.d, min_1, min_2});
+      a.d = std::min(a.d, std::min(min_1, min_2));
     }
   }
 
   // Full step search for trial penalty parameters
-  inline Integer fullStepCheck(Acceptance const & a, Parameter & p, Input & i, Counter & c, Iterate & z, Direction const & d)
+  inline Integer fullStepCheck(Acceptance const & a, Parameter & p, Input & i, Counter & c, Iterate & z,
+    Direction const & d)
   {
-    // Initialize boolean
-    Integer b{0};
-
     // Set current and last penalty parameters
     Real rho{z.rho}, rho_temp{z.rho_};
 
@@ -147,11 +141,9 @@ namespace Pipal
       evalMerit(z, i);
 
       // Store current values
+      Real phi{z.phi}, f{z.f};
+      Array cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE), cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
       Vector x(z.x);
-      Real f{z.f};
-      Array cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE);
-      Array cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
-      Real phi{z.phi};
 
       // Set trial point
       updatePoint(z, i, d, a);
@@ -166,11 +158,12 @@ namespace Pipal
 
         // Check for nonlinear fraction-to-boundary violation
         Integer ftb{0};
+        const Real tmp_min{std::min(p.ls_frac, z.mu)};
         if (i.nE > 0) {
-          ftb += (z.r1 < (std::min(p.ls_frac, z.mu)*r1)).count() + (z.r2 < (std::min(p.ls_frac, z.mu)*r2)).count();
+          ftb += (z.r1 < tmp_min*r1).count() + (z.r2 < tmp_min*r2).count();
         }
         if (i.nI > 0) {
-          ftb += (z.s1 < (std::min(p.ls_frac, z.mu)*s1)).count() + (z.s2 < (std::min(p.ls_frac, z.mu)*s2)).count();
+          ftb += (z.s1 < tmp_min*s1).count() + (z.s2 < tmp_min*s2).count();
         }
 
         // Check Armijo condition
@@ -178,7 +171,7 @@ namespace Pipal
         {
           // Reset variables, set boolean, and return
           setPrimals(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
-          b = 1; return b;
+          return 1;
         }
         else
         {
@@ -202,7 +195,7 @@ namespace Pipal
     // Evaluate merit
     evalMerit(z, i);
 
-    return b;
+    return 0;
   }
 
   // Line search
@@ -226,17 +219,13 @@ namespace Pipal
   }
 
   // Second-order Correction
-  inline Integer secondOrderCorrection(Acceptance & a, Parameter & p, Input & i, Counter & c, Iterate & z, Direction & d)
+  inline Integer secondOrderCorrection(Acceptance & a, Parameter & p, Input & i, Counter & c,
+    Iterate & z, Direction & d)
   {
-    // Initialize flag
-    Integer b{0};
-
     // Store current iterate values
+    Real f{z.f}, phi{z.phi}, v{z.v};
+    Array cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE), cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
     Vector x(z.x);
-    Real f{z.f};
-    Array cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE);
-    Array cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
-    Real phi{z.phi}, v{z.v};
 
     // Set trial point
     updatePoint(z, i, d, a);
@@ -251,11 +240,12 @@ namespace Pipal
 
       // Check for nonlinear fraction-to-boundary violation
       Integer ftb{0};
+      const Real tmp_min{std::min(p.ls_frac, z.mu)};
       if (i.nE > 0) {
-        ftb += (z.r1 < std::min(p.ls_frac, z.mu)*r1).count() + (z.r2 < std::min(p.ls_frac, z.mu)*r2).count();
+        ftb += (z.r1 < tmp_min*r1).count() + (z.r2 < tmp_min*r2).count();
       }
       if (i.nI > 0) {
-        ftb += (z.s1 < std::min(p.ls_frac, z.mu)*s1).count() + (z.s2 < std::min(p.ls_frac, z.mu)*s2).count();
+        ftb += (z.s1 < tmp_min*s1).count() + (z.s2 < tmp_min*s2).count();
       }
 
       // Check Armijo condition
@@ -263,13 +253,13 @@ namespace Pipal
       {
         // Reset variables, set flag, and return
         setPrimals(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
-        b = 1; return b;
+        return 1;
       }
       else if (evalViolation(i, z.cE, z.cI) < v)
       {
         // Reset variables and return
         setPrimals(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
-        return b;
+        return 0;
       }
       else
       {
@@ -281,7 +271,7 @@ namespace Pipal
     {
       // Reset variables and return
       setPrimals(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
-      return b;
+      return 0;
     }
 
     // Recompute slacks for second order correction
@@ -318,11 +308,12 @@ namespace Pipal
 
       // Check for nonlinear fraction-to-boundary violation
       Integer ftb{0};
+      const Real tmp_min{std::min(p.ls_frac, z.mu)};
       if (i.nE > 0) {
-        ftb += (z.r1 < std::min(p.ls_frac, z.mu)*r1).count() + (z.r2 < std::min(p.ls_frac, z.mu)*r2).count();
+        ftb += (z.r1 < tmp_min*r1).count() + (z.r2 < tmp_min*r2).count();
       }
       if (i.nI > 0) {
-        ftb += (z.s1 < std::min(p.ls_frac, z.mu)*s1).count() + (z.s2 < std::min(p.ls_frac, z.mu)*s2).count();
+        ftb += (z.s1 < tmp_min*s1).count() + (z.s2 < tmp_min*s2).count();
       }
 
       // Check Armijo condition
@@ -330,7 +321,7 @@ namespace Pipal
       {
         // Reset variables, set flag, and return
         setPrimals(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
-        b = 2; return b;
+        return 2;
       }
       else
       {
@@ -350,7 +341,7 @@ namespace Pipal
     // Reduce step length
     a.p *= p.ls_factor;
 
-    return b;
+    return 0;
   }
 
 } // namespace Pipal
