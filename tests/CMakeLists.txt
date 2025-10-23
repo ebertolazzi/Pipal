@@ -10,10 +10,10 @@
 
 include(PipalGTest)
 
-file(GLOB_RECURSE TEST_BASIC "${CMAKE_CURRENT_SOURCE_DIR}/test_basic.cc")
-add_executable(test_basic ${TEST_BASIC})
-target_link_libraries(test_basic PRIVATE Pipal GTest::gtest_main)
+file(GLOB_RECURSE TEST_ROSENBROCK_BOX "${CMAKE_CURRENT_SOURCE_DIR}/test_rosenbrock_box.cc")
+add_executable(test_rosenbrock_box ${TEST_ROSENBROCK_BOX})
+target_link_libraries(test_rosenbrock_box PRIVATE Pipal GTest::gtest_main)
 
-file(GLOB_RECURSE TEST_LINEAR "${CMAKE_CURRENT_SOURCE_DIR}/test_linear.cc")
-add_executable(test_linear ${TEST_LINEAR})
-target_link_libraries(test_linear PRIVATE Pipal GTest::gtest_main)
+file(GLOB_RECURSE TEST_ROSENBROCK_SUZUKI "${CMAKE_CURRENT_SOURCE_DIR}/test_rosenbrock_suzuki.cc")
+add_executable(test_rosenbrock_suzuki ${TEST_ROSENBROCK_SUZUKI})
+target_link_libraries(test_rosenbrock_suzuki PRIVATE Pipal GTest::gtest_main)

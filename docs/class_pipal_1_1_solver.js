@@ -43,7 +43,7 @@ var class_pipal_1_1_solver =
     [ "m_counters", "class_pipal_1_1_solver.html#af96f8dd4b044547ff18558a58fcfbdc5", null ],
     [ "m_max_iterations", "class_pipal_1_1_solver.html#a20fffe280c060b65320690cfbbac7e13", null ],
     [ "m_mu_max_exp", "class_pipal_1_1_solver.html#a2d2bfb64fb709f87f9f554b2e00067df", null ],
-    [ "m_params", "class_pipal_1_1_solver.html#a53f6463cf9c98f144ccbf29def8d05df", null ],
+    [ "m_params", "class_pipal_1_1_solver.html#aa271b224a7c58cceb3eb02e9cff49e0d", null ],
     [ "m_problem", "class_pipal_1_1_solver.html#a8011f730df457eb8bf4fb6983db4561e", null ],
     [ "m_tolerance", "class_pipal_1_1_solver.html#a6c155e6ff0fba9876938f7cfa749a86c", null ],
     [ "m_verbose", "class_pipal_1_1_solver.html#a1fa2d17da988fe8d857e81aff1a91307", null ]

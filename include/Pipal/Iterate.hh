@@ -32,16 +32,16 @@ namespace Pipal
     // z.r1.setZero(i.nE);
     // z.r2.setZero(i.nE);
     // z.cE.setZero(i.nE);
-    z.JE.setZero(i.nE, i.nV); // SparseMatrix
+    z.JE.resize(i.nE, i.nV); // SparseMatrix
     // z.JEnnz = 0;
     // z.lE.setZero(i.nE);
     // z.s1.setZero(i.nI);
     // z.s2.setZero(i.nI);
     // z.cI.setZero(i.nI);
-    z.JI.setZero(i.nI, i.nV); // SparseMatrix
+    z.JI.resize(i.nI, i.nV); // SparseMatrix
     // z.JInnz = 0;
     // z.lI.setConstant(i.nI, 0.5);
-    z.H.setZero(i.nV, i.nV); // SparseMatrix
+    z.H.resize(i.nV, i.nV); // SparseMatrix
     // z.Hnnz = 0;
     // z.v = 0.0;
     // z.vu = 0.0;
@@ -49,7 +49,7 @@ namespace Pipal
     // z.phi = 0.0;
     // z.Annz = 0;
     // z.shift = 0.0;
-    // z.b.setZero(i.nA);
+    z.b.resize(i.nA);
     z.kkt.setZero(3);
     z.kkt_.setConstant(p.opt_err_mem, INFTY);
     // z.err = 0;
@@ -58,7 +58,7 @@ namespace Pipal
     // z.cEu.setZero(i.nE);
     // z.cIs.setOnes(i.nI);
     // z.cIu.setZero(i.nI);
-    z.A.setZero(i.nA, i.nA);
+    z.A.resize(i.nA, i.nA);
     // z.shift22 = 0.0;
     // z.v_ = 0.0;
     // z.cut_ = false;
@@ -79,9 +79,9 @@ namespace Pipal
     evalInfeasibility(z, i);
     z.v_    = z.v;
     evalHessian(z, i, c);
-    z.Hnnz  = nnz(z.H);
-    z.JEnnz = nnz(z.JE);
-    z.JInnz = nnz(z.JI);
+    z.Hnnz  = static_cast<Integer>(z.H.nonZeros());
+    z.JEnnz = static_cast<Integer>(z.JE.nonZeros());
+    z.JInnz = static_cast<Integer>(z.JI.nonZeros());
     initNewtonMatrix(z, i);
     evalNewtonMatrix(z, p, i, c);
   }
@@ -190,6 +190,32 @@ namespace Pipal
 
   }
 
+
+  // Create the function to inject a block into a sparse matrix with given indices
+  inline void insert_block(SparseMatrix & mat_sparse, Matrix const & mat_dense, Integer const row_offset,
+    Integer const col_offset)
+  {
+    const Integer cols{static_cast<Integer>(mat_dense.cols())}, rows{static_cast<Integer>(mat_dense.rows())};
+    for (Integer r{0}; r < rows; ++r) {
+      for (Integer c{0}; c < cols; ++c) {
+        mat_sparse.coeffRef(r + row_offset, c + col_offset) = mat_dense(r, c);
+      }
+    }
+  }
+
+  // Create the function to inject a block into a sparse matrix with given indices
+  inline void insert_block(SparseMatrix & mat_sparse, Matrix const & mat_dense, Indices const & idx_row,
+    Indices const & idx_col, Integer const row_offset, Integer const col_offset)
+  {
+    for (Integer r_idx{0}; r_idx < idx_row.size(); ++r_idx) {
+      Integer r{idx_row[r_idx] + row_offset};
+      for (Integer c_idx{0}; c_idx < idx_col.size(); ++c_idx) {
+          
+        mat_sparse.coeffRef(r, idx_col[c_idx] + col_offset) = mat_dense.coeff(r_idx, c_idx);
+      }
+    }
+  }
+
   // Gradient evaluator
   inline void evalGradients(Iterate & z, Input & i, Counter & c)
   {
@@ -204,9 +230,6 @@ namespace Pipal
     incrementGradientCount(c);
 
     // Try AMPL gradients evaluation
-    //z.g.resize(i.nV);
-    //z.JE.resize(i.nE, i.nV);
-    //z.JI.resize(i.nI, i.nV);
     Vector g_orig;
     Matrix J_orig;
     try
@@ -227,7 +250,14 @@ namespace Pipal
 
     // Set equality constraint Jacobian
     if (i.nE > 0) {
-      z.JE << J_orig(i.I6, i.I1), J_orig(i.I6, i.I3), J_orig(i.I6, i.I4), J_orig(i.I6, i.I5);
+      Integer col_offset{0};
+      insert_block(z.JE, J_orig(i.I6, i.I1), 0, col_offset);
+      col_offset += i.I1.size();
+      insert_block(z.JE, J_orig(i.I6, i.I3), 0, col_offset);
+      col_offset += i.I3.size();
+      insert_block(z.JE, J_orig(i.I6, i.I4), 0, col_offset);
+      col_offset += i.I4.size();
+      insert_block(z.JE, J_orig(i.I6, i.I5), 0, col_offset);
     }
 
     // Initialize inequality constraint Jacobian
@@ -235,36 +265,74 @@ namespace Pipal
 
     // Set inequality constraint Jacobian
     if (i.n3 > 0) {
-      z.JI.block(0, i.n1, i.n3, i.n1+i.n3).diagonal().setConstant(-1.0);
+      Integer diag_len{std::min(i.n3, i.n1+i.n3)};
+      for (Integer k{0}; k < diag_len; ++k)  {z.JI.coeffRef(k, i.n1+k) = -1.0;}
     }
     if (i.n4 > 0) {
-      z.JI.block(i.n3, i.n1+i.n3, i.n4, i.n4).setIdentity();
+      Integer tmp{i.n1+i.n3};
+      for (Integer k{0}; k < i.n4; ++k) {z.JI.coeffRef(i.n3+k, tmp+k) = 1.0;}
     }
     if (i.n5 > 0) {
-      z.JI.block(i.n3+i.n4,      i.n1+i.n3+i.n4, i.n5, i.n5).diagonal().setConstant(-1.0);;
-      z.JI.block(i.n3+i.n4+i.n5, i.n1+i.n3+i.n4, i.n5, i.n5).setIdentity();
+      Integer tmp_row{i.n3+i.n4}, tmp_col{i.n1+i.n3+i.n4};
+      for (Integer k{0}; k < i.n5; ++k) {
+        z.JI.coeffRef(tmp_row+k,      tmp_col+k) = -1.0;
+        z.JI.coeffRef(tmp_row+i.n5+k, tmp_col+k) = 1.0;
+      }
     }
     if (i.n7 > 0) {
-      z.JI.block(i.n3+i.n4+i.n5+i.n5, 0, i.n7, i.n1+i.n3+i.n4+i.n5) <<
-        -J_orig(i.I7, i.I1), J_orig(i.I7,i.I3), J_orig(i.I7,i.I4), J_orig(i.I7,i.I5);
+      Integer row_offset{i.n3+i.n4+i.n5+i.n5}, col_offset{0};
+      insert_block(z.JI, -J_orig(i.I7, i.I1), i.I7, i.I1, row_offset, col_offset);
+      col_offset += i.I1.size();
+      insert_block(z.JI, J_orig(i.I7, i.I3), i.I7, i.I3, row_offset, col_offset);
+      col_offset += i.I3.size();
+      insert_block(z.JI, J_orig(i.I7, i.I4), i.I7, i.I4, row_offset, col_offset);
+      col_offset += i.I4.size();
+      insert_block(z.JI, J_orig(i.I7, i.I5), i.I7, i.I5, row_offset, col_offset);
     }
     if (i.n8 > 0) {
-      z.JI.block(i.n3+i.n4+i.n5+i.n5+i.n7, 0, i.n8, i.n1+i.n3+i.n4+i.n5) <<
-        J_orig(i.I8,i.I1), J_orig(i.I8,i.I3), J_orig(i.I8,i.I4), J_orig(i.I8,i.I5);
+      Integer row_offset{i.n3+i.n4+i.n5+i.n5+i.n7}, col_offset{0};
+      insert_block(z.JI, J_orig(i.I8, i.I1), i.I8, i.I1, row_offset, col_offset);
+      col_offset += i.I1.size();
+      insert_block(z.JI, J_orig(i.I8, i.I3), i.I8, i.I3, row_offset, col_offset);
+      col_offset += i.I3.size();
+      insert_block(z.JI, J_orig(i.I8, i.I4), i.I8, i.I4, row_offset, col_offset);
+      col_offset += i.I4.size();
+      insert_block(z.JI, J_orig(i.I8, i.I5), i.I8, i.I5, row_offset, col_offset);
     }
     if (i.n9 > 0) {
-      z.JI.block(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8, 0, i.n9, i.n1+i.n3+i.n4+i.n5) <<
-        -J_orig(i.I9,i.I1), -J_orig(i.I9,i.I3), -J_orig(i.I9,i.I4), -J_orig(i.I9,i.I5);
-      z.JI.block(i.n3+i.n4+i.n5+i.n5+i.n7+i.n8+i.n9, 0, i.n9, i.n1+i.n3+i.n4+i.n5) <<
-        J_orig(i.I9,i.I1), J_orig(i.I9,i.I3), J_orig(i.I9,i.I4), J_orig(i.I9,i.I5);
+      Integer row_offset{i.n3+i.n4+i.n5+i.n5+i.n7+i.n8}, col_offset{0};
+      insert_block(z.JI, -J_orig(i.I9, i.I1), i.I9, i.I1, row_offset, col_offset);
+      col_offset += i.I1.size();
+      insert_block(z.JI, -J_orig(i.I9, i.I3), i.I9, i.I3, row_offset, col_offset);
+      col_offset += i.I3.size();
+      insert_block(z.JI, -J_orig(i.I9, i.I4), i.I9, i.I4, row_offset, col_offset);
+      col_offset += i.I4.size();
+      insert_block(z.JI, -J_orig(i.I9, i.I5), i.I9, i.I5, row_offset, col_offset);
+      row_offset += i.n9; // next row block
+      col_offset = 0;
+      insert_block(z.JI, J_orig(i.I9, i.I1), i.I9, i.I1, row_offset, col_offset);
+      col_offset += i.I1.size();
+      insert_block(z.JI, J_orig(i.I9, i.I3), i.I9, i.I3, row_offset, col_offset);
+      col_offset += i.I3.size();
+      insert_block(z.JI, J_orig(i.I9, i.I4), i.I9, i.I4, row_offset, col_offset);
+      col_offset += i.I4.size();
+      insert_block(z.JI, J_orig(i.I9, i.I5), i.I9, i.I5, row_offset, col_offset);
     }
 
     // Scale objective gradient
     z.g *= z.fs;
 
     // Scale constraint Jacobians
-    if (i.nE > 0) {z.JE = z.cEs.matrix().asDiagonal() * z.JE;} // SPARSE
-    if (i.nI > 0) {z.JI = z.cIs.matrix().asDiagonal() * z.JI;} // SPARSE
+    if (i.nE > 0) {
+      for (Integer k{0}; k < z.JE.outerSize(); ++k) {
+        for (SparseMatrix::InnerIterator it(z.JE, k); it; ++it) {it.valueRef() *= z.cEs[it.row()];}
+      }
+    }
+    if (i.nI > 0) {
+      for (Integer k{0}; k < z.JI.outerSize(); ++k) {
+        for (SparseMatrix::InnerIterator it(z.JI, k); it; ++it) {it.valueRef() *= z.cIs[it.row()];}
+      }
+    }
   }
 
   // Hessian evaluator
@@ -292,16 +360,45 @@ namespace Pipal
     {
       // Set evaluation flag, default values, and return
       z.err = 1;
-      //z.H.resize(i.nV, i.nV);
       return;
     }
 
     // Set Hessian of the Lagrangian
-    z.H <<
-      H_orig(i.I1, i.I1), H_orig(i.I1, i.I3), H_orig(i.I1, i.I4), H_orig(i.I1, i.I5),
-      H_orig(i.I3, i.I1), H_orig(i.I3, i.I3), H_orig(i.I3, i.I4), H_orig(i.I3, i.I5),
-      H_orig(i.I4, i.I1), H_orig(i.I4, i.I3), H_orig(i.I4, i.I4), H_orig(i.I4, i.I5),
-      H_orig(i.I5, i.I1), H_orig(i.I5, i.I3), H_orig(i.I5, i.I4), H_orig(i.I5, i.I5);
+    Integer row_offset{0}, col_offset{0};
+    insert_block(z.H, H_orig(i.I1, i.I1), i.I1, i.I1, row_offset, col_offset);
+    col_offset += i.I1.size();
+    insert_block(z.H, H_orig(i.I1, i.I3), i.I1, i.I3, row_offset, col_offset);
+    col_offset += i.I3.size();
+    insert_block(z.H, H_orig(i.I1, i.I4), i.I1, i.I4, row_offset, col_offset);
+    col_offset += i.I4.size();
+    insert_block(z.H, H_orig(i.I1, i.I5), i.I1, i.I5, row_offset, col_offset);
+    row_offset += i.I1.size();
+    col_offset = 0; // next row block
+    insert_block(z.H, H_orig(i.I3, i.I1), i.I3, i.I1, row_offset, col_offset);
+    col_offset += i.I1.size();
+    insert_block(z.H, H_orig(i.I3, i.I3), i.I3, i.I3, row_offset, col_offset);
+    col_offset += i.I3.size();
+    insert_block(z.H, H_orig(i.I3, i.I4), i.I3, i.I4, row_offset, col_offset);
+    col_offset += i.I4.size();
+    insert_block(z.H, H_orig(i.I3, i.I5), i.I3, i.I5, row_offset, col_offset);
+    row_offset += i.I3.size();
+    col_offset = 0; // next row block
+    insert_block(z.H, H_orig(i.I4, i.I1), i.I4, i.I1, row_offset, col_offset);
+    col_offset += i.I1.size();
+    insert_block(z.H, H_orig(i.I4, i.I3), i.I4, i.I3, row_offset, col_offset);
+    col_offset += i.I3.size();
+    insert_block(z.H, H_orig(i.I4, i.I4), i.I4, i.I4, row_offset, col_offset);
+    col_offset += i.I4.size();
+    insert_block(z.H, H_orig(i.I4, i.I5), i.I4, i.I5, row_offset, col_offset);
+    row_offset += i.I4.size();
+    col_offset = 0; // next row block
+    insert_block(z.H, H_orig(i.I5, i.I1), i.I5, i.I1, row_offset, col_offset);
+    col_offset += i.I1.size();
+    insert_block(z.H, H_orig(i.I5, i.I3), i.I5, i.I3, row_offset, col_offset);
+    col_offset += i.I3.size();
+    insert_block(z.H, H_orig(i.I5, i.I4), i.I5, i.I4, row_offset, col_offset);
+    col_offset += i.I4.size();
+    insert_block(z.H, H_orig(i.I5, i.I5), i.I5, i.I5, row_offset, col_offset);
 
     // Rescale H
     z.H *= z.rho*z.fs;
@@ -326,8 +423,8 @@ namespace Pipal
     kkt.head(i.nV) = rho*z.g;
 
     // Set gradient of Lagrangian for constraints
-    if (i.nE > 0) {kkt.head(i.nV) += (z.lE.matrix().transpose()*z.JE.matrix()).transpose();}
-    if (i.nI > 0) {kkt.head(i.nV) += (z.lI.matrix().transpose()*z.JI.matrix()).transpose();}
+    if (i.nE > 0) {kkt.head(i.nV) += (z.lE.matrix().transpose()*z.JE).transpose();}
+    if (i.nI > 0) {kkt.head(i.nV) += (z.lI.matrix().transpose()*z.JI).transpose();}
 
     // Set complementarity for constraint slacks
     if (i.nE > 0) {
@@ -412,12 +509,12 @@ namespace Pipal
     {
       // Set diagonal terms
       for (Integer j{0}; j < i.nE; ++j) {
-        z.A(i.nV+j, i.nV+j)           = (1.0 + z.lE(j))/z.r1(j);
-        z.A(i.nV+i.nE+j, i.nV+i.nE+j) = (1.0 - z.lE(j))/z.r2(j);
+        z.A.coeffRef(i.nV+j, i.nV+j)           = (1.0 + z.lE(j))/z.r1(j);
+        z.A.coeffRef(i.nV+i.nE+j, i.nV+i.nE+j) = (1.0 - z.lE(j))/z.r2(j);
       }
 
       // Set constraint Jacobian
-      z.A.block(i.nV+2*i.nE+2*i.nI, 0, i.nE, i.nV) = z.JE;
+      insert_block(z.A, z.JE, i.nV+2*i.nE+2*i.nI, 0);
     }
 
     // Check for inequality constraints
@@ -425,12 +522,12 @@ namespace Pipal
     {
       // Set diagonal terms
       for (Integer j{0}; j < i.nI; ++j) {
-        z.A(i.nV+2*i.nE+j,      i.nV+2*i.nE+j)      = z.lI(j)/z.s1(j);
-        z.A(i.nV+2*i.nE+i.nI+j, i.nV+2*i.nE+i.nI+j) = (1.0 - z.lI(j))/z.s2(j);
+        z.A.coeffRef(i.nV+2*i.nE+j,      i.nV+2*i.nE+j)      = z.lI(j)/z.s1(j);
+        z.A.coeffRef(i.nV+2*i.nE+i.nI+j, i.nV+2*i.nE+i.nI+j) = (1.0 - z.lI(j))/z.s2(j);
       }
 
       // Set constraint Jacobian
-      z.A.block(i.nV+3*i.nE+2*i.nI, 0, i.nI, i.nV) = z.JI;
+      insert_block(z.A, z.JI, i.nV+3*i.nE+2*i.nI, 0);
     }
 
     // Set minimum potential shift
@@ -448,20 +545,20 @@ namespace Pipal
     while (!done && z.shift < p.shift_max)
     {
       // Set Hessian of Lagrangian
-      z.A.block(0, 0, i.nV, i.nV) = z.H+z.shift*SparseMatrix::Identity(i.nV, i.nV);
+      insert_block(z.A, z.H+z.shift*Matrix::Identity(i.nV, i.nV), 0, 0);;
 
       // Set diagonal terms
       for (Integer j{0}; j < i.nE; ++j) {
-        z.A(i.nV+2*i.nE+2*i.nI+j, i.nV+2*i.nE+2*i.nI+j) = -z.shift22;
+        z.A.coeffRef(i.nV+2*i.nE+2*i.nI+j, i.nV+2*i.nE+2*i.nI+j) = -z.shift22;
       }
 
       // Set diagonal terms
       for (Integer j{0}; j < i.nI; ++j) {
-        z.A(i.nV+3*i.nE+2*i.nI+j, i.nV+3*i.nE+2*i.nI+j) = -z.shift22;
+        z.A.coeffRef(i.nV+3*i.nE+2*i.nI+j, i.nV+3*i.nE+2*i.nI+j) = -z.shift22;
       }
 
       // Set number of nonzeros in (upper triangle of) Newton matrix
-      z.Annz = nnz<MatrixView::TRIL>(z.A);
+      z.Annz = static_cast<Integer>(z.A.nonZeros());
 
       // Factor primal-dual matrix
       z.ldlt.compute(z.A);
@@ -482,39 +579,55 @@ namespace Pipal
     }
 
     // Update Hessian
-    z.H = z.H+z.shift*SparseMatrix::Identity(i.nV, i.nV);
+    z.H.diagonal().array() += z.shift;
   }
 
   // Newton right-hand side evaluator
   inline void evalNewtonRhs(Iterate & z, Input const & i)
   {
     // Initialize right-hand side vector
-    z.b.setZero(i.nA);
+    z.b.setZero();
 
     // Set gradient of objective
-    z.b.head(i.nV) = z.rho*z.g;
+    for (Integer k{0}; k < i.nV; ++k) {
+      for (Integer k{0}; k < i.nV; ++k) {z.b.coeffRef(k) = z.rho*z.g(k);}
 
-    // Set gradient of Lagrangian for constraints
-    if (i.nE > 0) {z.b.head(i.nV) += (z.lE.matrix().transpose()*z.JE.matrix()).transpose();}
-    if (i.nI > 0) {z.b.head(i.nV) += (z.lI.matrix().transpose()*z.JI.matrix()).transpose();}
+      // Set gradient of Lagrangian for constraints
+      if (i.nE > 0) {
+        Vector tmp((z.lE.matrix().transpose()*z.JE).transpose());
+        for (Integer k{0}; k < tmp.size(); ++k) {z.b.coeffRef(k) += tmp[k];}
+      }
+      if (i.nI > 0) {
+        Vector tmp((z.lI.matrix().transpose()*z.JI).transpose());
+        for (Integer k{0}; k < tmp.size(); ++k) {z.b.coeffRef(k) += tmp[k];}
+      }
+    }
 
     // Set complementarity for constraint slacks
     if (i.nE > 0) {
-      // compute element-wise complementarity terms with safe element-wise division
-      Array tmpE1(1.0 + z.lE - z.mu * z.r1.cwiseInverse());
-      Array tmpE2(1.0 - z.lE - z.mu * z.r2.cwiseInverse());
-      z.b.segment(i.nV, 2*i.nE) << tmpE1, tmpE2;
+      // Compute element-wise complementarity terms with safe element-wise division
+      Vector tmp(2*i.nE);
+      tmp << 1.0 + z.lE - z.mu * z.r1.cwiseInverse(), 1.0 - z.lE - z.mu * z.r2.cwiseInverse();
+      for (Integer k{0}; k < 2*i.nE; ++k) {z.b.insert(i.nV + k) = tmp[k];}
     }
     if (i.nI > 0) {
-      // compute element-wise complementarity terms with safe element-wise division
-      Array tmpI1(z.lI - z.mu * z.s1.cwiseInverse());
-      Array tmpI2(1.0 - z.lI - z.mu * z.s2.cwiseInverse());
-      z.b.segment(i.nV+2*i.nE, 2*i.nI) << tmpI1, tmpI2;
+      // Compute element-wise complementarity terms with safe element-wise division
+      Vector tmp(2*i.nI);
+      tmp << z.lI - z.mu * z.s1.cwiseInverse(), 1.0 - z.lI - z.mu * z.s2.cwiseInverse();
+      for (Integer k{0}; k < 2*i.nI; ++k) {z.b.insert(i.nV + 2*i.nE + k) = tmp[k];}
     }
 
     // Set penalty-interior-point constraint values
-    if (i.nE > 0) {z.b.segment(i.nV+2*i.nE+2*i.nI, i.nE) = z.cE + z.r1 - z.r2;}
-    if (i.nI > 0) {z.b.segment(i.nV+3*i.nE+2*i.nI, i.nI) = z.cI + z.s1 - z.s2;}
+    if (i.nE > 0) {
+      const Vector tmp(z.cE + z.r1 - z.r2);
+      const Integer offset{i.nV+2*i.nE+2*i.nI};
+      for (Integer k{0}; k < i.nE; ++k) {z.b.coeffRef(offset+k) = tmp[k];}
+    }
+    if (i.nI > 0) {
+      const Vector tmp(z.cI + z.s1 - z.s2);
+      const Integer offset{i.nV+3*i.nE+2*i.nI};
+      for (Integer k{0}; k < i.nI; ++k) {z.b.coeffRef(offset+k) = tmp[k];}
+    }
   }
 
   // Scalings evaluator
@@ -535,14 +648,22 @@ namespace Pipal
     for (Integer j{0}; j < i.nE; ++j)
     {
       // Scale down equality constraint j if norm of gradient is too large
-      z.cEs(j) = p.grad_max / std::max(z.JE.row(j).template lpNorm<Eigen::Infinity>(), p.grad_max);
+      Real row_inf_norm{0.0};
+      for (SparseMatrix::InnerIterator it(z.JE, j); it; ++it) {
+        row_inf_norm = std::max(row_inf_norm, std::abs(it.value()));
+      }
+      z.cEs(j) = p.grad_max / std::max(row_inf_norm, p.grad_max);
     }
 
     // Loop through inequality constraints
     for (Integer j{0}; j < i.nI; ++j)
     {
       // Scale down inequality constraint j if norm of gradient is too large
-      z.cIs(j) = p.grad_max / std::max(z.JI.row(j).template lpNorm<Eigen::Infinity>(), p.grad_max);
+      Real row_inf_norm{0.0};
+      for (SparseMatrix::InnerIterator it(z.JI, j); it; ++it) {
+        row_inf_norm = std::max(row_inf_norm, std::abs(it.value()));
+      }
+      z.cIs(j) = p.grad_max / std::max(row_inf_norm, p.grad_max);
     }
   }
 
@@ -596,30 +717,51 @@ namespace Pipal
   }
 
   // Initializes Newton matrix
-  inline void initNewtonMatrix(Iterate & z, Input const & i)
+  inline void initNewtonMatrix(Iterate &z, Input const &i)
   {
     // Allocate memory
-    //z.A.resize(i.nA, i.nA);// FIXME, z.Hnnz+5*i.nE+5*i.nI+z.JEnnz+z.JInnz);
+    z.A.reserve(z.Hnnz + 5*i.nE + 5*i.nI + z.JEnnz + z.JInnz);
 
     // Initialize interior-point Hessians
-    z.A.block(i.nV,        i.nV,        2*i.nE, 2*i.nE).setIdentity();
-    z.A.block(i.nV+2*i.nE, i.nV+2*i.nE, 2*i.nI, 2*i.nI).setIdentity();
+    {
+      Integer diag;
+      for (Integer k{0}; k < 2*i.nE; ++k) {
+        diag = i.nV+k;
+        z.A.coeffRef(diag, diag) = 1.0;
+      }
 
-    // Check for equality constraints
+      for (Integer k{0}; k < 2*i.nI; ++k) {
+        diag = i.nV+2*i.nE+k;
+        z.A.coeffRef(diag, diag) = 1.0;
+      }
+    }
+
+    // Check for constraints
     if (i.nE > 0)
     {
       // Initialize constraint Jacobian
-      z.A.block(i.nV+2*i.nE+2*i.nI, i.nV,      i.nE, i.nE).setIdentity();
-      z.A.block(i.nV+2*i.nE+2*i.nI, i.nV+i.nE, i.nE, i.nE).diagonal().setConstant(-1.0);
+      Integer row, col;
+      for (Integer k{0}; k < i.nE; ++k) {
+        row = i.nV+2*i.nE+2*i.nI+k, col = i.nV+k;
+        z.A.coeffRef(row, col) = 1.0;
+        z.A.coeffRef(row, col+i.nE) = -1.0;
+      }
     }
 
     // Check for inequality constraints
     if (i.nI > 0)
     {
       // Initialize constraint Jacobian
-      z.A.block(i.nV+3*i.nE+2*i.nI, i.nV+2*i.nE,      i.nI, i.nI).setIdentity();
-      z.A.block(i.nV+3*i.nE+2*i.nI, i.nV+2*i.nE+i.nI, i.nI, i.nI).diagonal().setConstant(-1.0);
+      Integer row, col;
+      for (Integer k{0}; k < i.nI; ++k) {
+        row = i.nV+3*i.nE+2*i.nI+k, col = i.nV+2*i.nE+k;
+        z.A.coeffRef(row, col) = 1.0;
+        z.A.coeffRef(row, col+i.nI) = -1.0;
+      }
     }
+
+    // Optional: compress after all insertions for efficient arithmetic
+    //z.A.makeCompressed();
   }
 
   // Set interior-point parameter

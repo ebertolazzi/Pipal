@@ -10,7 +10,7 @@ var searchData=
   ['m_5fobjective_7',['m_objective',['../class_pipal_1_1_problem_wrapper.html#aa271566b8220e399da0cea26f3df636a',1,'Pipal::ProblemWrapper']]],
   ['m_5fobjective_5fgradient_8',['m_objective_gradient',['../class_pipal_1_1_problem_wrapper.html#af53435552c25532c52d79942feee173c',1,'Pipal::ProblemWrapper']]],
   ['m_5fobjective_5fhessian_9',['m_objective_hessian',['../class_pipal_1_1_problem_wrapper.html#ac56d2acfc3e95970cb4c3fbfa8ee4350',1,'Pipal::ProblemWrapper']]],
-  ['m_5fparams_10',['m_params',['../class_pipal_1_1_solver.html#a53f6463cf9c98f144ccbf29def8d05df',1,'Pipal::Solver']]],
+  ['m_5fparams_10',['m_params',['../class_pipal_1_1_solver.html#aa271b224a7c58cceb3eb02e9cff49e0d',1,'Pipal::Solver']]],
   ['m_5fproblem_11',['m_problem',['../class_pipal_1_1_solver.html#a8011f730df457eb8bf4fb6983db4561e',1,'Pipal::Solver']]],
   ['m_5ftolerance_12',['m_tolerance',['../class_pipal_1_1_solver.html#a6c155e6ff0fba9876938f7cfa749a86c',1,'Pipal::Solver']]],
   ['m_5fverbose_13',['m_verbose',['../class_pipal_1_1_solver.html#a1fa2d17da988fe8d857e81aff1a91307',1,'Pipal::Solver']]],

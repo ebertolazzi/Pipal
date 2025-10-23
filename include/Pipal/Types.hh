@@ -23,6 +23,8 @@
 
 // Eigen library
 #include <Eigen/Dense>
+#include <Eigen/Sparse>
+#include <Eigen/SparseCholesky>
 
 // Print Pipal errors
 #ifndef PIPAL_ERROR
@@ -102,8 +104,8 @@ namespace Pipal
   using String       = std::string;
   using Vector       = Eigen::Vector<Real, Eigen::Dynamic>;
   using Matrix       = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
-  using SparseVector = Eigen::Vector<Real, Eigen::Dynamic>;
-  using SparseMatrix = Eigen::Matrix<Real, Eigen::Dynamic, Eigen::Dynamic>;
+  using SparseVector = Eigen::SparseVector<Real>;
+  using SparseMatrix = Eigen::SparseMatrix<Real>;
 
   using Array   = Eigen::Array<Real, Eigen::Dynamic, 1>;
   using Indices = Eigen::Array<Integer, Eigen::Dynamic, 1>;
@@ -144,30 +146,6 @@ namespace Pipal
       if (mask[i]) {out[j++] = i;}
     }
     return out;
-  }
-
-  /**
-   * \brief Count the number of non-zero elements in a matrix.
-   * \tparam View The matrix view type (FULL, TRIL, TRIU).
-   * \tparam Matrix The matrix type.
-   * \param[in] mat The input matrix.
-   * \param[in] tol The tolerance for considering an element as non-zero.
-   * \return The number of non-zero elements in the matrix.
-   */
-  template <MatrixView View = MatrixView::FULL, typename Matrix, typename Real = typename Matrix::Scalar>
-  static Integer nnz(Matrix const & mat, Real const tol = Eigen::NumTraits<Real>::epsilon())
-  {
-    Integer count{0};
-    const Integer rows{static_cast<Integer>(mat.rows())};
-    const Integer cols{static_cast<Integer>(mat.cols())};
-    for (Integer j{0}; j < cols; ++j) {
-      const Integer i_start{(View == MatrixView::TRIU) ? j : 0};
-      const Integer i_end{(View == MatrixView::TRIL) ? std::min(j + 1, rows) : rows};
-      for (Integer i{i_start}; i < i_end; ++i) {
-        if (std::abs(mat(i, j)) > tol) {++count;}
-      }
-    }
-    return count;
   }
 
   /**
@@ -299,7 +277,7 @@ namespace Pipal
     Real         vu;    // Feasibility violation measure value (unscaled)
     Real         v0;    // Feasibility violation measure initial value
     Real         phi;   // Merit function value
-    Eigen::LDLT<SparseMatrix, Eigen::Lower> ldlt; // LDLT factorization of Newton matrix
+    Eigen::SimplicialLDLT<SparseMatrix, Eigen::Lower> ldlt; // LDLT factorization of Newton matrix
     Integer      Annz;  // Newton matrix (upper triangle) nonzeros
     Real         shift; // Hessian shift value
     SparseVector b;     // Newton right-hand side
@@ -347,7 +325,7 @@ namespace Pipal
     bool s{false}; // Bool for second-order correction
   }; // struct Acceptance
 
-  // Function
+  // Function forward declarations
   inline void    fractionToBoundary(Acceptance & a, Parameter & p, Input const & i, Iterate & z, Direction & d);
   inline void    evalTrialSteps(Direction & d, Input const & i, Iterate & z, Direction & d1, Direction & d2, Direction & d3);
   inline void    evalTrialStepCut(Direction & d, Input const & i, Acceptance const & a);

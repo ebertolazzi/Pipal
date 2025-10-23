@@ -29,7 +29,7 @@ constexpr Real APPROX_TOLERANCE{1.0e-6};
 constexpr Integer MAX_ITERATIONS{100};
 
 TEST(Test1, ProblemWrapper) {
-  Pipal::ProblemWrapper problem_wrapper("test_basic",
+  Pipal::Solver solver("test_rosenbrock_box",
     [] (const Vector & x, Real & out) { // Objective function
       out = 100.0*std::pow(x(1) - x(0)*x(0), 2.0) + std::pow(1 - x(0), 2.0);
       return std::isfinite(out);
@@ -63,18 +63,12 @@ TEST(Test1, ProblemWrapper) {
     [] (Vector & out) {out.resize(0); return true;}, // Lower bounds on the constraints
     [] (Vector & out) {out.resize(0); return true;}  // Upper bounds on the constraints
   );
-
-  Pipal::Solver solver(
-    problem_wrapper.name(), problem_wrapper.objective(), problem_wrapper.objective_gradient(),
-    problem_wrapper.objective_hessian(), problem_wrapper.constraints(), problem_wrapper.constraints_jacobian(),
-    problem_wrapper.lagrangian_hessian(), problem_wrapper.primal_lower_bounds(), problem_wrapper.primal_upper_bounds(),
-    problem_wrapper.constraints_lower_bounds(), problem_wrapper.constraints_upper_bounds()
-  );
   solver.verbose_mode(VERBOSE);
   solver.tolerance(SOLVER_TOLERANCE);
   solver.max_iterations(MAX_ITERATIONS);
-  Vector x_sol, x_guess;
-  x_guess.setZero(2);
+  Vector x_sol(2), x_guess(2), x_opt(2);
+  x_guess.setZero();
+  x_opt << 1.0, 1.0;
   EXPECT_TRUE(solver.optimize(x_guess, x_sol));
-   EXPECT_TRUE(x_sol.isApprox(x_sol, APPROX_TOLERANCE));
+  EXPECT_TRUE(x_sol.isApprox(x_opt, APPROX_TOLERANCE));
 }

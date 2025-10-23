@@ -116,8 +116,8 @@ namespace Pipal
       vec.head(i.nV) = z.rho*z.g;
 
       // Set gradient of Lagrangian for constraints
-      if (i.nE > 0) {vec.head(i.nV) += ((z.lE+d.lE).matrix().transpose()*z.JE.matrix()).transpose().array();}
-      if (i.nI > 0) {vec.head(i.nV) += ((z.lI+d.lI).matrix().transpose()*z.JI.matrix()).transpose().array();}
+      if (i.nE > 0) {vec.head(i.nV) += ((z.lE+d.lE).matrix().transpose()*z.JE).transpose().array();}
+      if (i.nI > 0) {vec.head(i.nV) += ((z.lI+d.lI).matrix().transpose()*z.JI).transpose().array();}
 
       // Set complementarity for constraint slacks
       if (i.nE > 0) {
