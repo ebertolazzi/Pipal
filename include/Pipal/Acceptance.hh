@@ -77,6 +77,7 @@ namespace Pipal
       a.p *= p.ls_factor;
     }
   }
+
   // Fraction-to-boundary line search
   inline void fractionToBoundary(Acceptance & a, Parameter & p, Input const & i, Iterate & z, Direction & d)
   {
@@ -89,15 +90,15 @@ namespace Pipal
     if (i.nE > 0) {
       const Indices idx_r1(find(d.r1 < 0.0)), idx_r2(find(d.r2 < 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
-      if (idx_r1.size() > 0) {min_1 = (((frac - 1.0) * z.r1(idx_r1)) / d.r1(idx_r1)).minCoeff();}
-      if (idx_r2.size() > 0) {min_2 = (((frac - 1.0) * z.r2(idx_r2)) / d.r2(idx_r2)).minCoeff();}
+      if (idx_r1.size() > 0) {min_1 = (((frac - 1.0)*z.r1(idx_r1))/d.r1(idx_r1)).minCoeff();}
+      if (idx_r2.size() > 0) {min_2 = (((frac - 1.0)*z.r2(idx_r2))/d.r2(idx_r2)).minCoeff();}
       a.p0 = std::min(a.p0, std::min(min_1, min_2));
     }
     if (i.nI > 0) {
       const Indices idx_s1(find(d.s1 < 0.0)), idx_s2(find(d.s2 < 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
-      if (idx_s1.size() > 0) {min_1 = (((frac - 1.0) * z.s1(idx_s1)) / d.s1(idx_s1)).minCoeff();}
-      if (idx_s2.size() > 0) {min_2 = (((frac - 1.0) * z.s2(idx_s2)) / d.s2(idx_s2)).minCoeff();}
+      if (idx_s1.size() > 0) {min_1 = (((frac - 1.0)*z.s1(idx_s1))/d.s1(idx_s1)).minCoeff();}
+      if (idx_s2.size() > 0) {min_2 = (((frac - 1.0)*z.s2(idx_s2))/d.s2(idx_s2)).minCoeff();}
       a.p0 = std::min(a.p0, std::min(min_1, min_2));
     }
 
@@ -111,15 +112,15 @@ namespace Pipal
     if (i.nE > 0) {
       const Indices idx_l(find(d.lE < 0.0)), idx_g(find(d.lE > 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
-      if (idx_l.size() > 0) {min_1 = (((frac - 1.0) * (1.0 + z.lE(idx_l))) / d.lE(idx_l)).minCoeff();}
-      if (idx_g.size() > 0) {min_2 = (((1.0 - frac) * (1.0 - z.lE(idx_g))) / d.lE(idx_g)).minCoeff();}
+      if (idx_l.size() > 0) {min_1 = (((frac - 1.0)*(1.0 + z.lE(idx_l)))/d.lE(idx_l)).minCoeff();}
+      if (idx_g.size() > 0) {min_2 = (((1.0 - frac)*(1.0 - z.lE(idx_g)))/d.lE(idx_g)).minCoeff();}
       a.d = std::min(a.d, std::min(min_1, min_2));
     }
     if (i.nI > 0) {
       const Indices idx_l(find(d.lI < 0.0)), idx_g(find(d.lI > 0.0));
       Real min_1{INFINITY}, min_2{INFINITY};
-      if (idx_l.size() > 0) {min_1 = (((frac - 1.0) *        z.lI(idx_l))  / d.lI(idx_l)).minCoeff();}
-      if (idx_g.size() > 0) {min_2 = (((1.0 - frac) * (1.0 - z.lI(idx_g))) / d.lI(idx_g)).minCoeff();}
+      if (idx_l.size() > 0) {min_1 = (((frac - 1.0)*       z.lI(idx_l)) /d.lI(idx_l)).minCoeff();}
+      if (idx_g.size() > 0) {min_2 = (((1.0 - frac)*(1.0 - z.lI(idx_g)))/d.lI(idx_g)).minCoeff();}
       a.d = std::min(a.d, std::min(min_1, min_2));
     }
   }

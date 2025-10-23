@@ -20,7 +20,7 @@ namespace Pipal
 {
 
   // Reset all internal counters to zero
-  inline void buildCounter(Counter & c) {c.f = c.g = c.H = c.k = c.M = 0;}
+  inline void resetCounter(Counter & c) {c.f = c.g = c.H = c.k = c.M = 0;}
 
   // Matrix factorization counter incrementor
   inline void incrementFactorizationCount(Counter & c) {++c.M;}

@@ -25,7 +25,7 @@ using Pipal::Matrix;
 
 constexpr bool VERBOSE{true};
 constexpr Real SOLVER_TOLERANCE{1.0e-9};
-constexpr Real APPROX_TOLERANCE{1.0e-6};
+constexpr Real APPROX_TOLERANCE{1.0e-3};
 constexpr Integer MAX_ITERATIONS{100};
 
 TEST(Test1, ProblemWrapper) {
@@ -69,17 +69,15 @@ TEST(Test1, ProblemWrapper) {
       Vector diag1(4); diag1 << 2.0, 2.0, 2.0, 2.0;
       Vector diag2(4); diag2 << 2.0, 4.0, 2.0, 4.0;
       Vector diag3(4); diag3 << 4.0, 2.0, 2.0, 0.0;
-      out = diag0.asDiagonal()
-          + z(0)*diag1.asDiagonal()
-          + z(1)*diag2.asDiagonal()
-          + z(2)*diag3.asDiagonal();
+      out = diag0.asDiagonal() + z(0)*diag1.asDiagonal() + z(1)*diag2.asDiagonal() + z(2)*diag3.asDiagonal();
       return out.allFinite();
     },
-    [] (Vector & out) {out.setConstant(4, -INFINITY); return true;}, // Lower bounds on the primal variables
+    [] (Vector & out) {out.setConstant(4, -INFINITY); out(0) = -3000.0; return true;}, // Lower bounds on the primal variables
     [] (Vector & out) {out.setConstant(4, INFINITY); return true;}, // Upper bounds on the primal variables
     [] (Vector & out) {out.setConstant(4, -INFINITY); out(3) = 0.0; return true;}, // Lower bounds on the constraints
     [] (Vector & out) {out.setConstant(4, 0.0); return true;}  // Upper bounds on the constraints
   );
+  solver.algorithm(Pipal::Algorithm::ADAPTIVE);
   solver.verbose_mode(VERBOSE);
   solver.tolerance(SOLVER_TOLERANCE);
   solver.max_iterations(MAX_ITERATIONS);

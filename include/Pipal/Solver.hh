@@ -288,7 +288,8 @@ namespace Pipal
         CMD "error in evaluating upper bounds on constraints");
 
       // Reset counters
-      buildCounter(c);
+      resetCounter(c);
+      resetDirection(d, i);
 
       // Build function handles
       auto f_fun = [this](Vector const & x, Real & out) -> bool {return this->m_problem->objective(x, out);};

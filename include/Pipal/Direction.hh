@@ -41,7 +41,7 @@ namespace Pipal
     Direction const & d3, Real const a1, Real const a2, Real const a3)
   {
     // Evaluate linear combinations
-    d.x = a1*d1.x  + a2*d2.x  + a3*d3.x;
+    d.x = a1*d1.x + a2*d2.x + a3*d3.x;
     if (i.nE > 0) {
       d.r1 = a1*d1.r1 + a2*d2.r1 + a3*d3.r1;
       d.r2 = a1*d1.r2 + a2*d2.r2 + a3*d3.r2;
@@ -64,16 +64,20 @@ namespace Pipal
   inline void evalModels(Direction & d, Input const & i, Iterate & z)
   {
     // Evaluate reduction in linear model of penalty-interior-point objective for zero penalty parameter
-    d.lred0 = 0;
+    d.lred0 = 0.0;
     if (i.nE > 0) {
-      Array tmp1(2*i.nE); tmp1 << 1.0 - z.mu/z.r1, 1.0 - z.mu/z.r2;
-      Array tmp2(2*i.nE); tmp2 << d.r1, d.r2;
-      d.lred0 -= (tmp1 * tmp2).sum();
+      //Array tmp1(2*i.nE); tmp1 << 1.0 - z.mu/z.r1, 1.0 - z.mu/z.r2;
+      //Array tmp2(2*i.nE); tmp2 << d.r1, d.r2;
+      //d.lred0 -= (tmp1 * tmp2).sum();
+      d.lred0 -= ((1.0 - z.mu / z.r1) * d.r1).sum();
+      d.lred0 -= ((1.0 - z.mu / z.r2) * d.r2).sum();
     }
     if (i.nI > 0) {
-      Array tmp1(2*i.nI); tmp1 << z.mu/z.s1, 1.0 - z.mu/z.s2;
-      Array tmp2(2*i.nI); tmp2 << d.s1, d.s2;
-      d.lred0 -= (tmp1 * tmp2).sum();
+      //Array tmp1(2*i.nI); tmp1 << -z.mu/z.s1, 1.0 - z.mu/z.s2;
+      //Array tmp2(2*i.nI); tmp2 << d.s1, d.s2;
+      //d.lred0 -= (tmp1 * tmp2).sum();
+      d.lred0 -= (((-z.mu) / z.s1) * d.s1).sum();
+      d.lred0 -= ((1.0 - z.mu / z.s2) * d.s2).sum();
     }
 
     // Evaluate remaining quantities only for nonzero penalty parameter
@@ -83,13 +87,17 @@ namespace Pipal
       d.ltred0 = 0.0;
       if (i.nE > 0) {
         Array sqrt_term((z.cE.square() + z.mu*z.mu).sqrt());
-        Array tmp((1.0 - z.mu/z.r1) * (-1.0 + z.cE/sqrt_term) + (1.0 - z.mu/z.r2) * (1.0 + z.cE/sqrt_term) * (z.JE * d.x).array());
-        d.ltred0 -= 0.5*tmp.sum();
+        //Array tmp((1.0 - z.mu/z.r1) * (-1.0 + z.cE/sqrt_term) + (1.0 - z.mu/z.r2) * (1.0 + z.cE/sqrt_term) * (z.JE * d.x).array());
+        //d.ltred0 -= 0.5*tmp.sum();
+        d.ltred0 -= 0.5*(((1.0 - z.mu/z.r1) * (-1.0 + z.cE/sqrt_term) + (1.0 - z.mu/z.r2) *
+          (1.0 + z.cE/sqrt_term)) * (z.JE * d.x).array()).sum();
       }
       if (i.nI > 0) {
         Array sqrt_term((z.cI.square() + 4.0*z.mu*z.mu).sqrt());
-        Array tmp(((z.mu/z.s1) * (-1.0 + z.cI/sqrt_term) + (1.0 - z.mu/z.s2) * (1.0 + z.cI/sqrt_term)) * (z.JI * d.x).array());
-        d.ltred0 -= 0.5*tmp.sum();
+        //Array tmp(((z.mu/z.s1) * (-1.0 + z.cI/sqrt_term) + (1.0 - z.mu/z.s2) * (1.0 + z.cI/sqrt_term)) * (z.JI * d.x).array());
+        //d.ltred0 -= 0.5*tmp.sum();
+        d.ltred0 -= 0.5*((((-z.mu)/z.s1) * (-1.0 + z.cI/sqrt_term) + (1.0 - z.mu/z.s2) *
+          (1.0 + z.cI/sqrt_term)) * (z.JI * d.x).array()).sum();
       }
 
       // Evaluate reduction in linear model of merit function
@@ -122,11 +130,11 @@ namespace Pipal
       // Set complementarity for constraint slacks
       if (i.nE > 0) {
           vec.segment(i.nV, 2*i.nE) <<
-            (z.r1+d.r1) * (1.0 + (z.lE+d.lE)), (z.r2+d.r2) * (1.0 - (z.lE+d.lE));
+            (z.r1+d.r1)*(1.0 + (z.lE+d.lE)), (z.r2+d.r2)*(1.0 - (z.lE+d.lE));
       }
       if (i.nI > 0) {
           vec.segment(i.nV+2*i.nE, 2*i.nI) <<
-            (z.s1+d.s1) * (z.lI+d.lI), (z.s2+d.s2) * (1.0 - (z.lI+d.lI));
+            (z.s1+d.s1)*(z.lI+d.lI), (z.s2+d.s2)*(1.0 - (z.lI+d.lI));
       }
 
       // Evaluate quality function
@@ -192,10 +200,8 @@ namespace Pipal
       evalTrialSteps(d, i, z, d1, d2, d3);
 
       // Set trial interior-point parameter values
-      Array exponents(p.mu_trials);
-      for (Integer j{0}; j < p.mu_trials; ++j) {exponents[j] = (p.mu_trials - 1.0 - j) - p.mu_max_exp;}
-      Array Mu(mu_curr * exponents.unaryExpr([&p] (Real e) {return std::pow(p.mu_factor, e);}));
-      Mu = Mu.min(p.mu_max).max(p.mu_min);
+      Array exponents(Array::LinSpaced(p.mu_trials, p.mu_trials - 1, 0) - p.mu_max_exp);
+      Array Mu((mu_curr * exponents.unaryExpr([&p] (Real e) {return std::pow(p.mu_factor, e);})).min(p.mu_max).max(p.mu_min));
 
       // Initialize feasibility direction data
       Vector lred0_0_mu(p.mu_trials);
@@ -209,11 +215,13 @@ namespace Pipal
         setMu(z, Mu(j));
 
         // Evaluate direction
-        evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1.0), (1.0-z.mu/mu_curr),
-          (1.0-z.rho/rho_curr));
+        evalLinearCombination(d, i, d1, d2, d3,
+          z.rho/rho_curr+z.mu/mu_curr-1.0,
+          1.0-z.mu/mu_curr,
+          1.0-z.rho/rho_curr);
 
         // Cut length
-        d.x = std::min(d.x_norm_/std::max(d.x_norm, 1.0), 1.0)*d.x;
+        d.x *= std::min(d.x_norm_/std::max(d.x_norm, 1.0), 1.0);
 
         // Run fraction-to-boundary
         fractionToBoundary(a, p, i, z, d);
@@ -229,21 +237,17 @@ namespace Pipal
       }
 
       // Initialize updating data
-      Vector ltred0_rho_mu(p.mu_trials);
-      ltred0_rho_mu.setZero();
-      Vector qtred_rho_mu(p.mu_trials);
-      qtred_rho_mu.setZero();
-      Vector m_rho_mu(p.mu_trials);
-      m_rho_mu.setZero();
+      Vector ltred0_rho_mu(p.mu_trials), qtred_rho_mu(p.mu_trials), m_rho_mu(p.mu_trials);
+      ltred0_rho_mu.setZero(); qtred_rho_mu.setZero(); m_rho_mu.setZero();
 
       // Initialize check
       bool check{false};
 
       // Loop through penalty parameter values
-      for (Integer k{1}; k <= p.rho_trials; ++k)
+      for (Integer k{0}; k < p.rho_trials; ++k)
       {
         // Set penalty parameter
-        setRho(z, std::max(p.rho_min, std::pow(p.rho_factor, k-1)*rho_curr));
+        setRho(z, std::max(p.rho_min, std::pow(p.rho_factor, k)*rho_curr));
 
         // Set last penalty parameter
         if (rho_curr > z.kkt(0)*z.kkt(0)) {setRhoLast(z, z.rho);}
@@ -255,8 +259,10 @@ namespace Pipal
           setMu(z, Mu(j));
 
           // Evaluate direction
-          evalLinearCombination(d, i, d1, d2, d3, (z.rho/rho_curr+z.mu/mu_curr-1.0), (1.0-z.mu/mu_curr),
-            (1.0-z.rho/rho_curr));
+          evalLinearCombination(d, i, d1, d2, d3,
+            z.rho/rho_curr+z.mu/mu_curr-1.0,
+            1.0-z.mu/mu_curr,
+            1.0-z.rho/rho_curr);
 
           // Run fraction-to-boundary
           fractionToBoundary(a, p, i, z, d);
@@ -328,10 +334,8 @@ namespace Pipal
   {
     // Set direction components
     v.x = d.x;
-    if (i.nE > 0) {v.r1 = d.r1; v.r2 = d.r2;}
-    if (i.nI > 0) {v.s1 = d.s1; v.s2 = d.s2;}
-    if (i.nE > 0) {v.lE = d.lE;}
-    if (i.nI > 0) {v.lI = d.lI;}
+    if (i.nE > 0) {v.r1 = d.r1; v.r2 = d.r2; v.lE = d.lE;}
+    if (i.nI > 0) {v.s1 = d.s1; v.s2 = d.s2; v.lI = d.lI;}
   }
 
   // Evaluate trial step cut by fraction-to-boundary rule
@@ -339,10 +343,8 @@ namespace Pipal
   {
     // Set direction components
     d.x = a.p*d.x ;
-    if (i.nE > 0) {d.r1 = a.p*d.r1; d.r2 = a.p*d.r2;}
-    if (i.nI > 0) {d.s1 = a.p*d.s1; d.s2 = a.p*d.s2;}
-    if (i.nE > 0) {d.lE = a.d*d.lE;}
-    if (i.nI > 0) {d.lI = a.d*d.lI;}
+    if (i.nE > 0) {d.r1 = a.p*d.r1; d.r2 = a.p*d.r2; d.lE = a.d*d.lE;}
+    if (i.nI > 0) {d.s1 = a.p*d.s1; d.s2 = a.p*d.s2; d.lI = a.d*d.lI;}
   }
 
   // Evaluate and store directions for parameter combinations

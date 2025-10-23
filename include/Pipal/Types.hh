@@ -153,7 +153,7 @@ namespace Pipal
    */
   using Parameter = struct Parameter {
     static constexpr Real    opt_err_tol{1.0e-10};   // Default optimality tolerance
-    static constexpr Real    iter_max{1.0e+03};      // Default iteration limit
+    static constexpr Integer iter_max{1000};            // Default iteration limit
     static constexpr Real    rhs_bnd{1.0e+18};       // Maximum absolute value allowed for constraint right-hand side
     static constexpr Real    grad_max{1.0e+02};      // Gradient norm limit for scaling
     static constexpr Real    infeas_max{1.0e+02};    // Infeasibility limit for penalty parameter update
@@ -291,7 +291,7 @@ namespace Pipal
     Array        cIs;     // Inequality constraint scaling factors
     Array        cIu;     // Inequality constraint value (unscaled)
     SparseMatrix A;       // Newton matrix
-    Integer      shift22; // Newton matrix (2,2)-block shift value
+    Real         shift22; // Newton matrix (2,2)-block shift value
     Real         v_;      // Feasibility violation measure last value
     bool         cut_;    // Boolean value for last backtracking line search
   }; // struct Iterate

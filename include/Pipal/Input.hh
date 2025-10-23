@@ -42,13 +42,12 @@ namespace Pipal
     i.n0 = static_cast<Integer>(x0.size());
 
     // Find indices sets
-    constexpr Real tolerance{Eigen::NumTraits<Real>::epsilon()};
     Mask const cond_bl(bl.array() <= -p.rhs_bnd);
     Mask const cond_bu(bu.array() >= p.rhs_bnd);
     Mask const cond_cl(cl.array() <= -p.rhs_bnd);
     Mask const cond_cu(cu.array() >= p.rhs_bnd);
-    Mask const cond_beq((bl.array() - bu.array()).abs() <= tolerance);
-    Mask const cond_ceq((cl.array() - cu.array()).abs() <= tolerance);
+    Mask const cond_beq((bl.array() - bu.array()).abs() <= EPSILON);
+    Mask const cond_ceq((cl.array() - cu.array()).abs() <= EPSILON);
 
     // Now the index sets
     i.I1 = find(cond_bl && cond_bu);
