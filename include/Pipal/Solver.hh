@@ -155,7 +155,7 @@ namespace Pipal
      * \brief Get the problem being solved.
      * \return A reference to the problem.
      */
-    Problem<Real> const & problem() const {return *this->m_problem;}
+    Problem<Real> const & problem() const {return this->m_problem.get();}
 
     /**
      * \brief Get the verbose mode.
@@ -267,11 +267,11 @@ namespace Pipal
 
       // Reset counters
       resetCounter(c);
-      resetDirection<Real>(d, i);
 
       // Fill input structure
       buildInput<Real>(i, p, this->m_problem->name(), x_guess, bl, bu, cl, cu);
-      buildIterate<Real>(z, p, i, c, *this->m_problem);
+      buildIterate<Real>(z, p, i, c, this->m_problem.get());
+      resetDirection<Real>(d, i);
 
       // Print header and break line
       if (this->m_verbose) {this->m_output.printHeader(i, z); this->m_output.printBreak(c);}
@@ -283,17 +283,17 @@ namespace Pipal
         if (this->m_verbose) {this->m_output.printIterate(c, z);}
 
         // Evaluate the step
-        evalStep<Real>(d, p, i, c, z, a, *this->m_problem);
+        evalStep<Real>(d, p, i, c, z, a, this->m_problem.get());
 
         // Print direction
         if (this->m_verbose) {this->m_output.printDirection(z, d);}
 
-        lineSearch<Real>(a, p, i, c, z, d, *this->m_problem);
+        lineSearch<Real>(a, p, i, c, z, d, this->m_problem.get());
 
         // Print accepted
         if (this->m_verbose) {this->m_output.printAcceptance(a);}
 
-        updateIterate<Real>(z, p, i, c, d, a, *this->m_problem);
+        updateIterate<Real>(z, p, i, c, d, a, this->m_problem.get());
 
         // Increment iteration counter
         incrementIterationCount(c);

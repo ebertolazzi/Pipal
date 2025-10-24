@@ -28,7 +28,6 @@ var _types_8hh =
     [ "Pipal::evalLambdaOriginal", "namespace_pipal.html#a696a675861bdfebbac1cd18020e080f6", null ],
     [ "Pipal::evalMerit", "namespace_pipal.html#a7081356519d46d2b6dc1fa9434674eb0", null ],
     [ "Pipal::evalNewtonMatrix", "namespace_pipal.html#a371aaafe128090910ac85ce247fa2e21", null ],
-    [ "Pipal::evalScalings", "namespace_pipal.html#a39cdc591835b4eee3f21f5f0416cf1c9", null ],
     [ "Pipal::evalSlacks", "namespace_pipal.html#a72e4c148dbdf3f75bd1d7be62067546b", null ],
     [ "Pipal::evalTrialStepCut", "namespace_pipal.html#abd4269cef64145d293e50af656b946ed", null ],
     [ "Pipal::evalTrialSteps", "namespace_pipal.html#ae3261bcfc6a5cb81df1bb71213b25945", null ],

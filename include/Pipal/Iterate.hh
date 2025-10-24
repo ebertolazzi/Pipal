@@ -32,7 +32,7 @@ namespace Pipal
    */
   template <typename Real>
   inline void buildIterate(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Problem<Real> const & problem)
+    Problem<Real> const * problem)
   {
     // Safe initialization of all members
     z.f = 0;
@@ -145,7 +145,7 @@ namespace Pipal
    * \param[in] problem Problem interface used for objective/constraints.
    */
   template <typename Real>
-  inline void evalFunctions(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const & problem)
+  inline void evalFunctions(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const * problem)
   {
     // Evaluate x in original space
     Vector<Real> x_orig;
@@ -162,8 +162,8 @@ namespace Pipal
     try
     {
       // Evaluate AMPL functions
-      problem.objective(x_orig, z.f);
-      problem.constraints(x_orig, c_orig);
+      problem->objective(x_orig, z.f);
+      problem->constraints(x_orig, c_orig);
     }
     catch (...)
     {
@@ -222,19 +222,26 @@ namespace Pipal
   /**
    * \brief Insert a dense block into a sparse matrix at the specified offsets.
    * \tparam Real Floating-point type used by the algorithm.
+   * \tparam CheckZero Whether to skip zero entries when inserting.
    * \param[out] mat_sparse Sparse matrix where to insert the block.
    * \param[in] mat_dense Dense matrix block to insert.
    * \param[in] row_offset Row offset in the sparse matrix.
    * \param[in] col_offset Column offset in the sparse matrix.
    */
-  template <typename Real>
+  template <typename Real, bool CheckZero = true>
   inline void insert_block(SparseMatrix<Real> & mat_sparse, Matrix<Real> const & mat_dense,
     Integer const row_offset, Integer const col_offset)
   {
     const Integer cols{static_cast<Integer>(mat_dense.cols())}, rows{static_cast<Integer>(mat_dense.rows())};
     for (Integer r{0}; r < rows; ++r) {
       for (Integer c{0}; c < cols; ++c) {
-        mat_sparse.coeffRef(r + row_offset, c + col_offset) = mat_dense(r, c);
+        if constexpr (CheckZero) {
+          if (mat_dense(r, c) != static_cast<Real>(0.0)) {
+            mat_sparse.coeffRef(r + row_offset, c + col_offset) = mat_dense(r, c);
+          }
+        } else {
+          mat_sparse.coeffRef(r + row_offset, c + col_offset) = mat_dense(r, c);
+        }
       }
     }
   }
@@ -252,7 +259,7 @@ namespace Pipal
    * \param[in] problem Problem interface used for objective/constraints.
    */
   template <typename Real>
-  inline void evalGradients(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const & problem)
+  inline void evalGradients(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const * problem)
   {
     // Evaluate x in original space
     Vector<Real> x_orig;
@@ -270,8 +277,8 @@ namespace Pipal
     try
     {
       // Evaluate AMPL gradients
-      problem.objective_gradient(x_orig, g_orig);
-      problem.constraints_jacobian(x_orig, J_orig);
+      problem->objective_gradient(x_orig, g_orig);
+      problem->constraints_jacobian(x_orig, J_orig);
     }
     catch (...)
     {
@@ -386,7 +393,7 @@ namespace Pipal
    * \param[in] problem Problem interface used for objective/constraints.
    */
   template <typename Real>
-  inline void evalHessian(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const & problem)
+  inline void evalHessian(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const * problem)
   {
     // Evaluate lambda in original space
     Vector<Real> l_orig, x_orig;
@@ -404,7 +411,7 @@ namespace Pipal
     try
     {
       // Evaluate H_orig
-      problem.lagrangian_hessian(x_orig, l_orig, H_orig);
+      problem->lagrangian_hessian(x_orig, l_orig, H_orig);
     }
     catch (...)
     {
@@ -567,7 +574,7 @@ namespace Pipal
    */
   template <typename Real>
   inline void evalMatrices(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Problem<Real> const & problem)
+    Problem<Real> const * problem)
   {
     // Evaluate Hessian and Newton matrices
     evalHessian<Real>(z, i, c, problem);
@@ -759,7 +766,7 @@ namespace Pipal
    */
   template <typename Real>
   inline void evalScalings(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Problem<Real> const & problem)
+    Problem<Real> const * problem)
   {
     // Initialize scalings
     z.fs = 1;
@@ -994,7 +1001,7 @@ namespace Pipal
    */
   template <typename Real>
   inline void updateIterate(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Direction<Real> const & d, Acceptance<Real> const  & a, Problem<Real> const & problem)
+    Direction<Real> const & d, Acceptance<Real> const  & a, Problem<Real> const * problem)
   {
     // Update last quantities
     z.v_   = z.v;

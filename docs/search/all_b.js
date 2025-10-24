@@ -14,7 +14,7 @@ var searchData=
   ['li_11',['lI',['../struct_pipal_1_1_iterate.html#a2a7edfa1c522afb4a3e5105ecba9734d',1,'Pipal::Iterate::lI'],['../struct_pipal_1_1_direction.html#a360b99d9ad119838a618eb4e0794c806',1,'Pipal::Direction::lI']]],
   ['license_12',['License',['../index.html#autotoc_md5',1,'']]],
   ['license_20by_20frank_20e_20curtis_13',['License by Frank E. Curtis',['../index.html#autotoc_md6',1,'']]],
-  ['linesearch_14',['lineSearch',['../namespace_pipal.html#a5f0a4bd0de91ef3f85fbd4d3f5b5e633',1,'Pipal']]],
+  ['linesearch_14',['lineSearch',['../namespace_pipal.html#a59fb6d6cb561ee7b46cc16b0410cc93d',1,'Pipal']]],
   ['lred0_15',['lred0',['../struct_pipal_1_1_direction.html#aca77543363cb7ebf2b6358ec2e8b8b25',1,'Pipal::Direction']]],
   ['ls_5ffactor_16',['ls_factor',['../struct_pipal_1_1_parameter.html#a25cac1d32b88fddcde60b01571016814',1,'Pipal::Parameter']]],
   ['ls_5ffrac_17',['ls_frac',['../struct_pipal_1_1_parameter.html#a9e7a0e0033056fd8d4e6c350f9ed369c',1,'Pipal::Parameter']]],

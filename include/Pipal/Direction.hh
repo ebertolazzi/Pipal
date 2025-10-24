@@ -203,7 +203,7 @@ namespace Pipal
    */
   template<typename Real>
   inline void evalStep(Direction<Real> & d, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Iterate<Real> & z, Acceptance<Real> & a, Problem<Real> const & problem)
+    Iterate<Real> & z, Acceptance<Real> & a, Problem<Real> const * problem)
   {
     // Reset maximum exponent for interior-point parameter increases
     resetMuMaxExp(p);

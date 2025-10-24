@@ -39,7 +39,7 @@ namespace Pipal
    */
   template <typename Real>
   inline void backtracking(Acceptance<Real> & a, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Iterate<Real> & z, Direction<Real> const & d, Problem<Real> const & problem)
+    Iterate<Real> & z, Direction<Real> const & d, Problem<Real> const * problem)
   {
     static constexpr Real EPSILON{std::numeric_limits<Real>::epsilon()};
 
@@ -179,7 +179,7 @@ namespace Pipal
    */
   template <typename Real>
   inline Integer fullStepCheck(Acceptance<Real> const & a, Parameter<Real> & p, Input<Real> & i,
-    Counter & c, Iterate<Real> & z, Direction<Real> const & d, Problem<Real> const & problem)
+    Counter & c, Iterate<Real> & z, Direction<Real> const & d, Problem<Real> const * problem)
   {
     // Set current and last penalty parameters
     Real rho{z.rho}, rho_temp{z.rho_};
@@ -268,7 +268,7 @@ namespace Pipal
    */
   template <typename Real>
   inline void lineSearch(Acceptance<Real> & a, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Iterate<Real> & z, Direction<Real> & d, Problem<Real> const & problem)
+    Iterate<Real> & z, Direction<Real> & d, Problem<Real> const * problem)
   {
     // Check fraction-to-boundary rule
     fractionToBoundary<Real>(a, p, i, z, d);
@@ -304,7 +304,7 @@ namespace Pipal
    */
   template <typename Real>
   inline Integer secondOrderCorrection(Acceptance<Real> & a, Parameter<Real> & p, Input<Real> & i,
-    Counter & c, Iterate<Real> & z, Direction<Real> & d, Problem<Real> const & problem)
+    Counter & c, Iterate<Real> & z, Direction<Real> & d, Problem<Real> const * problem)
   {
     // Store current iterate values
     Real f{z.f}, phi{z.phi}, v{z.v};

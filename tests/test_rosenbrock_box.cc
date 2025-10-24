@@ -59,7 +59,7 @@ TEST(Test1, ProblemWrapper) {
     [] (Vector & out) {out.resize(0); return true;}, // Lower bounds on the constraints
     [] (Vector & out) {out.resize(0); return true;}  // Upper bounds on the constraints
   );
-  solver.algorithm(Pipal::Algorithm::ADAPTIVE);
+  solver.algorithm(Pipal::Algorithm::CONSERVATIVE);
   solver.verbose_mode(VERBOSE);
   solver.tolerance(SOLVER_TOLERANCE);
   solver.max_iterations(MAX_ITERATIONS);

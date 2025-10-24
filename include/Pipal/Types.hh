@@ -326,7 +326,6 @@ namespace Pipal
   template<typename Real> inline void    fractionToBoundary(Acceptance<Real> & a, Parameter<Real> & p, Input<Real> const & i, Iterate<Real> & z, Direction<Real> & d);
   template<typename Real> inline void    evalTrialSteps(Direction<Real> & d, Input<Real> const & i, Iterate<Real> & z, Direction<Real> & d1, Direction<Real> & d2, Direction<Real> & d3);
   template<typename Real> inline void    evalTrialStepCut(Direction<Real> & d, Input<Real> const & i, Acceptance<Real> const & a);
-  template<typename Real> inline void    evalScalings(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c);
   template<typename Real> inline void    evalDependent(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i);
   template<typename Real> inline void    evalInfeasibility(Iterate<Real> & z, Input<Real> const & i);
   template<typename Real> inline void    initNewtonMatrix(Iterate<Real> & z, Input<Real> const & i);
