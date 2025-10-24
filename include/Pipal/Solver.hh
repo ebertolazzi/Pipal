@@ -18,9 +18,6 @@
 #include <algorithm>
 #include <type_traits>
 
-// Eigen library
-#include <Eigen/Dense>
-
 // Pipal includes
 #include "Pipal/Acceptance.hh"
 #include "Pipal/Counter.hh"

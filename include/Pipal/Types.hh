@@ -22,9 +22,11 @@
 #include <memory>
 
 // Eigen library
+#ifndef PIPAL_EIGEN_EXTERNAL
 #include <Eigen/Dense>
 #include <Eigen/Sparse>
 #include <Eigen/SparseCholesky>
+#endif
 
 // Pipal includes
 #include "Pipal/Problem.hh"
