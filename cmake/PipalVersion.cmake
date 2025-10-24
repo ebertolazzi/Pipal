@@ -64,7 +64,7 @@ function(get_version_from_git)
   endif()
 
   # Final fallback: Use a default version
-  set(PIPAL_VERSION "0.0.0" CACHE INTERNAL "")
+  set(PIPAL_VERSION "1.2.0" CACHE INTERNAL "")
   set(PIPAL_VERSION_PRERELEASE "" CACHE INTERNAL "")
 endfunction()
 
