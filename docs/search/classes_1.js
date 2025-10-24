@@ -1,6 +1,4 @@
 var searchData=
 [
-  ['parameter_0',['Parameter',['../struct_pipal_1_1_solver_1_1_parameter.html',1,'Pipal::Solver']]],
-  ['problem_1',['Problem',['../class_pipal_1_1_problem.html',1,'Pipal']]],
-  ['problemwrapper_2',['ProblemWrapper',['../class_pipal_1_1_problem_wrapper.html',1,'Pipal']]]
+  ['direction_0',['Direction',['../struct_pipal_1_1_direction.html',1,'Pipal']]]
 ];

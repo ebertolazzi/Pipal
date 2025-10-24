@@ -1,4 +1,6 @@
 var searchData=
 [
-  ['lagrangian_5fhessian_0',['lagrangian_hessian',['../class_pipal_1_1_problem.html#ac6605b6d2061f277c724c0398fd687b9',1,'Pipal::Problem::lagrangian_hessian()'],['../class_pipal_1_1_problem_wrapper.html#a340cb8c5d56be9640e3725f3dd6e74b5',1,'Pipal::ProblemWrapper::lagrangian_hessian() const'],['../class_pipal_1_1_problem_wrapper.html#a0e6ba9021d10485ef90ed3dbf1e83c1f',1,'Pipal::ProblemWrapper::lagrangian_hessian(LagrangianHessianFunc const &amp;lagrangian_hessian)'],['../class_pipal_1_1_problem_wrapper.html#a2234718629d7635d9c1d6043395d2321',1,'Pipal::ProblemWrapper::lagrangian_hessian(VectorN const &amp;x, VectorM const &amp;z) const override']]]
+  ['find_0',['find',['../namespace_pipal.html#a147c9d72986523f5f27d9b42b1b5ec4e',1,'Pipal']]],
+  ['fractiontoboundary_1',['fractionToBoundary',['../namespace_pipal.html#a182ad81c9d07cff20af5c1ce6f23a377',1,'Pipal']]],
+  ['fullstepcheck_2',['fullStepCheck',['../namespace_pipal.html#aaa55b18a0665a01a226a59fe14031185',1,'Pipal']]]
 ];

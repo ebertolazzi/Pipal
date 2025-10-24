@@ -1,11 +1,20 @@
 var searchData=
 [
-  ['objective_0',['objective',['../class_pipal_1_1_problem.html#a6cb28f808012d89447eddba642cc0f25',1,'Pipal::Problem::objective()'],['../class_pipal_1_1_problem_wrapper.html#a7eaf837dd1d7cdda620d07dd190e99da',1,'Pipal::ProblemWrapper::objective() const'],['../class_pipal_1_1_problem_wrapper.html#af53716b9c81cdbfbc61da166e9df74c2',1,'Pipal::ProblemWrapper::objective(ObjectiveFunc const &amp;objective)'],['../class_pipal_1_1_problem_wrapper.html#a8e3a4bd8a01efe8b2f1a40aa5f1fd23e',1,'Pipal::ProblemWrapper::objective(VectorN const &amp;x) const override']]],
-  ['objective_5fgradient_1',['objective_gradient',['../class_pipal_1_1_problem.html#ab6f8637033552d403798d10fd24e4559',1,'Pipal::Problem::objective_gradient()'],['../class_pipal_1_1_problem_wrapper.html#a6c31f1dada7a85fd63fca69b1466623d',1,'Pipal::ProblemWrapper::objective_gradient() const'],['../class_pipal_1_1_problem_wrapper.html#ab919604f7a5d1da079399ad5b3640464',1,'Pipal::ProblemWrapper::objective_gradient(ObjectiveGradientFunc const &amp;objective_gradient)'],['../class_pipal_1_1_problem_wrapper.html#a9afbea70c7791c076237d940201225eb',1,'Pipal::ProblemWrapper::objective_gradient(VectorN const &amp;x) const override']]],
-  ['objective_5fhessian_2',['objective_hessian',['../class_pipal_1_1_problem.html#a8852b4ced7db97117db59193de7c0a6d',1,'Pipal::Problem::objective_hessian()'],['../class_pipal_1_1_problem_wrapper.html#a7ea8bd96e8dcf6a72ae0d8c677cd3540',1,'Pipal::ProblemWrapper::objective_hessian() const'],['../class_pipal_1_1_problem_wrapper.html#a6fe943561fc6ed93486945e6511f2349',1,'Pipal::ProblemWrapper::objective_hessian(ObjectiveHessianFunc const &amp;objective_hessian)'],['../class_pipal_1_1_problem_wrapper.html#ab89e02c6030f8444bc4ee2add434eed6',1,'Pipal::ProblemWrapper::objective_hessian(VectorN const &amp;x) const override']]],
-  ['objectivefunc_3',['ObjectiveFunc',['../class_pipal_1_1_problem_wrapper.html#a4bec1b6ca593dc26a507d9fdada6ffea',1,'Pipal::ProblemWrapper::ObjectiveFunc'],['../class_pipal_1_1_solver.html#a06882d59796846deb982ec889eed4b14',1,'Pipal::Solver::ObjectiveFunc']]],
-  ['objectivegradientfunc_4',['ObjectiveGradientFunc',['../class_pipal_1_1_problem_wrapper.html#ae2c90ccc902c6a31789f8c912033cdca',1,'Pipal::ProblemWrapper::ObjectiveGradientFunc'],['../class_pipal_1_1_solver.html#af9cea5b6442c38454d6d50478c640b24',1,'Pipal::Solver::ObjectiveGradientFunc']]],
-  ['objectivehessianfunc_5',['ObjectiveHessianFunc',['../class_pipal_1_1_problem_wrapper.html#a7838845906d7f694367a80b59f14b850',1,'Pipal::ProblemWrapper::ObjectiveHessianFunc'],['../class_pipal_1_1_solver.html#ac0ebfb6f3b707602dcffa229d04dfed8',1,'Pipal::Solver::ObjectiveHessianFunc']]],
-  ['operator_3d_6',['operator=',['../class_pipal_1_1_solver.html#aaad39366b37d164362558bbbbdad64e1',1,'Pipal::Solver::operator=(Solver const &amp;)=delete'],['../class_pipal_1_1_solver.html#aa91603ed8d65c0ba43ac41b3f122b1c7',1,'Pipal::Solver::operator=(Solver &amp;&amp;)=delete']]],
-  ['opt_5ferr_5fmem_7',['opt_err_mem',['../struct_pipal_1_1_solver_1_1_parameter.html#a34ee09fba6d75fd64ce596211e50f2f3',1,'Pipal::Solver::Parameter']]]
+  ['n_0',['n',['../class_pipal_1_1_output.html#aafdfb3fe80aa03f4f4b591d7a0aeeb7b',1,'Pipal::Output']]],
+  ['n0_1',['n0',['../struct_pipal_1_1_input.html#a8dd7b2077e000a3882f2baa3a8aacb6a',1,'Pipal::Input']]],
+  ['n1_2',['n1',['../struct_pipal_1_1_input.html#a4bd57a92933792ab5a781955eb675c16',1,'Pipal::Input']]],
+  ['n2_3',['n2',['../struct_pipal_1_1_input.html#ae3691ae4b8d3a9e0479929b9f5c419e9',1,'Pipal::Input']]],
+  ['n3_4',['n3',['../struct_pipal_1_1_input.html#a2be28ec34e865c019b275dd69cadc92e',1,'Pipal::Input']]],
+  ['n4_5',['n4',['../struct_pipal_1_1_input.html#a2d4ab1383bbdb87b2e8785209c399765',1,'Pipal::Input']]],
+  ['n5_6',['n5',['../struct_pipal_1_1_input.html#a4bc7f3369c59cf46b46fe26db94ac07e',1,'Pipal::Input']]],
+  ['n6_7',['n6',['../struct_pipal_1_1_input.html#a5907032afb288542490a4da0f26afdcd',1,'Pipal::Input']]],
+  ['n7_8',['n7',['../struct_pipal_1_1_input.html#aab576de6b7412407a4683f864de9c208',1,'Pipal::Input']]],
+  ['n8_9',['n8',['../struct_pipal_1_1_input.html#ab187737887aa2cce15f6263014f25946',1,'Pipal::Input']]],
+  ['n9_10',['n9',['../struct_pipal_1_1_input.html#a6a6286d9558114a694a2c84e025cde2b',1,'Pipal::Input']]],
+  ['na_11',['nA',['../struct_pipal_1_1_input.html#a8863aeb45ff43e55f73b7f8db4dd5a1f',1,'Pipal::Input']]],
+  ['name_12',['name',['../struct_pipal_1_1_input.html#a2a4d9bca4d77f58ebce077ac3b8525b5',1,'Pipal::Input::name'],['../class_pipal_1_1_problem.html#adcc5ed78fcff43dcdf3f5f57f55b8348',1,'Pipal::Problem::name() const'],['../class_pipal_1_1_problem.html#a609c95afa02ee066db995e125f6bf7ce',1,'Pipal::Problem::name(std::string const &amp;t_name)']]],
+  ['ne_13',['nE',['../struct_pipal_1_1_input.html#ae8f971b5c3633e030381ee382a8088c2',1,'Pipal::Input']]],
+  ['ni_14',['nI',['../struct_pipal_1_1_input.html#acaa757bcc631e3f79a47071d9f789c86',1,'Pipal::Input']]],
+  ['nnz_5fmax_15',['nnz_max',['../struct_pipal_1_1_parameter.html#a2a907dda1714d8a3b281650232229dd8',1,'Pipal::Parameter']]],
+  ['nv_16',['nV',['../struct_pipal_1_1_input.html#a228dc970b45c89954480856b4a6b8234',1,'Pipal::Input']]]
 ];

@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Doxygen Awesome" />
 <meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
 <!-- END twitter metadata -->
-<title>Pipal: Pipal::ProblemWrapper&lt; Real, N, M &gt; Class Template Reference</title>
+<title>Pipal: Pipal::ProblemWrapper&lt; Real &gt; Class Template Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <link rel="icon" type="image/svg+xml" href="logo.svg"/>
 <script type="text/javascript" src="jquery.js"></script>
@@ -131,7 +131,7 @@ $(function(){initNavTree('class_pipal_1_1_problem_wrapper.html','','class_pipal_
 </div>
 
 <div class="header">
-  <div class="headertitle"><div class="title">Pipal::ProblemWrapper&lt; Real, N, M &gt; Class Template Reference</div></div>
+  <div class="headertitle"><div class="title">Pipal::ProblemWrapper&lt; Real &gt; Class Template Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -140,254 +140,210 @@ $(function(){initNavTree('class_pipal_1_1_problem_wrapper.html','','class_pipal_
 
 <p><code>#include &lt;<a class="el" href="_problem_8hh_source.html">Problem.hh</a>&gt;</code></p>
 
-<p>Inherits <a class="el" href="class_pipal_1_1_problem.html">Pipal::Problem&lt; Real, N, M &gt;</a>.</p>
+<p>Inherits <a class="el" href="class_pipal_1_1_problem.html">Pipal::Problem&lt; Real &gt;</a>.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-types" class="groupheader"><a id="pub-types" name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a5d9c0ac48cb53f4b83bb6bf25befb572" id="r_a5d9c0ac48cb53f4b83bb6bf25befb572"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::VectorN</td></tr>
-<tr class="memitem:a60f2aef693e3ad2e8cfd47232865f8dd" id="r_a60f2aef693e3ad2e8cfd47232865f8dd"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a> = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::VectorM</td></tr>
-<tr class="memitem:a98a0018d7b504df694261ac39831162f" id="r_a98a0018d7b504df694261ac39831162f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a98a0018d7b504df694261ac39831162f">MatrixH</a> = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::MatrixH</td></tr>
-<tr class="memitem:a6de1c2445cc8273c2c0a5bb7a2bb1803" id="r_a6de1c2445cc8273c2c0a5bb7a2bb1803"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6de1c2445cc8273c2c0a5bb7a2bb1803">MatrixJ</a> = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::MatrixJ</td></tr>
-<tr class="memitem:a4bec1b6ca593dc26a507d9fdada6ffea" id="r_a4bec1b6ca593dc26a507d9fdada6ffea"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a> = std::function&lt;Real(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;)&gt;</td></tr>
-<tr class="memitem:ae2c90ccc902c6a31789f8c912033cdca" id="r_ae2c90ccc902c6a31789f8c912033cdca"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a> = std::function&lt;<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a>(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;)&gt;</td></tr>
-<tr class="memitem:a7838845906d7f694367a80b59f14b850" id="r_a7838845906d7f694367a80b59f14b850"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7838845906d7f694367a80b59f14b850">ObjectiveHessianFunc</a> = std::function&lt;<a class="el" href="#a98a0018d7b504df694261ac39831162f">MatrixH</a>(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;)&gt;</td></tr>
-<tr class="memitem:ad70d2215da8b8545bc452927abf895af" id="r_ad70d2215da8b8545bc452927abf895af"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a> = std::function&lt;<a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a>(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;)&gt;</td></tr>
-<tr class="memitem:a605867c93fecdf3f86d294bc3a989dae" id="r_a605867c93fecdf3f86d294bc3a989dae"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a> = std::function&lt;<a class="el" href="#a6de1c2445cc8273c2c0a5bb7a2bb1803">MatrixJ</a>(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;, <a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a> const &amp;)&gt;</td></tr>
-<tr class="memitem:ad62817690a743b80fedfc4e73bd98882" id="r_ad62817690a743b80fedfc4e73bd98882"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a> = std::function&lt;<a class="el" href="#a98a0018d7b504df694261ac39831162f">MatrixH</a>(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;, <a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a> const &amp;)&gt;</td></tr>
-<tr class="inherit_header pub_types_class_pipal_1_1_problem"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_class_pipal_1_1_problem')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Types inherited from <a class="el" href="class_pipal_1_1_problem.html">Pipal::Problem&lt; Real, N, M &gt;</a></td></tr>
-<tr class="memitem:af7f95516dd8370795b18d41bb8750b0a inherit pub_types_class_pipal_1_1_problem" id="r_af7f95516dd8370795b18d41bb8750b0a"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#af7f95516dd8370795b18d41bb8750b0a">VectorN</a> = Eigen::Vector&lt;Real, N&gt;</td></tr>
-<tr class="memitem:a1c26f6b6cf99fc4e1475af511a6b3fdc inherit pub_types_class_pipal_1_1_problem" id="r_a1c26f6b6cf99fc4e1475af511a6b3fdc"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#a1c26f6b6cf99fc4e1475af511a6b3fdc">VectorM</a> = Eigen::Vector&lt;Real, M&gt;</td></tr>
-<tr class="memitem:a63a323e678fa1c46afe2373ec2ba1367 inherit pub_types_class_pipal_1_1_problem" id="r_a63a323e678fa1c46afe2373ec2ba1367"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#a63a323e678fa1c46afe2373ec2ba1367">MatrixH</a> = Eigen::Matrix&lt;Real, N, N&gt;</td></tr>
-<tr class="memitem:ad7d83b46c1c919ef6af7901fbba78b43 inherit pub_types_class_pipal_1_1_problem" id="r_ad7d83b46c1c919ef6af7901fbba78b43"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#ad7d83b46c1c919ef6af7901fbba78b43">MatrixJ</a> = Eigen::Matrix&lt;Real, M, N&gt;</td></tr>
+<tr class="memitem:a75a94803a75d15c29351d40d62c94a5d" id="r_a75a94803a75d15c29351d40d62c94a5d"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75a94803a75d15c29351d40d62c94a5d">ObjectiveFunc</a> = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, Real &amp;)&gt;</td></tr>
+<tr class="memitem:a467db72970f7d1f6fe08d0cf049ede67" id="r_a467db72970f7d1f6fe08d0cf049ede67"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a467db72970f7d1f6fe08d0cf049ede67">ObjectiveGradientFunc</a> = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, <a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; &amp;)&gt;</td></tr>
+<tr class="memitem:aebf52fdb2d46d6d5dfaefd54a9b2cb44" id="r_aebf52fdb2d46d6d5dfaefd54a9b2cb44"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aebf52fdb2d46d6d5dfaefd54a9b2cb44">ConstraintsFunc</a> = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, <a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; &amp;)&gt;</td></tr>
+<tr class="memitem:a3bd7d2bd85a52e293ea2496ca4f500e9" id="r_a3bd7d2bd85a52e293ea2496ca4f500e9"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a3bd7d2bd85a52e293ea2496ca4f500e9">ConstraintsJacobianFunc</a> = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, <a class="el" href="namespace_pipal.html#a235e107a65ec24fec67ce606ac7457ee">Matrix</a>&lt;Real&gt; &amp;)&gt;</td></tr>
+<tr class="memitem:aaebacdfbe574af382fec580b2e226364" id="r_aaebacdfbe574af382fec580b2e226364"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaebacdfbe574af382fec580b2e226364">LagrangianHessianFunc</a> = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, <a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, <a class="el" href="namespace_pipal.html#a235e107a65ec24fec67ce606ac7457ee">Matrix</a>&lt;Real&gt; &amp;)&gt;</td></tr>
+<tr class="memitem:a0230d1875cbab414fac56db07e080d6b" id="r_a0230d1875cbab414fac56db07e080d6b"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; &amp;)&gt;</td></tr>
+<tr class="inherit_header pub_types_class_pipal_1_1_problem"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_types_class_pipal_1_1_problem')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Types inherited from <a class="el" href="class_pipal_1_1_problem.html">Pipal::Problem&lt; Real &gt;</a></td></tr>
+<tr class="memitem:a253cb3e6dc4fcd339323ab4a33b4c05f inherit pub_types_class_pipal_1_1_problem" id="r_a253cb3e6dc4fcd339323ab4a33b4c05f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#a253cb3e6dc4fcd339323ab4a33b4c05f">UniquePtr</a> = std::unique_ptr&lt;<a class="el" href="class_pipal_1_1_problem.html">Problem</a>&gt;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2f7b0ad642417f860beccd9af80aab13" id="r_a2f7b0ad642417f860beccd9af80aab13"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2f7b0ad642417f860beccd9af80aab13">ProblemWrapper</a> (<a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a> const &amp;<a class="el" href="#a7eaf837dd1d7cdda620d07dd190e99da">objective</a>, <a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a> const &amp;<a class="el" href="#a6c31f1dada7a85fd63fca69b1466623d">objective_gradient</a>, <a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a> const &amp;<a class="el" href="#a206e6d278c2d7362820ec2bb7af84481">constraints</a>, <a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a> const &amp;<a class="el" href="#a64c5927076fbad864e2e2c548ec8ba18">constraints_jacobian</a>, <a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a> const &amp;<a class="el" href="#a340cb8c5d56be9640e3725f3dd6e74b5">lagrangian_hessian</a>)</td></tr>
-<tr class="memdesc:a2f7b0ad642417f860beccd9af80aab13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="class_pipal_1_1_problem_wrapper.html" title="Wrapper class for the Problem class.">ProblemWrapper</a> class (without the Hessian of the Lagrangian).  <br /></td></tr>
-<tr class="memitem:a0ad3a94de84ab3e67ca37087887163af" id="r_a0ad3a94de84ab3e67ca37087887163af"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0ad3a94de84ab3e67ca37087887163af">ProblemWrapper</a> (<a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a> const &amp;<a class="el" href="#a7eaf837dd1d7cdda620d07dd190e99da">objective</a>, <a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a> const &amp;<a class="el" href="#a6c31f1dada7a85fd63fca69b1466623d">objective_gradient</a>, <a class="el" href="#a7838845906d7f694367a80b59f14b850">ObjectiveHessianFunc</a> const &amp;<a class="el" href="#a7ea8bd96e8dcf6a72ae0d8c677cd3540">objective_hessian</a>, <a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a> const &amp;<a class="el" href="#a206e6d278c2d7362820ec2bb7af84481">constraints</a>, <a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a> const &amp;<a class="el" href="#a64c5927076fbad864e2e2c548ec8ba18">constraints_jacobian</a>, <a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a> const &amp;<a class="el" href="#a340cb8c5d56be9640e3725f3dd6e74b5">lagrangian_hessian</a>)</td></tr>
-<tr class="memdesc:a0ad3a94de84ab3e67ca37087887163af"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="class_pipal_1_1_problem_wrapper.html" title="Wrapper class for the Problem class.">ProblemWrapper</a> class (with the Hessian of the Lagrangian).  <br /></td></tr>
-<tr class="memitem:a21208063ae1d43d107241918c0f1ca08" id="r_a21208063ae1d43d107241918c0f1ca08"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a21208063ae1d43d107241918c0f1ca08">~ProblemWrapper</a> ()</td></tr>
-<tr class="memdesc:a21208063ae1d43d107241918c0f1ca08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor for the <a class="el" href="class_pipal_1_1_problem_wrapper.html" title="Wrapper class for the Problem class.">ProblemWrapper</a> class.  <br /></td></tr>
-<tr class="memitem:a7eaf837dd1d7cdda620d07dd190e99da" id="r_a7eaf837dd1d7cdda620d07dd190e99da"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7eaf837dd1d7cdda620d07dd190e99da">objective</a> () const</td></tr>
-<tr class="memdesc:a7eaf837dd1d7cdda620d07dd190e99da"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the objective function.  <br /></td></tr>
-<tr class="memitem:af53716b9c81cdbfbc61da166e9df74c2" id="r_af53716b9c81cdbfbc61da166e9df74c2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af53716b9c81cdbfbc61da166e9df74c2">objective</a> (<a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a> const &amp;objective)</td></tr>
-<tr class="memdesc:af53716b9c81cdbfbc61da166e9df74c2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the objective function.  <br /></td></tr>
-<tr class="memitem:a6c31f1dada7a85fd63fca69b1466623d" id="r_a6c31f1dada7a85fd63fca69b1466623d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6c31f1dada7a85fd63fca69b1466623d">objective_gradient</a> () const</td></tr>
-<tr class="memdesc:a6c31f1dada7a85fd63fca69b1466623d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the gradient of the objective function.  <br /></td></tr>
-<tr class="memitem:ab919604f7a5d1da079399ad5b3640464" id="r_ab919604f7a5d1da079399ad5b3640464"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab919604f7a5d1da079399ad5b3640464">objective_gradient</a> (<a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a> const &amp;objective_gradient)</td></tr>
-<tr class="memdesc:ab919604f7a5d1da079399ad5b3640464"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the objective function.  <br /></td></tr>
-<tr class="memitem:a7ea8bd96e8dcf6a72ae0d8c677cd3540" id="r_a7ea8bd96e8dcf6a72ae0d8c677cd3540"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a7838845906d7f694367a80b59f14b850">ObjectiveHessianFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7ea8bd96e8dcf6a72ae0d8c677cd3540">objective_hessian</a> () const</td></tr>
-<tr class="memdesc:a7ea8bd96e8dcf6a72ae0d8c677cd3540"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Hessian of the objective function.  <br /></td></tr>
-<tr class="memitem:a6fe943561fc6ed93486945e6511f2349" id="r_a6fe943561fc6ed93486945e6511f2349"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6fe943561fc6ed93486945e6511f2349">objective_hessian</a> (<a class="el" href="#a7838845906d7f694367a80b59f14b850">ObjectiveHessianFunc</a> const &amp;objective_hessian)</td></tr>
-<tr class="memdesc:a6fe943561fc6ed93486945e6511f2349"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Hessian of the objective function.  <br /></td></tr>
-<tr class="memitem:a206e6d278c2d7362820ec2bb7af84481" id="r_a206e6d278c2d7362820ec2bb7af84481"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a206e6d278c2d7362820ec2bb7af84481">constraints</a> () const</td></tr>
-<tr class="memdesc:a206e6d278c2d7362820ec2bb7af84481"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the constraints function.  <br /></td></tr>
-<tr class="memitem:a8fec6733888fa5e92df76a4f31986260" id="r_a8fec6733888fa5e92df76a4f31986260"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8fec6733888fa5e92df76a4f31986260">constraints</a> (<a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a> const &amp;constraints)</td></tr>
-<tr class="memdesc:a8fec6733888fa5e92df76a4f31986260"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the constraints function.  <br /></td></tr>
-<tr class="memitem:a64c5927076fbad864e2e2c548ec8ba18" id="r_a64c5927076fbad864e2e2c548ec8ba18"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64c5927076fbad864e2e2c548ec8ba18">constraints_jacobian</a> () const</td></tr>
-<tr class="memdesc:a64c5927076fbad864e2e2c548ec8ba18"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Jacobian of the constraints function.  <br /></td></tr>
-<tr class="memitem:a18d7cbe44aa5763e8afaf8c90bc04fa5" id="r_a18d7cbe44aa5763e8afaf8c90bc04fa5"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a18d7cbe44aa5763e8afaf8c90bc04fa5">constraints_jacobian</a> (<a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a> const &amp;constraints_jacobian)</td></tr>
-<tr class="memdesc:a18d7cbe44aa5763e8afaf8c90bc04fa5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Jacobian of the constraints function.  <br /></td></tr>
-<tr class="memitem:a340cb8c5d56be9640e3725f3dd6e74b5" id="r_a340cb8c5d56be9640e3725f3dd6e74b5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a340cb8c5d56be9640e3725f3dd6e74b5">lagrangian_hessian</a> () const</td></tr>
-<tr class="memdesc:a340cb8c5d56be9640e3725f3dd6e74b5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Hessian of the Lagrangian function.  <br /></td></tr>
-<tr class="memitem:a0e6ba9021d10485ef90ed3dbf1e83c1f" id="r_a0e6ba9021d10485ef90ed3dbf1e83c1f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0e6ba9021d10485ef90ed3dbf1e83c1f">lagrangian_hessian</a> (<a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a> const &amp;lagrangian_hessian)</td></tr>
-<tr class="memdesc:a0e6ba9021d10485ef90ed3dbf1e83c1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Hessian of the Lagrangian function.  <br /></td></tr>
-<tr class="memitem:a8e3a4bd8a01efe8b2f1a40aa5f1fd23e" id="r_a8e3a4bd8a01efe8b2f1a40aa5f1fd23e"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8e3a4bd8a01efe8b2f1a40aa5f1fd23e">objective</a> (<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;x) const override</td></tr>
-<tr class="memdesc:a8e3a4bd8a01efe8b2f1a40aa5f1fd23e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the objective function.  <br /></td></tr>
-<tr class="memitem:a9afbea70c7791c076237d940201225eb" id="r_a9afbea70c7791c076237d940201225eb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9afbea70c7791c076237d940201225eb">objective_gradient</a> (<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;x) const override</td></tr>
-<tr class="memdesc:a9afbea70c7791c076237d940201225eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the gradient of the objective function.  <br /></td></tr>
-<tr class="memitem:ab89e02c6030f8444bc4ee2add434eed6" id="r_ab89e02c6030f8444bc4ee2add434eed6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a98a0018d7b504df694261ac39831162f">MatrixH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab89e02c6030f8444bc4ee2add434eed6">objective_hessian</a> (<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;x) const override</td></tr>
-<tr class="memdesc:ab89e02c6030f8444bc4ee2add434eed6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the Hessian of the objective function.  <br /></td></tr>
-<tr class="memitem:aeda6122a36c802c8d5d9c5e4e38befad" id="r_aeda6122a36c802c8d5d9c5e4e38befad"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aeda6122a36c802c8d5d9c5e4e38befad">constraints</a> (<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;x) const override</td></tr>
-<tr class="memdesc:aeda6122a36c802c8d5d9c5e4e38befad"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the constraints function.  <br /></td></tr>
-<tr class="memitem:a40953ef491445abc7e3e3b21e271f86e" id="r_a40953ef491445abc7e3e3b21e271f86e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a6de1c2445cc8273c2c0a5bb7a2bb1803">MatrixJ</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40953ef491445abc7e3e3b21e271f86e">constraints_jacobian</a> (<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;x, <a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a> const &amp;z) const override</td></tr>
-<tr class="memdesc:a40953ef491445abc7e3e3b21e271f86e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the Jacobian of the constraints function.  <br /></td></tr>
-<tr class="memitem:a2234718629d7635d9c1d6043395d2321" id="r_a2234718629d7635d9c1d6043395d2321"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a98a0018d7b504df694261ac39831162f">MatrixH</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2234718629d7635d9c1d6043395d2321">lagrangian_hessian</a> (<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;x, <a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a> const &amp;z) const override</td></tr>
-<tr class="memdesc:a2234718629d7635d9c1d6043395d2321"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the Hessian of the Lagrangian function.  <br /></td></tr>
-<tr class="inherit_header pub_methods_class_pipal_1_1_problem"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_pipal_1_1_problem')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="class_pipal_1_1_problem.html">Pipal::Problem&lt; Real, N, M &gt;</a></td></tr>
-<tr class="memitem:ae223a38f10ab3519e532cbbd20c5932c inherit pub_methods_class_pipal_1_1_problem" id="r_ae223a38f10ab3519e532cbbd20c5932c"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#ae223a38f10ab3519e532cbbd20c5932c">Problem</a> ()</td></tr>
-<tr class="memdesc:ae223a38f10ab3519e532cbbd20c5932c inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <br /></td></tr>
-<tr class="memitem:a192cf4e601e23f64a5b2d870fc3fa735 inherit pub_methods_class_pipal_1_1_problem" id="r_a192cf4e601e23f64a5b2d870fc3fa735"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#a192cf4e601e23f64a5b2d870fc3fa735">Problem</a> (const <a class="el" href="class_pipal_1_1_problem.html">Problem</a> &amp;)=default</td></tr>
-<tr class="memdesc:a192cf4e601e23f64a5b2d870fc3fa735 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default copy constructor.  <br /></td></tr>
-<tr class="memitem:a0b1d4c7db8ba0fa7c5296484619b7e11 inherit pub_methods_class_pipal_1_1_problem" id="r_a0b1d4c7db8ba0fa7c5296484619b7e11"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#a0b1d4c7db8ba0fa7c5296484619b7e11">Problem</a> (<a class="el" href="class_pipal_1_1_problem.html">Problem</a> &amp;&amp;)=default</td></tr>
-<tr class="memdesc:a0b1d4c7db8ba0fa7c5296484619b7e11 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default move constructor.  <br /></td></tr>
-<tr class="memitem:a121e8373dae6d6e5fe8378179bb21150 inherit pub_methods_class_pipal_1_1_problem" id="r_a121e8373dae6d6e5fe8378179bb21150"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#a121e8373dae6d6e5fe8378179bb21150">~Problem</a> ()=default</td></tr>
-<tr class="memdesc:a121e8373dae6d6e5fe8378179bb21150 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <br /></td></tr>
+<tr class="memitem:a82f9ea956bd235cbb56efafdd0ed0323" id="r_a82f9ea956bd235cbb56efafdd0ed0323"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a82f9ea956bd235cbb56efafdd0ed0323">ProblemWrapper</a> (std::string const &amp;t_name, <a class="el" href="#a75a94803a75d15c29351d40d62c94a5d">ObjectiveFunc</a> const &amp;t_objective, <a class="el" href="#a467db72970f7d1f6fe08d0cf049ede67">ObjectiveGradientFunc</a> const &amp;t_objective_gradient, <a class="el" href="#aebf52fdb2d46d6d5dfaefd54a9b2cb44">ConstraintsFunc</a> const &amp;t_constraints, <a class="el" href="#a3bd7d2bd85a52e293ea2496ca4f500e9">ConstraintsJacobianFunc</a> const &amp;t_constraints_jacobian, <a class="el" href="#aaebacdfbe574af382fec580b2e226364">LagrangianHessianFunc</a> const &amp;t_lagrangian_hessian, <a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;t_primal_lower_bounds, <a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;t_primal_upper_bounds, <a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;t_constraints_lower_bounds, <a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;t_constraints_upper_bounds)</td></tr>
+<tr class="memdesc:a82f9ea956bd235cbb56efafdd0ed0323"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor for the <a class="el" href="class_pipal_1_1_problem_wrapper.html" title="Wrapper class for the Problem class.">ProblemWrapper</a> class (without the Hessian of the Lagrangian).  <br /></td></tr>
+<tr class="memitem:a9f36a55911dd82defc3fc9c36e1fd675" id="r_a9f36a55911dd82defc3fc9c36e1fd675"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9f36a55911dd82defc3fc9c36e1fd675">~ProblemWrapper</a> () override</td></tr>
+<tr class="memdesc:a9f36a55911dd82defc3fc9c36e1fd675"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor for the <a class="el" href="class_pipal_1_1_problem_wrapper.html" title="Wrapper class for the Problem class.">ProblemWrapper</a> class.  <br /></td></tr>
+<tr class="memitem:a964de0c9fffbb79cacdeaeb670f88ad0" id="r_a964de0c9fffbb79cacdeaeb670f88ad0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a75a94803a75d15c29351d40d62c94a5d">ObjectiveFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a964de0c9fffbb79cacdeaeb670f88ad0">objective</a> ()</td></tr>
+<tr class="memdesc:a964de0c9fffbb79cacdeaeb670f88ad0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the objective function.  <br /></td></tr>
+<tr class="memitem:ab1e5e27b8ebf51b65c9f3be5574eb0f1" id="r_ab1e5e27b8ebf51b65c9f3be5574eb0f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab1e5e27b8ebf51b65c9f3be5574eb0f1">objective</a> (<a class="el" href="#a75a94803a75d15c29351d40d62c94a5d">ObjectiveFunc</a> const &amp;objective)</td></tr>
+<tr class="memdesc:ab1e5e27b8ebf51b65c9f3be5574eb0f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the objective function.  <br /></td></tr>
+<tr class="memitem:aaf1a601b2f07c5d5f74a32e776c1d0bd" id="r_aaf1a601b2f07c5d5f74a32e776c1d0bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a467db72970f7d1f6fe08d0cf049ede67">ObjectiveGradientFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aaf1a601b2f07c5d5f74a32e776c1d0bd">objective_gradient</a> ()</td></tr>
+<tr class="memdesc:aaf1a601b2f07c5d5f74a32e776c1d0bd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the gradient of the objective function.  <br /></td></tr>
+<tr class="memitem:a213996cfe218a6966382ac5fe4581ee1" id="r_a213996cfe218a6966382ac5fe4581ee1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a213996cfe218a6966382ac5fe4581ee1">objective_gradient</a> (<a class="el" href="#a467db72970f7d1f6fe08d0cf049ede67">ObjectiveGradientFunc</a> const &amp;objective_gradient)</td></tr>
+<tr class="memdesc:a213996cfe218a6966382ac5fe4581ee1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the gradient of the objective function.  <br /></td></tr>
+<tr class="memitem:af2587d77f864838a6222b5939332e556" id="r_af2587d77f864838a6222b5939332e556"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#aebf52fdb2d46d6d5dfaefd54a9b2cb44">ConstraintsFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af2587d77f864838a6222b5939332e556">constraints</a> ()</td></tr>
+<tr class="memdesc:af2587d77f864838a6222b5939332e556"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the constraints function.  <br /></td></tr>
+<tr class="memitem:a71f376fcf7cc287907796afa22a0ec0d" id="r_a71f376fcf7cc287907796afa22a0ec0d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a71f376fcf7cc287907796afa22a0ec0d">constraints</a> (<a class="el" href="#aebf52fdb2d46d6d5dfaefd54a9b2cb44">ConstraintsFunc</a> const &amp;constraints)</td></tr>
+<tr class="memdesc:a71f376fcf7cc287907796afa22a0ec0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the constraints function.  <br /></td></tr>
+<tr class="memitem:ab3523826899cb5804189890c81d33e16" id="r_ab3523826899cb5804189890c81d33e16"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a3bd7d2bd85a52e293ea2496ca4f500e9">ConstraintsJacobianFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3523826899cb5804189890c81d33e16">constraints_jacobian</a> ()</td></tr>
+<tr class="memdesc:ab3523826899cb5804189890c81d33e16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Jacobian of the constraints function.  <br /></td></tr>
+<tr class="memitem:a75d79ace71a796d86537e48e5a5d15ee" id="r_a75d79ace71a796d86537e48e5a5d15ee"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a75d79ace71a796d86537e48e5a5d15ee">constraints_jacobian</a> (<a class="el" href="#a3bd7d2bd85a52e293ea2496ca4f500e9">ConstraintsJacobianFunc</a> const &amp;constraints_jacobian)</td></tr>
+<tr class="memdesc:a75d79ace71a796d86537e48e5a5d15ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Jacobian of the constraints function.  <br /></td></tr>
+<tr class="memitem:adb257967d0b354296856859fa819caec" id="r_adb257967d0b354296856859fa819caec"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adb257967d0b354296856859fa819caec">primal_lower_bounds</a> ()</td></tr>
+<tr class="memdesc:adb257967d0b354296856859fa819caec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the lower bounds on the primal variables function.  <br /></td></tr>
+<tr class="memitem:a0478665a272f7bca3944351a3c17204f" id="r_a0478665a272f7bca3944351a3c17204f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0478665a272f7bca3944351a3c17204f">primal_lower_bounds</a> (<a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;primal_lower_bounds)</td></tr>
+<tr class="memdesc:a0478665a272f7bca3944351a3c17204f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the lower bounds on the primal variables function.  <br /></td></tr>
+<tr class="memitem:ad86f8cd99b9d47a5bb593818ffd601b8" id="r_ad86f8cd99b9d47a5bb593818ffd601b8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad86f8cd99b9d47a5bb593818ffd601b8">primal_upper_bounds</a> ()</td></tr>
+<tr class="memdesc:ad86f8cd99b9d47a5bb593818ffd601b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the upper bounds on the primal variables function.  <br /></td></tr>
+<tr class="memitem:ab65a2dc0bad727cdd3026ae562734ee1" id="r_ab65a2dc0bad727cdd3026ae562734ee1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab65a2dc0bad727cdd3026ae562734ee1">primal_upper_bounds</a> (<a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;primal_upper_bounds)</td></tr>
+<tr class="memdesc:ab65a2dc0bad727cdd3026ae562734ee1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the upper bounds on the primal variables function.  <br /></td></tr>
+<tr class="memitem:a05990389301771657ea18eaa4e2c8f2b" id="r_a05990389301771657ea18eaa4e2c8f2b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05990389301771657ea18eaa4e2c8f2b">constraints_lower_bounds</a> ()</td></tr>
+<tr class="memdesc:a05990389301771657ea18eaa4e2c8f2b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the lower bounds on the constraints function.  <br /></td></tr>
+<tr class="memitem:a64038eded24bd69c303a260a99942277" id="r_a64038eded24bd69c303a260a99942277"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a64038eded24bd69c303a260a99942277">constraints_lower_bounds</a> (<a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;constraints_lower_bounds)</td></tr>
+<tr class="memdesc:a64038eded24bd69c303a260a99942277"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the lower bounds on the constraints function.  <br /></td></tr>
+<tr class="memitem:ad3cc0b1c826912b10a3ae70596894970" id="r_ad3cc0b1c826912b10a3ae70596894970"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad3cc0b1c826912b10a3ae70596894970">constraints_upper_bounds</a> ()</td></tr>
+<tr class="memdesc:ad3cc0b1c826912b10a3ae70596894970"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the upper bounds on the constraints function.  <br /></td></tr>
+<tr class="memitem:a05a32b19db233fcdc81cfffb005add8e" id="r_a05a32b19db233fcdc81cfffb005add8e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05a32b19db233fcdc81cfffb005add8e">constraints_upper_bounds</a> (<a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;constraints_upper_bounds)</td></tr>
+<tr class="memdesc:a05a32b19db233fcdc81cfffb005add8e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the upper bounds on the constraints function.  <br /></td></tr>
+<tr class="memitem:abce2cb2564550989d3cab81c52b38ddd" id="r_abce2cb2564550989d3cab81c52b38ddd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#aaebacdfbe574af382fec580b2e226364">LagrangianHessianFunc</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#abce2cb2564550989d3cab81c52b38ddd">lagrangian_hessian</a> ()</td></tr>
+<tr class="memdesc:abce2cb2564550989d3cab81c52b38ddd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the Hessian of the Lagrangian function.  <br /></td></tr>
+<tr class="memitem:a451f40caf7a30a68523042ab42a9d059" id="r_a451f40caf7a30a68523042ab42a9d059"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a451f40caf7a30a68523042ab42a9d059">lagrangian_hessian</a> (<a class="el" href="#aaebacdfbe574af382fec580b2e226364">LagrangianHessianFunc</a> const &amp;lagrangian_hessian)</td></tr>
+<tr class="memdesc:a451f40caf7a30a68523042ab42a9d059"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the Hessian of the Lagrangian function.  <br /></td></tr>
+<tr class="memitem:af9c4118fd13070cc8ee966fd2dd11914" id="r_af9c4118fd13070cc8ee966fd2dd11914"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af9c4118fd13070cc8ee966fd2dd11914">objective</a> (<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;x, Real &amp;out) const override</td></tr>
+<tr class="memdesc:af9c4118fd13070cc8ee966fd2dd11914"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the objective function.  <br /></td></tr>
+<tr class="memitem:ae8f7a5f08d3e0c6554df469cf03a9f16" id="r_ae8f7a5f08d3e0c6554df469cf03a9f16"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae8f7a5f08d3e0c6554df469cf03a9f16">objective_gradient</a> (<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;x, <a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;out) const override</td></tr>
+<tr class="memdesc:ae8f7a5f08d3e0c6554df469cf03a9f16"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the gradient of the objective function.  <br /></td></tr>
+<tr class="memitem:aba316516f087147b7bdf148db6b82e24" id="r_aba316516f087147b7bdf148db6b82e24"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba316516f087147b7bdf148db6b82e24">constraints</a> (<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;x, <a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;out) const override</td></tr>
+<tr class="memdesc:aba316516f087147b7bdf148db6b82e24"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the constraints function.  <br /></td></tr>
+<tr class="memitem:a6dcbd6c50a0e9118023413b441e6a8bb" id="r_a6dcbd6c50a0e9118023413b441e6a8bb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6dcbd6c50a0e9118023413b441e6a8bb">constraints_jacobian</a> (<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;x, <a class="el" href="namespace_pipal.html#a235e107a65ec24fec67ce606ac7457ee">Matrix</a>&lt; Real &gt; &amp;out) const override</td></tr>
+<tr class="memdesc:a6dcbd6c50a0e9118023413b441e6a8bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the Jacobian of the constraints function.  <br /></td></tr>
+<tr class="memitem:aba5bc88409788fe1db60f2056bcb34b8" id="r_aba5bc88409788fe1db60f2056bcb34b8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aba5bc88409788fe1db60f2056bcb34b8">lagrangian_hessian</a> (<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;x, <a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;z, <a class="el" href="namespace_pipal.html#a235e107a65ec24fec67ce606ac7457ee">Matrix</a>&lt; Real &gt; &amp;out) const override</td></tr>
+<tr class="memdesc:aba5bc88409788fe1db60f2056bcb34b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Evaluate the Hessian of the Lagrangian function.  <br /></td></tr>
+<tr class="memitem:a47ee509bd3a911a3098ec25d7a746726" id="r_a47ee509bd3a911a3098ec25d7a746726"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a47ee509bd3a911a3098ec25d7a746726">primal_lower_bounds</a> (<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;out) const override</td></tr>
+<tr class="memdesc:a47ee509bd3a911a3098ec25d7a746726"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lower bounds on the primal variables.  <br /></td></tr>
+<tr class="memitem:afc53161e878dd58ead7bcb6f84af77fa" id="r_afc53161e878dd58ead7bcb6f84af77fa"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afc53161e878dd58ead7bcb6f84af77fa">primal_upper_bounds</a> (<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;out) const override</td></tr>
+<tr class="memdesc:afc53161e878dd58ead7bcb6f84af77fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper bounds on the primal variables.  <br /></td></tr>
+<tr class="memitem:a1d2b52971808871806b4f3833a72e223" id="r_a1d2b52971808871806b4f3833a72e223"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1d2b52971808871806b4f3833a72e223">constraints_lower_bounds</a> (<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;out) const override</td></tr>
+<tr class="memdesc:a1d2b52971808871806b4f3833a72e223"><td class="mdescLeft">&#160;</td><td class="mdescRight">Lower bounds on the constraints.  <br /></td></tr>
+<tr class="memitem:a0165ac5927265dee8fd1608ebe255036" id="r_a0165ac5927265dee8fd1608ebe255036"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0165ac5927265dee8fd1608ebe255036">constraints_upper_bounds</a> (<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;out) const override</td></tr>
+<tr class="memdesc:a0165ac5927265dee8fd1608ebe255036"><td class="mdescLeft">&#160;</td><td class="mdescRight">Upper bounds on the constraints.  <br /></td></tr>
+<tr class="inherit_header pub_methods_class_pipal_1_1_problem"><td colspan="2" onclick="javascript:dynsection.toggleInherit('pub_methods_class_pipal_1_1_problem')"><span class="dynarrow"><span class="arrowhead closed"></span></span>Public Member Functions inherited from <a class="el" href="class_pipal_1_1_problem.html">Pipal::Problem&lt; Real &gt;</a></td></tr>
+<tr class="memitem:adca4611908092835d82a56c167e9dda1 inherit pub_methods_class_pipal_1_1_problem" id="r_adca4611908092835d82a56c167e9dda1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#adca4611908092835d82a56c167e9dda1">Problem</a> ()=default</td></tr>
+<tr class="memdesc:adca4611908092835d82a56c167e9dda1 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <br /></td></tr>
+<tr class="memitem:a624edfa6b48d5875f64f85ac6833af69 inherit pub_methods_class_pipal_1_1_problem" id="r_a624edfa6b48d5875f64f85ac6833af69"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#a624edfa6b48d5875f64f85ac6833af69">Problem</a> (std::string t_name)</td></tr>
+<tr class="memdesc:a624edfa6b48d5875f64f85ac6833af69 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="class_pipal_1_1_problem.html" title="Problem class for the Pipal library.">Problem</a> constructor.  <br /></td></tr>
+<tr class="memitem:ac269b23eaf78f8d72bf6a97a234c7dc8 inherit pub_methods_class_pipal_1_1_problem" id="r_ac269b23eaf78f8d72bf6a97a234c7dc8"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#ac269b23eaf78f8d72bf6a97a234c7dc8">Problem</a> (<a class="el" href="class_pipal_1_1_problem.html">Problem</a> const &amp;)=delete</td></tr>
+<tr class="memdesc:ac269b23eaf78f8d72bf6a97a234c7dc8 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleted copy constructor.  <br /></td></tr>
+<tr class="memitem:a6a45850267f913a81ba8276ea5e0bf83 inherit pub_methods_class_pipal_1_1_problem" id="r_a6a45850267f913a81ba8276ea5e0bf83"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_pipal_1_1_problem.html">Problem</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#a6a45850267f913a81ba8276ea5e0bf83">operator=</a> (<a class="el" href="class_pipal_1_1_problem.html">Problem</a> const &amp;)=delete</td></tr>
+<tr class="memdesc:a6a45850267f913a81ba8276ea5e0bf83 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleted assignment operator.  <br /></td></tr>
+<tr class="memitem:ab34dec6c8a6cb3a2220c2287f8750a53 inherit pub_methods_class_pipal_1_1_problem" id="r_ab34dec6c8a6cb3a2220c2287f8750a53"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#ab34dec6c8a6cb3a2220c2287f8750a53">Problem</a> (<a class="el" href="class_pipal_1_1_problem.html">Problem</a> &amp;&amp;)=delete</td></tr>
+<tr class="memdesc:ab34dec6c8a6cb3a2220c2287f8750a53 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleted move constructor.  <br /></td></tr>
+<tr class="memitem:adc9727c83348943e2149d2b2d84dedd2 inherit pub_methods_class_pipal_1_1_problem" id="r_adc9727c83348943e2149d2b2d84dedd2"><td class="memItemLeft" align="right" valign="top"><a class="el" href="class_pipal_1_1_problem.html">Problem</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#adc9727c83348943e2149d2b2d84dedd2">operator=</a> (<a class="el" href="class_pipal_1_1_problem.html">Problem</a> &amp;&amp;)=delete</td></tr>
+<tr class="memdesc:adc9727c83348943e2149d2b2d84dedd2 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deleted move assignment operator.  <br /></td></tr>
+<tr class="memitem:a0a891d7ae61e53df1ca479280b086c78 inherit pub_methods_class_pipal_1_1_problem" id="r_a0a891d7ae61e53df1ca479280b086c78"><td class="memItemLeft" align="right" valign="top">virtual&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#a0a891d7ae61e53df1ca479280b086c78">~Problem</a> ()=default</td></tr>
+<tr class="memdesc:a0a891d7ae61e53df1ca479280b086c78 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default destructor.  <br /></td></tr>
+<tr class="memitem:adcc5ed78fcff43dcdf3f5f57f55b8348 inherit pub_methods_class_pipal_1_1_problem" id="r_adcc5ed78fcff43dcdf3f5f57f55b8348"><td class="memItemLeft" align="right" valign="top">std::string const &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#adcc5ed78fcff43dcdf3f5f57f55b8348">name</a> () const</td></tr>
+<tr class="memdesc:adcc5ed78fcff43dcdf3f5f57f55b8348 inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get the name of the optimization problem.  <br /></td></tr>
+<tr class="memitem:a609c95afa02ee066db995e125f6bf7ce inherit pub_methods_class_pipal_1_1_problem" id="r_a609c95afa02ee066db995e125f6bf7ce"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_pipal_1_1_problem.html#a609c95afa02ee066db995e125f6bf7ce">name</a> (std::string const &amp;t_name)</td></tr>
+<tr class="memdesc:a609c95afa02ee066db995e125f6bf7ce inherit pub_methods_class_pipal_1_1_problem"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set the name of the optimization problem.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:aa271566b8220e399da0cea26f3df636a" id="r_aa271566b8220e399da0cea26f3df636a"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa271566b8220e399da0cea26f3df636a">m_objective</a> {nullptr}</td></tr>
-<tr class="memitem:af53435552c25532c52d79942feee173c" id="r_af53435552c25532c52d79942feee173c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#af53435552c25532c52d79942feee173c">m_objective_gradient</a> {nullptr}</td></tr>
-<tr class="memitem:ac56d2acfc3e95970cb4c3fbfa8ee4350" id="r_ac56d2acfc3e95970cb4c3fbfa8ee4350"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a7838845906d7f694367a80b59f14b850">ObjectiveHessianFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac56d2acfc3e95970cb4c3fbfa8ee4350">m_objective_hessian</a> {nullptr}</td></tr>
-<tr class="memitem:a81f5273a7741efefb66b06b49413ed92" id="r_a81f5273a7741efefb66b06b49413ed92"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81f5273a7741efefb66b06b49413ed92">m_constraints</a> {nullptr}</td></tr>
-<tr class="memitem:a89541f0cb7da1225c92e446b70a8df05" id="r_a89541f0cb7da1225c92e446b70a8df05"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a89541f0cb7da1225c92e446b70a8df05">m_constraints_jacobian</a> {nullptr}</td></tr>
-<tr class="memitem:adda42b0fcc379d6af5409edf7fc894c1" id="r_adda42b0fcc379d6af5409edf7fc894c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adda42b0fcc379d6af5409edf7fc894c1">m_lagrangian_hessian</a> {nullptr}</td></tr>
+<tr class="memitem:aac9d75277a0ab510d45ad528a44a8812" id="r_aac9d75277a0ab510d45ad528a44a8812"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a75a94803a75d15c29351d40d62c94a5d">ObjectiveFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aac9d75277a0ab510d45ad528a44a8812">m_objective</a> {nullptr}</td></tr>
+<tr class="memitem:a84a3a2b91899e9ca9be8d3da8d939a71" id="r_a84a3a2b91899e9ca9be8d3da8d939a71"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a467db72970f7d1f6fe08d0cf049ede67">ObjectiveGradientFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a84a3a2b91899e9ca9be8d3da8d939a71">m_objective_gradient</a> {nullptr}</td></tr>
+<tr class="memitem:a6510e510e4bf48e8485ef428b6a8a2c5" id="r_a6510e510e4bf48e8485ef428b6a8a2c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#aebf52fdb2d46d6d5dfaefd54a9b2cb44">ConstraintsFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a6510e510e4bf48e8485ef428b6a8a2c5">m_constraints</a> {nullptr}</td></tr>
+<tr class="memitem:a1779a05f93ba47ff81b338d085fcc2a9" id="r_a1779a05f93ba47ff81b338d085fcc2a9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a3bd7d2bd85a52e293ea2496ca4f500e9">ConstraintsJacobianFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1779a05f93ba47ff81b338d085fcc2a9">m_constraints_jacobian</a> {nullptr}</td></tr>
+<tr class="memitem:a076676ddbf8a45e80e3955116e523d5d" id="r_a076676ddbf8a45e80e3955116e523d5d"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#aaebacdfbe574af382fec580b2e226364">LagrangianHessianFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a076676ddbf8a45e80e3955116e523d5d">m_lagrangian_hessian</a> {nullptr}</td></tr>
+<tr class="memitem:a5ecaf8efad8b9c2c5f0274e514f4901b" id="r_a5ecaf8efad8b9c2c5f0274e514f4901b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5ecaf8efad8b9c2c5f0274e514f4901b">m_primal_lower_bounds</a> {nullptr}</td></tr>
+<tr class="memitem:ab9fe2985b97df74bd42751684972cb84" id="r_ab9fe2985b97df74bd42751684972cb84"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab9fe2985b97df74bd42751684972cb84">m_primal_upper_bounds</a> {nullptr}</td></tr>
+<tr class="memitem:a2be3a5a9f1f3ef785a8d9e9ccdd4ec07" id="r_a2be3a5a9f1f3ef785a8d9e9ccdd4ec07"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2be3a5a9f1f3ef785a8d9e9ccdd4ec07">m_constraints_lower_bounds</a> {nullptr}</td></tr>
+<tr class="memitem:a7999128071914ce748165986e703de78" id="r_a7999128071914ce748165986e703de78"><td class="memItemLeft" align="right" valign="top"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7999128071914ce748165986e703de78">m_constraints_upper_bounds</a> {nullptr}</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><div class="compoundTemplParams">template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt;<br />
-class Pipal::ProblemWrapper&lt; Real, N, M &gt;</div><p>The <a class="el" href="class_pipal_1_1_problem_wrapper.html" title="Wrapper class for the Problem class.">ProblemWrapper</a> class is a simple wrapper around the <a class="el" href="class_pipal_1_1_problem.html" title="Problem class for the Pipal library.">Problem</a> class. It inherits from the <a class="el" href="class_pipal_1_1_problem.html" title="Problem class for the Pipal library.">Problem</a> class and can be used to define optimization problems through function handles. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename Real&gt;<br />
+class Pipal::ProblemWrapper&lt; Real &gt;</div><p>The <a class="el" href="class_pipal_1_1_problem_wrapper.html" title="Wrapper class for the Problem class.">ProblemWrapper</a> class is a simple wrapper around the <a class="el" href="class_pipal_1_1_problem.html" title="Problem class for the Pipal library.">Problem</a> class. It inherits from the <a class="el" href="class_pipal_1_1_problem.html" title="Problem class for the Pipal library.">Problem</a> class and can be used to define optimization problems through function handles. </p><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
-    <tr><td class="paramname">Real</td><td>The floating-point type. </td></tr>
-    <tr><td class="paramname">N</td><td>The size of the primal variable vector. </td></tr>
-    <tr><td class="paramname">M</td><td>The size of the dual variable vector. </td></tr>
+    <tr><td class="paramname">Real</td><td>The real number type. </td></tr>
   </table>
   </dd>
 </dl>
 </div><a name="doc-typedef-members" id="doc-typedef-members"></a><h2 id="header-doc-typedef-members" class="groupheader">Member Typedef Documentation</h2>
-<a id="ad70d2215da8b8545bc452927abf895af" name="ad70d2215da8b8545bc452927abf895af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad70d2215da8b8545bc452927abf895af">&#9670;&#160;</a></span>ConstraintsFunc</h2>
+<a id="a0230d1875cbab414fac56db07e080d6b" name="a0230d1875cbab414fac56db07e080d6b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0230d1875cbab414fac56db07e080d6b">&#9670;&#160;</a></span>BoundsFunc</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::ConstraintsFunc = std::function&lt;<a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a>(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;)&gt;</td>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::BoundsFunc = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; &amp;)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a605867c93fecdf3f86d294bc3a989dae" name="a605867c93fecdf3f86d294bc3a989dae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a605867c93fecdf3f86d294bc3a989dae">&#9670;&#160;</a></span>ConstraintsJacobianFunc</h2>
+<a id="aebf52fdb2d46d6d5dfaefd54a9b2cb44" name="aebf52fdb2d46d6d5dfaefd54a9b2cb44"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebf52fdb2d46d6d5dfaefd54a9b2cb44">&#9670;&#160;</a></span>ConstraintsFunc</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::ConstraintsJacobianFunc = std::function&lt;<a class="el" href="#a6de1c2445cc8273c2c0a5bb7a2bb1803">MatrixJ</a>(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;, <a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a> const &amp;)&gt;</td>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::ConstraintsFunc = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, <a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; &amp;)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="ad62817690a743b80fedfc4e73bd98882" name="ad62817690a743b80fedfc4e73bd98882"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad62817690a743b80fedfc4e73bd98882">&#9670;&#160;</a></span>LagrangianHessianFunc</h2>
+<a id="a3bd7d2bd85a52e293ea2496ca4f500e9" name="a3bd7d2bd85a52e293ea2496ca4f500e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bd7d2bd85a52e293ea2496ca4f500e9">&#9670;&#160;</a></span>ConstraintsJacobianFunc</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::LagrangianHessianFunc = std::function&lt;<a class="el" href="#a98a0018d7b504df694261ac39831162f">MatrixH</a>(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;, <a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a> const &amp;)&gt;</td>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::ConstraintsJacobianFunc = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, <a class="el" href="namespace_pipal.html#a235e107a65ec24fec67ce606ac7457ee">Matrix</a>&lt;Real&gt; &amp;)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a98a0018d7b504df694261ac39831162f" name="a98a0018d7b504df694261ac39831162f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a98a0018d7b504df694261ac39831162f">&#9670;&#160;</a></span>MatrixH</h2>
+<a id="aaebacdfbe574af382fec580b2e226364" name="aaebacdfbe574af382fec580b2e226364"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaebacdfbe574af382fec580b2e226364">&#9670;&#160;</a></span>LagrangianHessianFunc</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::MatrixH = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::MatrixH</td>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::LagrangianHessianFunc = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, <a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, <a class="el" href="namespace_pipal.html#a235e107a65ec24fec67ce606ac7457ee">Matrix</a>&lt;Real&gt; &amp;)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a6de1c2445cc8273c2c0a5bb7a2bb1803" name="a6de1c2445cc8273c2c0a5bb7a2bb1803"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6de1c2445cc8273c2c0a5bb7a2bb1803">&#9670;&#160;</a></span>MatrixJ</h2>
+<a id="a75a94803a75d15c29351d40d62c94a5d" name="a75a94803a75d15c29351d40d62c94a5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75a94803a75d15c29351d40d62c94a5d">&#9670;&#160;</a></span>ObjectiveFunc</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::MatrixJ = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::MatrixJ</td>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::ObjectiveFunc = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, Real &amp;)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 </div>
 </div>
-<a id="a4bec1b6ca593dc26a507d9fdada6ffea" name="a4bec1b6ca593dc26a507d9fdada6ffea"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4bec1b6ca593dc26a507d9fdada6ffea">&#9670;&#160;</a></span>ObjectiveFunc</h2>
+<a id="a467db72970f7d1f6fe08d0cf049ede67" name="a467db72970f7d1f6fe08d0cf049ede67"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a467db72970f7d1f6fe08d0cf049ede67">&#9670;&#160;</a></span>ObjectiveGradientFunc</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
       <table class="memname">
         <tr>
-          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::ObjectiveFunc = std::function&lt;Real(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;)&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="ae2c90ccc902c6a31789f8c912033cdca" name="ae2c90ccc902c6a31789f8c912033cdca"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae2c90ccc902c6a31789f8c912033cdca">&#9670;&#160;</a></span>ObjectiveGradientFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::ObjectiveGradientFunc = std::function&lt;<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a>(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;)&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a7838845906d7f694367a80b59f14b850" name="a7838845906d7f694367a80b59f14b850"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7838845906d7f694367a80b59f14b850">&#9670;&#160;</a></span>ObjectiveHessianFunc</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::ObjectiveHessianFunc = std::function&lt;<a class="el" href="#a98a0018d7b504df694261ac39831162f">MatrixH</a>(<a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;)&gt;</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a60f2aef693e3ad2e8cfd47232865f8dd" name="a60f2aef693e3ad2e8cfd47232865f8dd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a60f2aef693e3ad2e8cfd47232865f8dd">&#9670;&#160;</a></span>VectorM</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::VectorM = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::VectorM</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a5d9c0ac48cb53f4b83bb6bf25befb572" name="a5d9c0ac48cb53f4b83bb6bf25befb572"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5d9c0ac48cb53f4b83bb6bf25befb572">&#9670;&#160;</a></span>VectorN</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
-      <table class="memname">
-        <tr>
-          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::VectorN = typename <a class="el" href="class_pipal_1_1_problem.html">Problem</a>&lt;Real, N, M&gt;::VectorN</td>
+          <td class="memname">using <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::ObjectiveGradientFunc = std::function&lt;bool(<a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; const &amp;, <a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt;Real&gt; &amp;)&gt;</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -395,41 +351,66 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 </div>
 </div>
 <a name="doc-constructors" id="doc-constructors"></a><h2 id="header-doc-constructors" class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a2f7b0ad642417f860beccd9af80aab13" name="a2f7b0ad642417f860beccd9af80aab13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2f7b0ad642417f860beccd9af80aab13">&#9670;&#160;</a></span>ProblemWrapper() <span class="overload">[1/2]</span></h2>
+<a id="a82f9ea956bd235cbb56efafdd0ed0323" name="a82f9ea956bd235cbb56efafdd0ed0323"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82f9ea956bd235cbb56efafdd0ed0323">&#9670;&#160;</a></span>ProblemWrapper()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::ProblemWrapper </td>
+          <td class="memname"><a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::ProblemWrapper </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective</em></span>, </td>
+          <td class="paramtype">std::string const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_name</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective_gradient</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a75a94803a75d15c29351d40d62c94a5d">ObjectiveFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_objective</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#a467db72970f7d1f6fe08d0cf049ede67">ObjectiveGradientFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_objective_gradient</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints_jacobian</em></span>, </td>
+          <td class="paramtype"><a class="el" href="#aebf52fdb2d46d6d5dfaefd54a9b2cb44">ConstraintsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_constraints</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>lagrangian_hessian</em></span>&#160;)</td>
+          <td class="paramtype"><a class="el" href="#a3bd7d2bd85a52e293ea2496ca4f500e9">ConstraintsJacobianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_constraints_jacobian</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#aaebacdfbe574af382fec580b2e226364">LagrangianHessianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_lagrangian_hessian</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_primal_lower_bounds</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_primal_upper_bounds</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_constraints_lower_bounds</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>t_constraints_upper_bounds</em></span>&#160;)</td>
         </tr>
       </table>
   </td>
@@ -440,92 +421,35 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 </div><div class="memdoc">
 <p>Initializes the problem with the provided objective, gradient, constraints, and Jacobian functions. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">objective</td><td>Objective function handle. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">objective_gradient</td><td>Gradient of the objective function handle. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">constraints</td><td>Constraints function handle. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">constraints_jacobian</td><td>Jacobian of the constraints function handle. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lagrangian_hessian</td><td>Hessian of the Lagrangian function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_name</td><td>Name of the optimization problem. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_objective</td><td>Objective function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_objective_gradient</td><td>Gradient of the objective function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_constraints</td><td>Constraints function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_constraints_jacobian</td><td>Jacobian of the constraints function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_lagrangian_hessian</td><td>Hessian of the Lagrangian function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_primal_lower_bounds</td><td>Lower bounds on the primal variables function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_primal_upper_bounds</td><td>Upper bounds on the primal variables function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_constraints_lower_bounds</td><td>Lower bounds on the constraints function handle. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">t_constraints_upper_bounds</td><td>Upper bounds on the constraints function handle. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="a0ad3a94de84ab3e67ca37087887163af" name="a0ad3a94de84ab3e67ca37087887163af"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0ad3a94de84ab3e67ca37087887163af">&#9670;&#160;</a></span>ProblemWrapper() <span class="overload">[2/2]</span></h2>
+<a id="a9f36a55911dd82defc3fc9c36e1fd675" name="a9f36a55911dd82defc3fc9c36e1fd675"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f36a55911dd82defc3fc9c36e1fd675">&#9670;&#160;</a></span>~ProblemWrapper()</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::ProblemWrapper </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective_gradient</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="#a7838845906d7f694367a80b59f14b850">ObjectiveHessianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective_hessian</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints_jacobian</em></span>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>lagrangian_hessian</em></span>&#160;)</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Initializes the problem with the provided objective, gradient, constraints, Jacobian, and Hessian functions. </p><dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">objective</td><td>Objective function handle. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">objective_gradient</td><td>Gradient of the objective function handle. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">objective_hessian</td><td>Hessian of the objective function handle. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">constraints</td><td>Constraints function handle. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">constraints_jacobian</td><td>Jacobian of the constraints function handle. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">lagrangian_hessian</td><td>Hessian of the Lagrangian function handle. </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a21208063ae1d43d107241918c0f1ca08" name="a21208063ae1d43d107241918c0f1ca08"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a21208063ae1d43d107241918c0f1ca08">&#9670;&#160;</a></span>~ProblemWrapper()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::~<a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a> </td>
+          <td class="memname"><a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::~<a class="el" href="class_pipal_1_1_problem_wrapper.html">ProblemWrapper</a> </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
           <td></td>
@@ -533,7 +457,7 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -541,22 +465,22 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 </div>
 </div>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
-<a id="a206e6d278c2d7362820ec2bb7af84481" name="a206e6d278c2d7362820ec2bb7af84481"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a206e6d278c2d7362820ec2bb7af84481">&#9670;&#160;</a></span>constraints() <span class="overload">[1/3]</span></h2>
+<a id="af2587d77f864838a6222b5939332e556" name="af2587d77f864838a6222b5939332e556"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2587d77f864838a6222b5939332e556">&#9670;&#160;</a></span>constraints() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::constraints </td>
+          <td class="memname"><a class="el" href="#aebf52fdb2d46d6d5dfaefd54a9b2cb44">ConstraintsFunc</a> &amp; <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -569,21 +493,21 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 
 </div>
 </div>
-<a id="a8fec6733888fa5e92df76a4f31986260" name="a8fec6733888fa5e92df76a4f31986260"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8fec6733888fa5e92df76a4f31986260">&#9670;&#160;</a></span>constraints() <span class="overload">[2/3]</span></h2>
+<a id="a71f376fcf7cc287907796afa22a0ec0d" name="a71f376fcf7cc287907796afa22a0ec0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a71f376fcf7cc287907796afa22a0ec0d">&#9670;&#160;</a></span>constraints() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::constraints </td>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#aebf52fdb2d46d6d5dfaefd54a9b2cb44">ConstraintsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -602,22 +526,26 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 
 </div>
 </div>
-<a id="aeda6122a36c802c8d5d9c5e4e38befad" name="aeda6122a36c802c8d5d9c5e4e38befad"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aeda6122a36c802c8d5d9c5e4e38befad">&#9670;&#160;</a></span>constraints() <span class="overload">[3/3]</span></h2>
+<a id="aba316516f087147b7bdf148db6b82e24" name="aba316516f087147b7bdf148db6b82e24"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba316516f087147b7bdf148db6b82e24">&#9670;&#160;</a></span>constraints() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::constraints </td>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -628,32 +556,33 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variable vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variables. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>The value of the constraints function. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The value of the constraints function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the evaluation was successful, false otherwise. </dd></dl>
 
-<p>Implements <a class="el" href="class_pipal_1_1_problem.html#aff5f40f37a12ce9c81a5d9abc56afd6d">Pipal::Problem&lt; Real, N, M &gt;</a>.</p>
+<p>Implements <a class="el" href="class_pipal_1_1_problem.html#aa31435389ab16e7fa8ce559de9f63166">Pipal::Problem&lt; Real &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a64c5927076fbad864e2e2c548ec8ba18" name="a64c5927076fbad864e2e2c548ec8ba18"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a64c5927076fbad864e2e2c548ec8ba18">&#9670;&#160;</a></span>constraints_jacobian() <span class="overload">[1/3]</span></h2>
+<a id="ab3523826899cb5804189890c81d33e16" name="ab3523826899cb5804189890c81d33e16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3523826899cb5804189890c81d33e16">&#9670;&#160;</a></span>constraints_jacobian() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::constraints_jacobian </td>
+          <td class="memname"><a class="el" href="#a3bd7d2bd85a52e293ea2496ca4f500e9">ConstraintsJacobianFunc</a> &amp; <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints_jacobian </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -666,21 +595,21 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 
 </div>
 </div>
-<a id="a18d7cbe44aa5763e8afaf8c90bc04fa5" name="a18d7cbe44aa5763e8afaf8c90bc04fa5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a18d7cbe44aa5763e8afaf8c90bc04fa5">&#9670;&#160;</a></span>constraints_jacobian() <span class="overload">[2/3]</span></h2>
+<a id="a75d79ace71a796d86537e48e5a5d15ee" name="a75d79ace71a796d86537e48e5a5d15ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75d79ace71a796d86537e48e5a5d15ee">&#9670;&#160;</a></span>constraints_jacobian() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::constraints_jacobian </td>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints_jacobian </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints_jacobian</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a3bd7d2bd85a52e293ea2496ca4f500e9">ConstraintsJacobianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints_jacobian</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -699,26 +628,26 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 
 </div>
 </div>
-<a id="a40953ef491445abc7e3e3b21e271f86e" name="a40953ef491445abc7e3e3b21e271f86e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a40953ef491445abc7e3e3b21e271f86e">&#9670;&#160;</a></span>constraints_jacobian() <span class="overload">[3/3]</span></h2>
+<a id="a6dcbd6c50a0e9118023413b441e6a8bb" name="a6dcbd6c50a0e9118023413b441e6a8bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6dcbd6c50a0e9118023413b441e6a8bb">&#9670;&#160;</a></span>constraints_jacobian() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a6de1c2445cc8273c2c0a5bb7a2bb1803">MatrixJ</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::constraints_jacobian </td>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints_jacobian </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>z</em></span>&#160;) const</td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#a235e107a65ec24fec67ce606ac7457ee">Matrix</a>&lt; Real &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -729,33 +658,227 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variable vector. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">z</td><td>Dual variable vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variables. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>The Jacobian matrix of the constraints function. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The Jacobian matrix of the constraints function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the evaluation was successful, false otherwise. </dd></dl>
 
-<p>Implements <a class="el" href="class_pipal_1_1_problem.html#adcfd7efacc6233c66e950c3859763a64">Pipal::Problem&lt; Real, N, M &gt;</a>.</p>
+<p>Implements <a class="el" href="class_pipal_1_1_problem.html#ad691e22c09d9f8537892aa740635427d">Pipal::Problem&lt; Real &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a340cb8c5d56be9640e3725f3dd6e74b5" name="a340cb8c5d56be9640e3725f3dd6e74b5"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a340cb8c5d56be9640e3725f3dd6e74b5">&#9670;&#160;</a></span>lagrangian_hessian() <span class="overload">[1/3]</span></h2>
+<a id="a05990389301771657ea18eaa4e2c8f2b" name="a05990389301771657ea18eaa4e2c8f2b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05990389301771657ea18eaa4e2c8f2b">&#9670;&#160;</a></span>constraints_lower_bounds() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::lagrangian_hessian </td>
+          <td class="memname"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> &amp; <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints_lower_bounds </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The lower bounds on the constraints function. </dd></dl>
+
+</div>
+</div>
+<a id="a64038eded24bd69c303a260a99942277" name="a64038eded24bd69c303a260a99942277"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a64038eded24bd69c303a260a99942277">&#9670;&#160;</a></span>constraints_lower_bounds() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints_lower_bounds </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints_lower_bounds</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">constraints_lower_bounds</td><td>The lower bounds on the constraints function to set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a1d2b52971808871806b4f3833a72e223" name="a1d2b52971808871806b4f3833a72e223"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d2b52971808871806b4f3833a72e223">&#9670;&#160;</a></span>constraints_lower_bounds() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints_lower_bounds </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span></td><td>)</td>
           <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>The lower bounds on the constraints. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the evaluation was successful, false otherwise. </dd></dl>
+
+<p>Implements <a class="el" href="class_pipal_1_1_problem.html#a8e36a44394e6555abc0e5a33f12b4b02">Pipal::Problem&lt; Real &gt;</a>.</p>
+
+</div>
+</div>
+<a id="ad3cc0b1c826912b10a3ae70596894970" name="ad3cc0b1c826912b10a3ae70596894970"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3cc0b1c826912b10a3ae70596894970">&#9670;&#160;</a></span>constraints_upper_bounds() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> &amp; <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints_upper_bounds </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The upper bounds on the constraints function. </dd></dl>
+
+</div>
+</div>
+<a id="a05a32b19db233fcdc81cfffb005add8e" name="a05a32b19db233fcdc81cfffb005add8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05a32b19db233fcdc81cfffb005add8e">&#9670;&#160;</a></span>constraints_upper_bounds() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints_upper_bounds </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>constraints_upper_bounds</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">constraints_upper_bounds</td><td>The upper bounds on the constraints function to set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a0165ac5927265dee8fd1608ebe255036" name="a0165ac5927265dee8fd1608ebe255036"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0165ac5927265dee8fd1608ebe255036">&#9670;&#160;</a></span>constraints_upper_bounds() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::constraints_upper_bounds </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>The upper bounds on the constraints. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the evaluation was successful, false otherwise. </dd></dl>
+
+<p>Implements <a class="el" href="class_pipal_1_1_problem.html#a9dd0cd10c4b59950b87abc1c6af8775c">Pipal::Problem&lt; Real &gt;</a>.</p>
+
+</div>
+</div>
+<a id="abce2cb2564550989d3cab81c52b38ddd" name="abce2cb2564550989d3cab81c52b38ddd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abce2cb2564550989d3cab81c52b38ddd">&#9670;&#160;</a></span>lagrangian_hessian() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#aaebacdfbe574af382fec580b2e226364">LagrangianHessianFunc</a> &amp; <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::lagrangian_hessian </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -768,21 +891,21 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 
 </div>
 </div>
-<a id="a0e6ba9021d10485ef90ed3dbf1e83c1f" name="a0e6ba9021d10485ef90ed3dbf1e83c1f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0e6ba9021d10485ef90ed3dbf1e83c1f">&#9670;&#160;</a></span>lagrangian_hessian() <span class="overload">[2/3]</span></h2>
+<a id="a451f40caf7a30a68523042ab42a9d059" name="a451f40caf7a30a68523042ab42a9d059"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a451f40caf7a30a68523042ab42a9d059">&#9670;&#160;</a></span>lagrangian_hessian() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::lagrangian_hessian </td>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::lagrangian_hessian </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>lagrangian_hessian</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#aaebacdfbe574af382fec580b2e226364">LagrangianHessianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>lagrangian_hessian</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -801,26 +924,31 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 
 </div>
 </div>
-<a id="a2234718629d7635d9c1d6043395d2321" name="a2234718629d7635d9c1d6043395d2321"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2234718629d7635d9c1d6043395d2321">&#9670;&#160;</a></span>lagrangian_hessian() <span class="overload">[3/3]</span></h2>
+<a id="aba5bc88409788fe1db60f2056bcb34b8" name="aba5bc88409788fe1db60f2056bcb34b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aba5bc88409788fe1db60f2056bcb34b8">&#9670;&#160;</a></span>lagrangian_hessian() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a98a0018d7b504df694261ac39831162f">MatrixH</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::lagrangian_hessian </td>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::lagrangian_hessian </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="#a60f2aef693e3ad2e8cfd47232865f8dd">VectorM</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>z</em></span>&#160;) const</td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em>z</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#a235e107a65ec24fec67ce606ac7457ee">Matrix</a>&lt; Real &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -831,33 +959,34 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variable vector. </td></tr>
-    <tr><td class="paramdir">[in]</td><td class="paramname">z</td><td>Dual variable vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variables. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">z</td><td>Dual variables. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>The Hessian matrix of the Lagrangian function. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The Hessian matrix of the Lagrangian function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the evaluation was successful, false otherwise. </dd></dl>
 
-<p>Implements <a class="el" href="class_pipal_1_1_problem.html#ac6605b6d2061f277c724c0398fd687b9">Pipal::Problem&lt; Real, N, M &gt;</a>.</p>
+<p>Implements <a class="el" href="class_pipal_1_1_problem.html#aa9e2e8ed175f213567a6d0b226f49b2f">Pipal::Problem&lt; Real &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a7eaf837dd1d7cdda620d07dd190e99da" name="a7eaf837dd1d7cdda620d07dd190e99da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7eaf837dd1d7cdda620d07dd190e99da">&#9670;&#160;</a></span>objective() <span class="overload">[1/3]</span></h2>
+<a id="a964de0c9fffbb79cacdeaeb670f88ad0" name="a964de0c9fffbb79cacdeaeb670f88ad0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a964de0c9fffbb79cacdeaeb670f88ad0">&#9670;&#160;</a></span>objective() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::objective </td>
+          <td class="memname"><a class="el" href="#a75a94803a75d15c29351d40d62c94a5d">ObjectiveFunc</a> &amp; <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::objective </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -870,21 +999,21 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 
 </div>
 </div>
-<a id="af53716b9c81cdbfbc61da166e9df74c2" name="af53716b9c81cdbfbc61da166e9df74c2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af53716b9c81cdbfbc61da166e9df74c2">&#9670;&#160;</a></span>objective() <span class="overload">[2/3]</span></h2>
+<a id="ab1e5e27b8ebf51b65c9f3be5574eb0f1" name="ab1e5e27b8ebf51b65c9f3be5574eb0f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1e5e27b8ebf51b65c9f3be5574eb0f1">&#9670;&#160;</a></span>objective() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::objective </td>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::objective </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a75a94803a75d15c29351d40d62c94a5d">ObjectiveFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -903,22 +1032,26 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 
 </div>
 </div>
-<a id="a8e3a4bd8a01efe8b2f1a40aa5f1fd23e" name="a8e3a4bd8a01efe8b2f1a40aa5f1fd23e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e3a4bd8a01efe8b2f1a40aa5f1fd23e">&#9670;&#160;</a></span>objective() <span class="overload">[3/3]</span></h2>
+<a id="af9c4118fd13070cc8ee966fd2dd11914" name="af9c4118fd13070cc8ee966fd2dd11914"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9c4118fd13070cc8ee966fd2dd11914">&#9670;&#160;</a></span>objective() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Real <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::objective </td>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::objective </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Real &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -929,32 +1062,33 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variable vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variables. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>The objective function. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The objective function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the evaluation was successful, false otherwise. </dd></dl>
 
-<p>Implements <a class="el" href="class_pipal_1_1_problem.html#a6cb28f808012d89447eddba642cc0f25">Pipal::Problem&lt; Real, N, M &gt;</a>.</p>
+<p>Implements <a class="el" href="class_pipal_1_1_problem.html#a975d102522783557d6df7eb4ae51c3af">Pipal::Problem&lt; Real &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a6c31f1dada7a85fd63fca69b1466623d" name="a6c31f1dada7a85fd63fca69b1466623d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6c31f1dada7a85fd63fca69b1466623d">&#9670;&#160;</a></span>objective_gradient() <span class="overload">[1/3]</span></h2>
+<a id="aaf1a601b2f07c5d5f74a32e776c1d0bd" name="aaf1a601b2f07c5d5f74a32e776c1d0bd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaf1a601b2f07c5d5f74a32e776c1d0bd">&#9670;&#160;</a></span>objective_gradient() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::objective_gradient </td>
+          <td class="memname"><a class="el" href="#a467db72970f7d1f6fe08d0cf049ede67">ObjectiveGradientFunc</a> &amp; <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::objective_gradient </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -967,21 +1101,21 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 
 </div>
 </div>
-<a id="ab919604f7a5d1da079399ad5b3640464" name="ab919604f7a5d1da079399ad5b3640464"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab919604f7a5d1da079399ad5b3640464">&#9670;&#160;</a></span>objective_gradient() <span class="overload">[2/3]</span></h2>
+<a id="a213996cfe218a6966382ac5fe4581ee1" name="a213996cfe218a6966382ac5fe4581ee1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a213996cfe218a6966382ac5fe4581ee1">&#9670;&#160;</a></span>objective_gradient() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::objective_gradient </td>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::objective_gradient </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective_gradient</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a467db72970f7d1f6fe08d0cf049ede67">ObjectiveGradientFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective_gradient</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1000,22 +1134,26 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 
 </div>
 </div>
-<a id="a9afbea70c7791c076237d940201225eb" name="a9afbea70c7791c076237d940201225eb"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9afbea70c7791c076237d940201225eb">&#9670;&#160;</a></span>objective_gradient() <span class="overload">[3/3]</span></h2>
+<a id="ae8f7a5f08d3e0c6554df469cf03a9f16" name="ae8f7a5f08d3e0c6554df469cf03a9f16"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8f7a5f08d3e0c6554df469cf03a9f16">&#9670;&#160;</a></span>objective_gradient() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::objective_gradient </td>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::objective_gradient </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
-          <td> const</td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span>&#160;) const</td>
         </tr>
       </table>
   </td>
@@ -1026,32 +1164,33 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variable vector. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variables. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>The gradient of the objective function. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The gradient of the objective function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the evaluation was successful, false otherwise. </dd></dl>
 
-<p>Implements <a class="el" href="class_pipal_1_1_problem.html#ab6f8637033552d403798d10fd24e4559">Pipal::Problem&lt; Real, N, M &gt;</a>.</p>
+<p>Implements <a class="el" href="class_pipal_1_1_problem.html#af7f73cf7913eb5d1da02079546a9106d">Pipal::Problem&lt; Real &gt;</a>.</p>
 
 </div>
 </div>
-<a id="a7ea8bd96e8dcf6a72ae0d8c677cd3540" name="a7ea8bd96e8dcf6a72ae0d8c677cd3540"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7ea8bd96e8dcf6a72ae0d8c677cd3540">&#9670;&#160;</a></span>objective_hessian() <span class="overload">[1/3]</span></h2>
+<a id="adb257967d0b354296856859fa819caec" name="adb257967d0b354296856859fa819caec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adb257967d0b354296856859fa819caec">&#9670;&#160;</a></span>primal_lower_bounds() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a7838845906d7f694367a80b59f14b850">ObjectiveHessianFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::objective_hessian </td>
+          <td class="memname"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> &amp; <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::primal_lower_bounds </td>
           <td>(</td>
           <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -1060,25 +1199,25 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section return"><dt>Returns</dt><dd>The Hessian of the objective function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The lower bounds on the primal variables function. </dd></dl>
 
 </div>
 </div>
-<a id="a6fe943561fc6ed93486945e6511f2349" name="a6fe943561fc6ed93486945e6511f2349"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6fe943561fc6ed93486945e6511f2349">&#9670;&#160;</a></span>objective_hessian() <span class="overload">[2/3]</span></h2>
+<a id="a0478665a272f7bca3944351a3c17204f" name="a0478665a272f7bca3944351a3c17204f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0478665a272f7bca3944351a3c17204f">&#9670;&#160;</a></span>primal_lower_bounds() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::objective_hessian </td>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::primal_lower_bounds </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a7838845906d7f694367a80b59f14b850">ObjectiveHessianFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>objective_hessian</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>primal_lower_bounds</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -1090,28 +1229,28 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">objective_hessian</td><td>The Hessian of the objective function to set. </td></tr>
+    <tr><td class="paramdir">[in]</td><td class="paramname">primal_lower_bounds</td><td>The lower bounds on the primal variables function to set. </td></tr>
   </table>
   </dd>
 </dl>
 
 </div>
 </div>
-<a id="ab89e02c6030f8444bc4ee2add434eed6" name="ab89e02c6030f8444bc4ee2add434eed6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab89e02c6030f8444bc4ee2add434eed6">&#9670;&#160;</a></span>objective_hessian() <span class="overload">[3/3]</span></h2>
+<a id="a47ee509bd3a911a3098ec25d7a746726" name="a47ee509bd3a911a3098ec25d7a746726"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a47ee509bd3a911a3098ec25d7a746726">&#9670;&#160;</a></span>primal_lower_bounds() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a98a0018d7b504df694261ac39831162f">MatrixH</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::objective_hessian </td>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::primal_lower_bounds </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="#a5d9c0ac48cb53f4b83bb6bf25befb572">VectorN</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>x</em></span></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
@@ -1123,30 +1262,127 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
 </div><div class="memdoc">
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramdir">[in]</td><td class="paramname">x</td><td>Primal variable vector. </td></tr>
+    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>The lower bounds on the primal variables. </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The Hessian matrix of the objective function. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the evaluation was successful, false otherwise. </dd></dl>
 
-<p>Implements <a class="el" href="class_pipal_1_1_problem.html#a8852b4ced7db97117db59193de7c0a6d">Pipal::Problem&lt; Real, N, M &gt;</a>.</p>
+<p>Implements <a class="el" href="class_pipal_1_1_problem.html#a006fe563cfa33baea45665fc268df371">Pipal::Problem&lt; Real &gt;</a>.</p>
+
+</div>
+</div>
+<a id="ad86f8cd99b9d47a5bb593818ffd601b8" name="ad86f8cd99b9d47a5bb593818ffd601b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad86f8cd99b9d47a5bb593818ffd601b8">&#9670;&#160;</a></span>primal_upper_bounds() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> &amp; <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::primal_upper_bounds </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>The upper bounds on the primal variables function. </dd></dl>
+
+</div>
+</div>
+<a id="ab65a2dc0bad727cdd3026ae562734ee1" name="ab65a2dc0bad727cdd3026ae562734ee1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab65a2dc0bad727cdd3026ae562734ee1">&#9670;&#160;</a></span>primal_upper_bounds() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::primal_upper_bounds </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> const &amp;</td>          <td class="paramname"><span class="paramname"><em>primal_upper_bounds</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[in]</td><td class="paramname">primal_upper_bounds</td><td>The upper bounds on the primal variables function to set. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="afc53161e878dd58ead7bcb6f84af77fa" name="afc53161e878dd58ead7bcb6f84af77fa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc53161e878dd58ead7bcb6f84af77fa">&#9670;&#160;</a></span>primal_upper_bounds() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::primal_upper_bounds </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespace_pipal.html#adc99e85cd5bca62ce7ebfa6308504103">Vector</a>&lt; Real &gt; &amp;</td>          <td class="paramname"><span class="paramname"><em>out</em></span></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel inline">inline</span><span class="mlabel override">override</span><span class="mlabel virtual">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramdir">[out]</td><td class="paramname">out</td><td>The upper bounds on the primal variables. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>True if the evaluation was successful, false otherwise. </dd></dl>
+
+<p>Implements <a class="el" href="class_pipal_1_1_problem.html#a9286997812db11c48626a29da725858a">Pipal::Problem&lt; Real &gt;</a>.</p>
 
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
-<a id="a81f5273a7741efefb66b06b49413ed92" name="a81f5273a7741efefb66b06b49413ed92"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a81f5273a7741efefb66b06b49413ed92">&#9670;&#160;</a></span>m_constraints</h2>
+<a id="a6510e510e4bf48e8485ef428b6a8a2c5" name="a6510e510e4bf48e8485ef428b6a8a2c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6510e510e4bf48e8485ef428b6a8a2c5">&#9670;&#160;</a></span>m_constraints</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ad70d2215da8b8545bc452927abf895af">ConstraintsFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::m_constraints {nullptr}</td>
+          <td class="memname"><a class="el" href="#aebf52fdb2d46d6d5dfaefd54a9b2cb44">ConstraintsFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::m_constraints {nullptr}</td>
         </tr>
       </table>
   </td>
@@ -1155,23 +1391,23 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Constraints function \( g(\mathbf{x}) \) </p>
+<p>Constraints function. </p>
 
 </div>
 </div>
-<a id="a89541f0cb7da1225c92e446b70a8df05" name="a89541f0cb7da1225c92e446b70a8df05"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89541f0cb7da1225c92e446b70a8df05">&#9670;&#160;</a></span>m_constraints_jacobian</h2>
+<a id="a1779a05f93ba47ff81b338d085fcc2a9" name="a1779a05f93ba47ff81b338d085fcc2a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1779a05f93ba47ff81b338d085fcc2a9">&#9670;&#160;</a></span>m_constraints_jacobian</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a605867c93fecdf3f86d294bc3a989dae">ConstraintsJacobianFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::m_constraints_jacobian {nullptr}</td>
+          <td class="memname"><a class="el" href="#a3bd7d2bd85a52e293ea2496ca4f500e9">ConstraintsJacobianFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::m_constraints_jacobian {nullptr}</td>
         </tr>
       </table>
   </td>
@@ -1180,23 +1416,23 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Jacobian of the constraints \( J(\mathbf{x}) \) </p>
+<p>Jacobian of the constraints. </p>
 
 </div>
 </div>
-<a id="adda42b0fcc379d6af5409edf7fc894c1" name="adda42b0fcc379d6af5409edf7fc894c1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adda42b0fcc379d6af5409edf7fc894c1">&#9670;&#160;</a></span>m_lagrangian_hessian</h2>
+<a id="a2be3a5a9f1f3ef785a8d9e9ccdd4ec07" name="a2be3a5a9f1f3ef785a8d9e9ccdd4ec07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2be3a5a9f1f3ef785a8d9e9ccdd4ec07">&#9670;&#160;</a></span>m_constraints_lower_bounds</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ad62817690a743b80fedfc4e73bd98882">LagrangianHessianFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::m_lagrangian_hessian {nullptr}</td>
+          <td class="memname"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::m_constraints_lower_bounds {nullptr}</td>
         </tr>
       </table>
   </td>
@@ -1205,23 +1441,23 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Hessian of the Lagrangian \( W(\mathbf{x}, \mathbf{z}) \) </p>
+<p>Lower bounds on the constraints. </p>
 
 </div>
 </div>
-<a id="aa271566b8220e399da0cea26f3df636a" name="aa271566b8220e399da0cea26f3df636a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa271566b8220e399da0cea26f3df636a">&#9670;&#160;</a></span>m_objective</h2>
+<a id="a7999128071914ce748165986e703de78" name="a7999128071914ce748165986e703de78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7999128071914ce748165986e703de78">&#9670;&#160;</a></span>m_constraints_upper_bounds</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a4bec1b6ca593dc26a507d9fdada6ffea">ObjectiveFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::m_objective {nullptr}</td>
+          <td class="memname"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::m_constraints_upper_bounds {nullptr}</td>
         </tr>
       </table>
   </td>
@@ -1230,23 +1466,23 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Objective function \( f(\mathbf{x}) \) </p>
+<p>Upper bounds on the constraints. </p>
 
 </div>
 </div>
-<a id="af53435552c25532c52d79942feee173c" name="af53435552c25532c52d79942feee173c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af53435552c25532c52d79942feee173c">&#9670;&#160;</a></span>m_objective_gradient</h2>
+<a id="a076676ddbf8a45e80e3955116e523d5d" name="a076676ddbf8a45e80e3955116e523d5d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a076676ddbf8a45e80e3955116e523d5d">&#9670;&#160;</a></span>m_lagrangian_hessian</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#ae2c90ccc902c6a31789f8c912033cdca">ObjectiveGradientFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::m_objective_gradient {nullptr}</td>
+          <td class="memname"><a class="el" href="#aaebacdfbe574af382fec580b2e226364">LagrangianHessianFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::m_lagrangian_hessian {nullptr}</td>
         </tr>
       </table>
   </td>
@@ -1255,23 +1491,23 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Gradient of the objective function \( \nabla f(\mathbf{x}) \) </p>
+<p>Hessian of the Lagrangian. </p>
 
 </div>
 </div>
-<a id="ac56d2acfc3e95970cb4c3fbfa8ee4350" name="ac56d2acfc3e95970cb4c3fbfa8ee4350"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac56d2acfc3e95970cb4c3fbfa8ee4350">&#9670;&#160;</a></span>m_objective_hessian</h2>
+<a id="aac9d75277a0ab510d45ad528a44a8812" name="aac9d75277a0ab510d45ad528a44a8812"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aac9d75277a0ab510d45ad528a44a8812">&#9670;&#160;</a></span>m_objective</h2>
 
 <div class="memitem">
 <div class="memproto">
 <div class="memtemplate">
-template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> N, <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> M&gt; </div>
+template&lt;typename Real&gt; </div>
 <table class="mlabels">
   <tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="#a7838845906d7f694367a80b59f14b850">ObjectiveHessianFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real, N, M &gt;::m_objective_hessian {nullptr}</td>
+          <td class="memname"><a class="el" href="#a75a94803a75d15c29351d40d62c94a5d">ObjectiveFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::m_objective {nullptr}</td>
         </tr>
       </table>
   </td>
@@ -1280,7 +1516,82 @@ template&lt;typename Real, <a class="el" href="namespace_pipal.html#a5614603aab2
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Hessian of the objective function \( \nabla^2 f(\mathbf{x}) \) </p>
+<p>Objective function. </p>
+
+</div>
+</div>
+<a id="a84a3a2b91899e9ca9be8d3da8d939a71" name="a84a3a2b91899e9ca9be8d3da8d939a71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84a3a2b91899e9ca9be8d3da8d939a71">&#9670;&#160;</a></span>m_objective_gradient</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a467db72970f7d1f6fe08d0cf049ede67">ObjectiveGradientFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::m_objective_gradient {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gradient of the objective function. </p>
+
+</div>
+</div>
+<a id="a5ecaf8efad8b9c2c5f0274e514f4901b" name="a5ecaf8efad8b9c2c5f0274e514f4901b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ecaf8efad8b9c2c5f0274e514f4901b">&#9670;&#160;</a></span>m_primal_lower_bounds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::m_primal_lower_bounds {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Lower bounds on the primal variables. </p>
+
+</div>
+</div>
+<a id="ab9fe2985b97df74bd42751684972cb84" name="ab9fe2985b97df74bd42751684972cb84"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab9fe2985b97df74bd42751684972cb84">&#9670;&#160;</a></span>m_primal_upper_bounds</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#a0230d1875cbab414fac56db07e080d6b">BoundsFunc</a> <a class="el" href="class_pipal_1_1_problem_wrapper.html">Pipal::ProblemWrapper</a>&lt; Real &gt;::m_primal_upper_bounds {nullptr}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Upper bounds on the primal variables. </p>
 
 </div>
 </div>

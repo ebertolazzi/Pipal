@@ -21,12 +21,22 @@
 namespace Pipal
 {
 
-  // Constructor
-  inline void buildIterate(Iterate & z, Parameter & p, Input & i, Counter & c)
+  /**
+   * \brief Initialize an Iterate object for a given problem/input.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[out] z Iterate object to initialize.
+   * \param[in] p Algorithm parameters (may be read).
+   * \param[in] i Problem input structure.
+   * \param[in] c Counters used to account evaluations.
+   * \param[in] problem Problem interface used for objective/constraints.
+   */
+  template <typename Real>
+  inline void buildIterate(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
+    Problem<Real> const & problem)
   {
     // Safe initialization of all members
-    z.f = 0.0;
-    z.fu = 0.0;
+    z.f = 0;
+    z.fu = 0;
     z.g.setZero(i.nV);
     z.r1.setZero(i.nE);
     z.r2.setZero(i.nE);
@@ -37,21 +47,21 @@ namespace Pipal
     z.cI.setZero(i.nI);
     z.JI.resize(i.nI, i.nV);
     z.H.resize(i.nV, i.nV);
-    z.v = 0.0;
-    z.vu = 0.0;
-    z.phi = 0.0;
+    z.v = 0;
+    z.vu = 0;
+    z.phi = 0;
     z.Annz = 0;
-    z.shift = 0.0;
+    z.shift = 0;
     z.b.resize(i.nA);
     z.kkt.setZero(3);
-    z.kkt_.setConstant(p.opt_err_mem, INFTY);
+    z.kkt_.setConstant(p.opt_err_mem, std::numeric_limits<Real>::infinity());
     z.fs = 1.0;
     z.cEs.setOnes(i.nE);
     z.cEu.setZero(i.nE);
     z.cIs.setOnes(i.nI);
     z.cIu.setZero(i.nI);
     z.A.resize(i.nA, i.nA);
-    z.shift22 = 0.0;
+    z.shift22 = 0;
     z.cut_ = false;
 
     // Initialize point
@@ -61,25 +71,34 @@ namespace Pipal
     z.lE.setZero(i.nE);
     z.lI.setConstant(i.nI, 0.5);
     z.err   = 0;
-    evalScalings(z, p, i, c);
-    evalFunctions(z, i, c);
-    evalGradients(z, i, c);
-    evalDependent(z, p, i);
+    evalScalings<Real>(z, p, i, c, problem);
+    evalFunctions<Real>(z, i, c, problem);
+    evalGradients<Real>(z, i, c, problem);
+    evalDependent<Real>(z, p, i);
     z.v0    = 1.0;
-    evalInfeasibility(z, i);
+    evalInfeasibility<Real>(z, i);
     z.v0    = z.v;
-    evalInfeasibility(z, i);
+    evalInfeasibility<Real>(z, i);
     z.v_    = z.v;
-    evalHessian(z, i, c);
+    evalHessian<Real>(z, i, c, problem);
     z.Hnnz  = static_cast<Integer>(z.H.nonZeros());
     z.JEnnz = static_cast<Integer>(z.JE.nonZeros());
     z.JInnz = static_cast<Integer>(z.JI.nonZeros());
-    initNewtonMatrix(z, i);
-    evalNewtonMatrix(z, p, i, c);
+    initNewtonMatrix<Real>(z, i);
+    evalNewtonMatrix<Real>(z, p, i, c);
   }
 
-  // Termination checker
-  inline Integer checkTermination(Iterate const & z, Parameter const & p, Input const & i, Counter const & c)
+  /**
+   * \brief Check termination criteria for the solver.
+   *
+   * Evaluates optimality/feasibility/iteration-count/bounds error conditions and returns the
+   * termination code used by the solver.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \return An integer termination code (0 = continue, 1..5 = specific exits).
+   */
+  template <typename Real>
+  inline Integer checkTermination(Iterate<Real> const & z, Parameter<Real> const & p, Input<Real> const & i,
+    Counter const & c)
   {
     // Update termination based on optimality error of nonlinear optimization problem
     if (z.kkt(1) <= p.opt_err_tol && z.v <= p.opt_err_tol) {return 1;}
@@ -99,21 +118,38 @@ namespace Pipal
     return 0;
   }
 
-  // Dependent quantity evaluator
-  inline void evalDependent(Iterate & z, Parameter & p, Input & i)
+  /**
+   * \brief Evaluate quantities that depend on penalty/interior parameters.
+   *
+   * Runs slack, merit and KKT-error evaluations that are functions of the current penalty and
+   * interior-point parameters.
+   * \param[in] z Current iterate.
+   * \param[in] p Algorithm parameters.
+   * \param[in] i Problem input structure.
+   */
+  template <typename Real>
+  inline void evalDependent(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i)
   {
     // Evaluate quantities dependent on penalty and interior-point parameters
-    evalSlacks(z, p, i);
-    evalMerit(z, i);
-    evalKKTErrors(z, i);
+    evalSlacks<Real>(z, p, i);
+    evalMerit<Real>(z, i);
+    evalKKTErrors<Real>(z, i);
   }
 
-  // Function evaluator
-  inline void evalFunctions(Iterate & z, Input & i, Counter & c)
+  /**
+   * \brief Evaluate objective and constraint functions at the current iterate.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   * \param[in] c Counters used to account evaluations.
+   * \param[in] problem Problem interface used for objective/constraints.
+   */
+  template <typename Real>
+  inline void evalFunctions(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const & problem)
   {
     // Evaluate x in original space
-    Vector x_orig;
-    evalXOriginal(z, i, x_orig);
+    Vector<Real> x_orig;
+    evalXOriginal<Real>(z, i, x_orig);
 
     // Initialize/Reset evaluation flag
     z.err = 0;
@@ -122,23 +158,23 @@ namespace Pipal
     incrementFunctionCount(c);
 
     // Try AMPL functions evaluation
-    Vector c_orig;
+    Vector<Real> c_orig;
     try
     {
       // Evaluate AMPL functions
-      i.f_fun(x_orig, z.f);
-      i.c_fun(x_orig, c_orig);
+      problem.objective(x_orig, z.f);
+      problem.constraints(x_orig, c_orig);
     }
     catch (...)
     {
       // Set evaluation flag, default values, and return
       z.err = 1;
-      z.f   = QUIET_NAN;
-      z.cE.setConstant(i.nE, QUIET_NAN);
-      z.cI.setConstant(i.nI, QUIET_NAN);
-      z.fu  = QUIET_NAN;
-      z.cEu.setConstant(i.nE, QUIET_NAN);
-      z.cIu.setConstant(i.nI, QUIET_NAN);
+      z.f   = std::numeric_limits<Real>::quiet_NaN();
+      z.cE.setConstant(i.nE, std::numeric_limits<Real>::quiet_NaN());
+      z.cI.setConstant(i.nI, std::numeric_limits<Real>::quiet_NaN());
+      z.fu  = std::numeric_limits<Real>::quiet_NaN();
+      z.cEu.setConstant(i.nE, std::numeric_limits<Real>::quiet_NaN());
+      z.cIu.setConstant(i.nI, std::numeric_limits<Real>::quiet_NaN());
       return;
     }
 
@@ -183,9 +219,17 @@ namespace Pipal
   }
 
 
-  // Create the function to inject a block into a sparse matrix with given indices
-  inline void insert_block(SparseMatrix & mat_sparse, Matrix const & mat_dense, Integer const row_offset,
-    Integer const col_offset)
+  /**
+   * \brief Insert a dense block into a sparse matrix at the specified offsets.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[out] mat_sparse Sparse matrix where to insert the block.
+   * \param[in] mat_dense Dense matrix block to insert.
+   * \param[in] row_offset Row offset in the sparse matrix.
+   * \param[in] col_offset Column offset in the sparse matrix.
+   */
+  template <typename Real>
+  inline void insert_block(SparseMatrix<Real> & mat_sparse, Matrix<Real> const & mat_dense,
+    Integer const row_offset, Integer const col_offset)
   {
     const Integer cols{static_cast<Integer>(mat_dense.cols())}, rows{static_cast<Integer>(mat_dense.rows())};
     for (Integer r{0}; r < rows; ++r) {
@@ -195,12 +239,24 @@ namespace Pipal
     }
   }
 
-  // Gradient evaluator
-  inline void evalGradients(Iterate & z, Input & i, Counter & c)
+  /**
+   * \brief Evaluate objective gradient and constraint Jacobian.
+   *
+   * Calls the problem-provided gradient/jacobian functions in the original space, maps the results
+   * into the internal compressed representations and applies scaling. Increments gradient counters
+   * and handles exceptions.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   * \param[in] c Counters used to account evaluations.
+   * \param[in] problem Problem interface used for objective/constraints.
+   */
+  template <typename Real>
+  inline void evalGradients(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const & problem)
   {
     // Evaluate x in original space
-    Vector x_orig;
-    evalXOriginal(z, i, x_orig);
+    Vector<Real> x_orig;
+    evalXOriginal<Real>(z, i, x_orig);
 
     // Initialize/Reset evaluation flag
     z.err = 0;
@@ -209,13 +265,13 @@ namespace Pipal
     incrementGradientCount(c);
 
     // Try AMPL gradients evaluation
-    Vector g_orig;
-    Matrix J_orig;
+    Vector<Real> g_orig;
+    Matrix<Real> J_orig;
     try
     {
       // Evaluate AMPL gradients
-      i.g_fun(x_orig, g_orig);
-      i.J_fun(x_orig, J_orig);
+      problem.objective_gradient(x_orig, g_orig);
+      problem.constraints_jacobian(x_orig, J_orig);
     }
     catch (...)
     {
@@ -230,13 +286,13 @@ namespace Pipal
     // Set equality constraint Jacobian
     if (i.nE > 0) {
       Integer col_offset{0};
-      insert_block(z.JE, J_orig(i.I6, i.I1), 0, col_offset);
+      insert_block<Real>(z.JE, J_orig(i.I6, i.I1), 0, col_offset);
       col_offset += i.I1.size();
-      insert_block(z.JE, J_orig(i.I6, i.I3), 0, col_offset);
+      insert_block<Real>(z.JE, J_orig(i.I6, i.I3), 0, col_offset);
       col_offset += i.I3.size();
-      insert_block(z.JE, J_orig(i.I6, i.I4), 0, col_offset);
+      insert_block<Real>(z.JE, J_orig(i.I6, i.I4), 0, col_offset);
       col_offset += i.I4.size();
-      insert_block(z.JE, J_orig(i.I6, i.I5), 0, col_offset);
+      insert_block<Real>(z.JE, J_orig(i.I6, i.I5), 0, col_offset);
     }
 
     // Initialize inequality constraint Jacobian
@@ -259,42 +315,42 @@ namespace Pipal
     }
     if (i.n7 > 0) {
       Integer row_offset{i.n3+i.n4+i.n5+i.n5}, col_offset{0};
-      insert_block(z.JI, -J_orig(i.I7, i.I1), row_offset, col_offset);
+      insert_block<Real>(z.JI, -J_orig(i.I7, i.I1), row_offset, col_offset);
       col_offset += i.I1.size();
-      insert_block(z.JI, J_orig(i.I7, i.I3), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I7, i.I3), row_offset, col_offset);
       col_offset += i.I3.size();
-      insert_block(z.JI, J_orig(i.I7, i.I4), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I7, i.I4), row_offset, col_offset);
       col_offset += i.I4.size();
-      insert_block(z.JI, J_orig(i.I7, i.I5), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I7, i.I5), row_offset, col_offset);
     }
     if (i.n8 > 0) {
       Integer row_offset{i.n3+i.n4+i.n5+i.n5+i.n7}, col_offset{0};
-      insert_block(z.JI, J_orig(i.I8, i.I1), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I8, i.I1), row_offset, col_offset);
       col_offset += i.I1.size();
-      insert_block(z.JI, J_orig(i.I8, i.I3), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I8, i.I3), row_offset, col_offset);
       col_offset += i.I3.size();
-      insert_block(z.JI, J_orig(i.I8, i.I4), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I8, i.I4), row_offset, col_offset);
       col_offset += i.I4.size();
-      insert_block(z.JI, J_orig(i.I8, i.I5), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I8, i.I5), row_offset, col_offset);
     }
     if (i.n9 > 0) {
       Integer row_offset{i.n3+i.n4+i.n5+i.n5+i.n7+i.n8}, col_offset{0};
-      insert_block(z.JI, -J_orig(i.I9, i.I1), row_offset, col_offset);
+      insert_block<Real>(z.JI, -J_orig(i.I9, i.I1), row_offset, col_offset);
       col_offset += i.I1.size();
-      insert_block(z.JI, -J_orig(i.I9, i.I3), row_offset, col_offset);
+      insert_block<Real>(z.JI, -J_orig(i.I9, i.I3), row_offset, col_offset);
       col_offset += i.I3.size();
-      insert_block(z.JI, -J_orig(i.I9, i.I4), row_offset, col_offset);
+      insert_block<Real>(z.JI, -J_orig(i.I9, i.I4), row_offset, col_offset);
       col_offset += i.I4.size();
-      insert_block(z.JI, -J_orig(i.I9, i.I5), row_offset, col_offset);
+      insert_block<Real>(z.JI, -J_orig(i.I9, i.I5), row_offset, col_offset);
       row_offset += i.n9; // next row block
       col_offset = 0;
-      insert_block(z.JI, J_orig(i.I9, i.I1), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I9, i.I1), row_offset, col_offset);
       col_offset += i.I1.size();
-      insert_block(z.JI, J_orig(i.I9, i.I3), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I9, i.I3), row_offset, col_offset);
       col_offset += i.I3.size();
-      insert_block(z.JI, J_orig(i.I9, i.I4), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I9, i.I4), row_offset, col_offset);
       col_offset += i.I4.size();
-      insert_block(z.JI, J_orig(i.I9, i.I5), row_offset, col_offset);
+      insert_block<Real>(z.JI, J_orig(i.I9, i.I5), row_offset, col_offset);
     }
 
     // Scale objective gradient
@@ -303,23 +359,39 @@ namespace Pipal
     // Scale constraint Jacobians
     if (i.nE > 0) {
       for (Integer k{0}; k < z.JE.outerSize(); ++k) {
-        for (SparseMatrix::InnerIterator it(z.JE, k); it; ++it) {it.valueRef() *= z.cEs[it.row()];}
+        for (typename SparseMatrix<Real>::InnerIterator it(z.JE, k); it; ++it) {
+          it.valueRef() *= z.cEs[it.row()];
+        }
       }
     }
     if (i.nI > 0) {
       for (Integer k{0}; k < z.JI.outerSize(); ++k) {
-        for (SparseMatrix::InnerIterator it(z.JI, k); it; ++it) {it.valueRef() *= z.cIs[it.row()];}
+        for (typename SparseMatrix<Real>::InnerIterator it(z.JI, k); it; ++it) {
+          it.valueRef() *= z.cIs[it.row()];
+        }
       }
     }
   }
 
-  // Hessian evaluator
-  inline void evalHessian(Iterate & z, Input & i, Counter & c)
+  /**
+   * \brief Evaluate the Hessian of the Lagrangian and assemble internal H.
+   *
+   * Calls the problem's Hessian-of-Lagrangian routine (with multipliers and primal variables in the
+   * original space), maps blocks into the internal sparse Hessian and rescales according to
+   * penalization and scaling factors.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   * \param[in] c Counters used to account evaluations.
+   * \param[in] problem Problem interface used for objective/constraints.
+   */
+  template <typename Real>
+  inline void evalHessian(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const & problem)
   {
     // Evaluate lambda in original space
-    Vector l_orig, x_orig;
-    evalLambdaOriginal(z, i, l_orig);
-    evalXOriginal(z, i, x_orig);
+    Vector<Real> l_orig, x_orig;
+    evalLambdaOriginal<Real>(z, i, l_orig);
+    evalXOriginal<Real>(z, i, x_orig);
 
     // Initialize/Reset evaluation flag
     z.err = 0;
@@ -328,11 +400,11 @@ namespace Pipal
     incrementHessianCount(c);
 
     // Try AMPL Hessian evaluation
-    Matrix H_orig;
+    Matrix<Real> H_orig;
     try
     {
       // Evaluate H_orig
-      i.H_fun(x_orig, l_orig, H_orig);
+      problem.lagrangian_hessian(x_orig, l_orig, H_orig);
     }
     catch (...)
     {
@@ -343,58 +415,73 @@ namespace Pipal
 
     // Set Hessian of the Lagrangian
     Integer row_offset{0}, col_offset{0};
-    insert_block(z.H, H_orig(i.I1, i.I1), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I1, i.I1), row_offset, col_offset);
     col_offset += i.I1.size();
-    insert_block(z.H, H_orig(i.I1, i.I3), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I1, i.I3), row_offset, col_offset);
     col_offset += i.I3.size();
-    insert_block(z.H, H_orig(i.I1, i.I4), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I1, i.I4), row_offset, col_offset);
     col_offset += i.I4.size();
-    insert_block(z.H, H_orig(i.I1, i.I5), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I1, i.I5), row_offset, col_offset);
     row_offset += i.I1.size();
     col_offset = 0; // next row block
-    insert_block(z.H, H_orig(i.I3, i.I1), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I3, i.I1), row_offset, col_offset);
     col_offset += i.I1.size();
-    insert_block(z.H, H_orig(i.I3, i.I3), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I3, i.I3), row_offset, col_offset);
     col_offset += i.I3.size();
-    insert_block(z.H, H_orig(i.I3, i.I4), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I3, i.I4), row_offset, col_offset);
     col_offset += i.I4.size();
-    insert_block(z.H, H_orig(i.I3, i.I5), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I3, i.I5), row_offset, col_offset);
     row_offset += i.I3.size();
     col_offset = 0; // next row block
-    insert_block(z.H, H_orig(i.I4, i.I1), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I4, i.I1), row_offset, col_offset);
     col_offset += i.I1.size();
-    insert_block(z.H, H_orig(i.I4, i.I3), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I4, i.I3), row_offset, col_offset);
     col_offset += i.I3.size();
-    insert_block(z.H, H_orig(i.I4, i.I4), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I4, i.I4), row_offset, col_offset);
     col_offset += i.I4.size();
-    insert_block(z.H, H_orig(i.I4, i.I5), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I4, i.I5), row_offset, col_offset);
     row_offset += i.I4.size();
     col_offset = 0; // next row block
-    insert_block(z.H, H_orig(i.I5, i.I1), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I5, i.I1), row_offset, col_offset);
     col_offset += i.I1.size();
-    insert_block(z.H, H_orig(i.I5, i.I3), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I5, i.I3), row_offset, col_offset);
     col_offset += i.I3.size();
-    insert_block(z.H, H_orig(i.I5, i.I4), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I5, i.I4), row_offset, col_offset);
     col_offset += i.I4.size();
-    insert_block(z.H, H_orig(i.I5, i.I5), row_offset, col_offset);
+    insert_block<Real>(z.H, H_orig(i.I5, i.I5), row_offset, col_offset);
 
     // Rescale H
     z.H *= z.rho*z.fs;
   }
 
-  // Infeasibility evaluator
-  inline void evalInfeasibility(Iterate & z, Input const & i)
+  /**
+   * \brief Compute scaled and unscaled feasibility violations.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   */
+  template <typename Real>
+  inline void evalInfeasibility(Iterate<Real> & z, Input<Real> const & i)
   {
     // Evaluate scaled and unscaled feasibility violations
-    z.v  = evalViolation(i, z.cE, z.cI) / std::max(1.0, z.v0);
-    z.vu = evalViolation(i, z.cEu, z.cIu);
+    z.v  = evalViolation<Real>(i, z.cE, z.cI) / std::max(1.0, z.v0);
+    z.vu = evalViolation<Real>(i, z.cEu, z.cIu);
   }
 
-  // KKT error evaluator
-  inline Real evalKKTError(Iterate & z, Input const & i, Real const rho, Real const mu)
+  /**
+   * \brief Compute the infinity-norm of the KKT optimality vector.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   * \param[in] rho Current penalty parameter.
+   * \param[in] mu Current interior-point parameter.
+   * \return The infinity-norm of the KKT optimality vector.
+   */
+  template <typename Real>
+  inline Real evalKKTError(Iterate<Real> & z, Input<Real> const & i, Real const rho, Real const mu)
   {
     // Initialize optimality vector
-    Vector kkt(i.nV+2*i.nE+2*i.nI);
+    Vector<Real> kkt(i.nV+2*i.nE+2*i.nI);
     kkt.setZero();
 
     // Set gradient of penalty objective
@@ -413,7 +500,7 @@ namespace Pipal
     }
 
     // Scale complementarity
-    if (rho > 0.0) {
+    if (rho > 0) {
       kkt *= (1.0 / std::max(1.0, (rho*z.g).template lpNorm<Eigen::Infinity>()));
     }
 
@@ -421,15 +508,30 @@ namespace Pipal
     return kkt.template lpNorm<Eigen::Infinity>();
   }
 
-  // KKT errors evaluator
-  inline void evalKKTErrors(Iterate & z, Input const & i)
+  /**
+   * \brief Compute the three KKT error measures used by the solver.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   */
+  template <typename Real>
+  inline void evalKKTErrors(Iterate<Real> & z, Input<Real> const & i)
   {
     // Loop to compute optimality errors
-    z.kkt << evalKKTError(z, i, 0, 0), evalKKTError(z, i, z.rho, 0), evalKKTError(z, i, z.rho, z.mu);
+    z.kkt(0) = evalKKTError<Real>(z, i, 0.0, 0.0);
+    z.kkt(1) = evalKKTError<Real>(z, i, z.rho, 0.0);
+    z.kkt(2) = evalKKTError<Real>(z, i, z.rho, z.mu);
   }
 
-  // Evaluator of lambda in original space
-  inline void evalLambdaOriginal(Iterate const & z, Input const & i, Vector & l)
+  /**
+   * \brief Reconstruct multipliers in the original variable/constraint space.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   * \param[out] l Vector to store multipliers in original space.
+   */
+  template <typename Real>
+  inline void evalLambdaOriginal(Iterate<Real> const & z, Input<Real> const & i, Vector<Real> & l)
   {
     // Initialize multipliers in original space
     l.setZero(i.nE+i.n7+i.n8+i.n9);
@@ -438,7 +540,7 @@ namespace Pipal
     if (i.nE > 0) {l(i.I6) = z.lE*(z.cEs/(z.rho*z.fs));}
 
     // Scale inequality constraint multipliers
-    Array lI;
+    Array<Real> lI;
     if (i.n7+i.n8+i.n9 > 0) {lI = z.lI*(z.cIs/(z.rho*z.fs));}
 
     // Set inequality constraint multipliers in original space
@@ -454,33 +556,57 @@ namespace Pipal
     }
   }
 
-  // Matrices evaluator
-  inline void evalMatrices(Iterate & z, Parameter & p, Input & i, Counter & c)
+  /**
+   * \brief Evaluate model matrices (Hessian and Newton matrix).
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] p Algorithm parameters.
+   * \param[in] i Problem input structure.
+   * \param[in] c Counters used to account evaluations.
+   * \param[in] problem Problem interface used for objective/constraints.
+   */
+  template <typename Real>
+  inline void evalMatrices(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
+    Problem<Real> const & problem)
   {
     // Evaluate Hessian and Newton matrices
-    evalHessian(z, i, c);
-    evalNewtonMatrix(z, p, i, c);
+    evalHessian<Real>(z, i, c, problem);
+    evalNewtonMatrix<Real>(z, p, i, c);
   }
 
-  // Merit evaluator
-  inline void evalMerit(Iterate & z, Input const & i)
+  /**
+   * \brief Compute the merit function value for the current iterate.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   */
+  template <typename Real>
+  inline void evalMerit(Iterate<Real> & z, Input<Real> const & i)
   {
     // Initialize merit for objective
     z.phi = z.rho*z.f;
 
     // Update merit for slacks
     if (i.nE > 0) {
-      Array r_all(2*i.nE); r_all << z.r1, z.r2;
+      Array<Real> r_all(2*i.nE); r_all << z.r1, z.r2;
       z.phi -= z.mu * r_all.log().sum() - r_all.sum();
     }
     if (i.nI > 0) {
-      Array s_all(2*i.nI); s_all << z.s1, z.s2;
+      Array<Real> s_all(2*i.nI); s_all << z.s1, z.s2;
       z.phi -= z.mu * s_all.log().sum() - z.s2.sum();
     }
   }
 
-  // Newton matrix evaluator
-  inline void evalNewtonMatrix(Iterate & z, Parameter & p, Input const & i, Counter & c)
+  /**
+   * \brief Assemble and (attempt to) factorize the Newton system matrix.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] p Algorithm parameters.
+   * \param[in] i Problem input structure.
+   * \param[in] c Counters used to account evaluations.
+   */
+  template <typename Real>
+  inline void evalNewtonMatrix(Iterate<Real> & z, Parameter<Real> & p, Input<Real> const & i, Counter & c)
   {
     // Check for equality constraints
     if (i.nE > 0)
@@ -492,7 +618,7 @@ namespace Pipal
       }
 
       // Set constraint Jacobian
-      insert_block(z.A, z.JE, i.nV+2*i.nE+2*i.nI, 0);
+      insert_block<Real>(z.A, z.JE, i.nV+2*i.nE+2*i.nI, 0);
     }
 
     // Check for inequality constraints
@@ -506,7 +632,7 @@ namespace Pipal
       }
 
       // Set constraint Jacobian
-      insert_block(z.A, z.JI, i.nV+3*i.nE+2*i.nI, 0);
+      insert_block<Real>(z.A, z.JI, i.nV+3*i.nE+2*i.nI, 0);
     }
 
     // Set minimum potential shift
@@ -514,16 +640,16 @@ namespace Pipal
 
     // Initialize Hessian modification
     if (z.cut_ == true) {z.shift = std::min(p.shift_max, min_shift/p.shift_factor2);}
-    else {z.shift = 0.0;}
+    else {z.shift = 0;}
     // Initialize inertia correction loop
     bool done{false};
-    z.shift22 = 0.0;
+    z.shift22 = 0;
 
     // Loop until inertia is correct
     while (!done && z.shift < p.shift_max)
     {
       // Set Hessian of Lagrangian
-      insert_block(z.A, z.H+z.shift*Matrix::Identity(i.nV, i.nV), 0, 0);;
+      insert_block<Real>(z.A, z.H+z.shift*Matrix<Real>::Identity(i.nV, i.nV), 0, 0);
 
       // Set diagonal terms
       {
@@ -557,7 +683,7 @@ namespace Pipal
 
       // Check inertia
       if (peig < i.nV+2*i.nE+2*i.nI) {z.shift = std::max(min_shift, z.shift/p.shift_factor2);}
-      else if (neig < i.nE+i.nI && std::abs(z.shift22) < EPSILON) {z.shift22 = p.shift_min;}
+      else if (neig < i.nE+i.nI && z.shift22 == 0) {z.shift22 = p.shift_min;}
       else {done = true;}
     }
 
@@ -568,8 +694,14 @@ namespace Pipal
     z.A.makeCompressed();
   }
 
-  // Newton right-hand side evaluator
-  inline void evalNewtonRhs(Iterate & z, Input const & i)
+  /**
+   * \brief Build the right-hand side vector for the Newton system.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   */
+  template <typename Real>
+  inline void evalNewtonRhs(Iterate<Real> & z, Input<Real> const & i)
   {
     // Initialize right-hand side vector
     z.b.setZero();
@@ -580,11 +712,11 @@ namespace Pipal
 
       // Set gradient of Lagrangian for constraints
       if (i.nE > 0) {
-        Vector tmp((z.lE.matrix().transpose()*z.JE).transpose());
+        Vector<Real> tmp((z.lE.matrix().transpose()*z.JE).transpose());
         for (Integer k{0}; k < tmp.size(); ++k) {z.b.coeffRef(k) += tmp[k];}
       }
       if (i.nI > 0) {
-        Vector tmp((z.lI.matrix().transpose()*z.JI).transpose());
+        Vector<Real> tmp((z.lI.matrix().transpose()*z.JI).transpose());
         for (Integer k{0}; k < tmp.size(); ++k) {z.b.coeffRef(k) += tmp[k];}
       }
     }
@@ -592,32 +724,42 @@ namespace Pipal
     // Set complementarity for constraint slacks
     if (i.nE > 0) {
       // Compute element-wise complementarity terms with safe element-wise division
-      Vector tmp(2*i.nE);
+      Vector<Real> tmp(2*i.nE);
       tmp << 1.0 + z.lE - z.mu * z.r1.cwiseInverse(), 1.0 - z.lE - z.mu * z.r2.cwiseInverse();
       for (Integer k{0}; k < 2*i.nE; ++k) {z.b.insert(i.nV + k) = tmp[k];}
     }
     if (i.nI > 0) {
       // Compute element-wise complementarity terms with safe element-wise division
-      Vector tmp(2*i.nI);
+      Vector<Real> tmp(2*i.nI);
       tmp << z.lI - z.mu * z.s1.cwiseInverse(), 1.0 - z.lI - z.mu * z.s2.cwiseInverse();
       for (Integer k{0}; k < 2*i.nI; ++k) {z.b.insert(i.nV + 2*i.nE + k) = tmp[k];}
     }
 
     // Set penalty-interior-point constraint values
     if (i.nE > 0) {
-      const Vector tmp(z.cE + z.r1 - z.r2);
+      const Vector<Real> tmp(z.cE + z.r1 - z.r2);
       const Integer offset{i.nV+2*i.nE+2*i.nI};
       for (Integer k{0}; k < i.nE; ++k) {z.b.coeffRef(offset+k) = tmp[k];}
     }
     if (i.nI > 0) {
-      const Vector tmp(z.cI + z.s1 - z.s2);
+      const Vector<Real> tmp(z.cI + z.s1 - z.s2);
       const Integer offset{i.nV+3*i.nE+2*i.nI};
       for (Integer k{0}; k < i.nI; ++k) {z.b.coeffRef(offset+k) = tmp[k];}
     }
   }
 
-  // Scalings evaluator
-  inline void evalScalings(Iterate & z, Parameter & p, Input & i, Counter & c)
+  /**
+   * \brief Evaluate scaling multipliers for objective and constraints.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] p Algorithm parameters.
+   * \param[in] i Problem input structure.
+   * \param[in] c Counters used to account evaluations.
+   * \param[in] problem Problem interface used for objective/constraints.
+   */
+  template <typename Real>
+  inline void evalScalings(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
+    Problem<Real> const & problem)
   {
     // Initialize scalings
     z.fs = 1;
@@ -625,7 +767,7 @@ namespace Pipal
     z.cIs.setOnes(i.nI);
 
     // Evaluate gradients
-    evalGradients(z, i, c);
+    evalGradients(z, i, c, problem);
 
     // Scale down objective if norm of gradient is too large
     z.fs = p.grad_max / std::max(z.g.template lpNorm<Eigen::Infinity>(), p.grad_max);
@@ -636,7 +778,7 @@ namespace Pipal
       // Scale down equality constraint j if norm of gradient is too large
       Real row_inf_norm{0.0};
       for (Integer c{0}; c < z.JE.outerSize(); ++c) {
-        for (SparseMatrix::InnerIterator it(z.JE, c); it; ++it) {
+        for (typename SparseMatrix<Real>::InnerIterator it(z.JE, c); it; ++it) {
           if (it.row() == j) {row_inf_norm = std::max(row_inf_norm, std::abs(it.value()));}
         }
       }
@@ -649,7 +791,7 @@ namespace Pipal
       // Scale down inequality constraint j if norm of gradient is too large
       Real row_inf_norm{0.0};
       for (Integer c{0}; c < z.JI.outerSize(); ++c) {
-        for (SparseMatrix::InnerIterator it(z.JI, c); it; ++it) {
+        for (typename SparseMatrix<Real>::InnerIterator it(z.JI, c); it; ++it) {
           if (it.row() == j) {row_inf_norm = std::max(row_inf_norm, std::abs(it.value()));}
         }
       }
@@ -657,8 +799,15 @@ namespace Pipal
     }
   }
 
-  // Slacks evaluator
-  inline void evalSlacks(Iterate & z, Parameter & p, Input const & i)
+  /**
+   * \brief Compute internal slack variables from current iterate.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] p Algorithm parameters.
+   * \param[in] i Problem input structure.
+   */
+  template <typename Real>
+  inline void evalSlacks(Iterate<Real> & z, Parameter<Real> & p, Input<Real> const & i)
   {
     // Check for equality constraints
     if (i.nE > 0)
@@ -685,8 +834,15 @@ namespace Pipal
     }
   }
 
-  // Evaluator of x in original space
-  inline void evalXOriginal(Iterate & z, Input const & i, Vector & x)
+  /**
+   * \brief Reconstruct the full primal vector in the original variable ordering.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   * \param[out] x Vector to store primal variables in original space.
+   */
+  template <typename Real>
+  inline void evalXOriginal(Iterate<Real> & z, Input<Real> const & i, Vector<Real> & x)
   {
     // Initialize x in original space
     x.setZero(i.n0);
@@ -699,15 +855,29 @@ namespace Pipal
     x(i.I5) = z.x.segment(i.n1+i.n3+i.n4, i.n5);
   }
 
-  // Gets primal-dual point
-  inline void getSolution(Iterate & z, Input & i, Vector & x, Vector & l)
+  /**
+   * \brief Extract a primal-dual solution in original ordering.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   * \param[out] x Vector to store primal variables in original space.
+   * \param[out] l Vector to store multipliers in original space.
+   */
+  template <typename Real>
+  inline void getSolution(Iterate<Real> & z, Input<Real> & i, Vector<Real> & x, Vector<Real> & l)
   {
     evalXOriginal(z, i, x);
     evalLambdaOriginal(z, i, l);
   }
 
-  // Initializes Newton matrix
-  inline void initNewtonMatrix(Iterate &z, Input const &i)
+  /**
+   * \brief Reserve and initialize the internal sparse Newton matrix structure.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   */
+  template <typename Real>
+  inline void initNewtonMatrix(Iterate<Real> &z, Input<Real> const &i)
   {
     // Allocate memory
     z.A.reserve(z.Hnnz + 5*i.nE + 5*i.nI + z.JEnnz + z.JInnz);
@@ -751,13 +921,37 @@ namespace Pipal
     }
   }
 
-  // Set interior-point parameter
-  inline void setMu(Iterate & z, Real const mu) {z.mu = mu;}
+  /**
+   * \brief Set interior-point parameter \p mu.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] mu New interior-point parameter value.
+   */
+  template <typename Real>
+  inline void setMu(Iterate<Real> & z, Real const mu) {z.mu = mu;}
 
-  // Set primal variables
-  inline void setPrimals(Iterate & z, Input const & i, Vector const & x, Array const & r1,
-    Array const & r2, Array const  & s1, Array const & s2, Array const  & lE, Array const & lI,
-    Real const f, Array const  & cE, Array const & cI, Real const phi)
+  /**
+   * \brief Set primal/dual blocks and associated quantities on an iterate.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   * \param[in] x Primal variable vector.
+   * \param[in] r1 Equality constraint slack variables (lower).
+   * \param[in] r2 Equality constraint slack variables (upper).
+   * \param[in] s1 Inequality constraint slack variables (lower).
+   * \param[in] s2 Inequality constraint slack variables (upper).
+   * \param[in] lE Equality constraint multipliers.
+   * \param[in] lI Inequality constraint multipliers.
+   * \param[in] f Objective function value.
+   * \param[in] cE Equality constraint values.
+   * \param[in] cI Inequality constraint values.
+   * \param[in] phi Merit function value.
+   */
+  template <typename Real>
+  inline void setPrimals(Iterate<Real> & z, Input<Real> const & i, Vector<Real> const & x, Array<Real>
+    const & r1, Array<Real> const & r2, Array<Real> const  & s1, Array<Real> const & s2, Array<Real>
+    const & lE, Array<Real> const & lI, Real const f, Array<Real> const  & cE, Array<Real> const & cI,
+    Real const phi)
   {
     // Set primal variables
     z.x = x; z.f = f;
@@ -766,14 +960,41 @@ namespace Pipal
     z.phi = phi;
   }
 
-  // Set penalty parameter
-  inline void setRho(Iterate & z, Real const rho) {z.rho = rho;}
+  /**
+   * \brief Set penalty parameter rho.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] rho New penalty parameter value.
+   */
+  template <typename Real>
+  inline void setRho(Iterate<Real> & z, Real const rho) {z.rho = rho;}
 
-  // Set last penalty parameter
-  inline void setRhoLast(Iterate & z, Real const rho) {z.rho_ = rho;}
+  /**
+   * \brief Set last (previous) penalty parameter value.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] rho New last penalty parameter value.
+   */
+  template <typename Real>
+  inline void setRhoLast(Iterate<Real> & z, Real const rho) {z.rho_ = rho;}
 
-  // Iterate updater
-  inline void updateIterate(Iterate & z, Parameter & p, Input & i, Counter & c, Direction const & d, Acceptance const  & a)
+  /**
+   * \brief Update the iterate after a trial step is accepted.
+   *
+   * Applies the accepted step to the iterate, recomputes infeasibility and gradients and updates
+   * parameter memory used for adaptive strategies.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] p Algorithm parameters.
+   * \param[in] i Problem input structure.
+   * \param[in] c Counters used to account evaluations.
+   * \param[in] d Computed search direction.
+   * \param[in] a Step acceptance information.
+   * \param[in] problem Problem interface used for objective/constraints.
+   */
+  template <typename Real>
+  inline void updateIterate(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
+    Direction<Real> const & d, Acceptance<Real> const  & a, Problem<Real> const & problem)
   {
     // Update last quantities
     z.v_   = z.v;
@@ -782,7 +1003,7 @@ namespace Pipal
     // Update iterate quantities
     updatePoint(z, i, d, a);
     evalInfeasibility(z, i);
-    evalGradients(z, i, c);
+    evalGradients(z, i, c, problem);
     evalDependent(z, p, i);
 
     // Update last KKT errors
@@ -790,8 +1011,18 @@ namespace Pipal
     z.kkt_ << z.kkt(1), z.kkt_.head(p.opt_err_mem-1);
   }
 
-  // Parameter updater
-  inline void updateParameters(Iterate & z, Parameter & p, Input & i)
+  /**
+   * \brief Update penalty and interior-point parameters based on KKT errors.
+   *
+   * Adjusts rho and mu using the solver's adaptive rules to drive optimality and feasibility towards
+   * the desired tolerances.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] p Algorithm parameters.
+   * \param[in] i Problem input structure.
+   */
+  template <typename Real>
+  inline void updateParameters(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i)
   {
     // Check for interior-point parameter update based on optimality error
     while (z.mu > p.mu_min && z.kkt(2) <= std::max(z.mu, p.opt_err_tol-z.mu))
@@ -826,8 +1057,17 @@ namespace Pipal
     }
   }
 
-  // Primal point updater
-  inline void updatePoint(Iterate & z, Input const & i, Direction const & d, Acceptance const & a)
+  /**
+   * \brief Apply a step to the primal and dual variables of the iterate.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] z Current iterate.
+   * \param[in] i Problem input structure.
+   * \param[in] d Computed search direction.
+   * \param[in] a Step acceptance information.
+   */
+  template <typename Real>
+  inline void updatePoint(Iterate<Real> & z, Input<Real> const & i, Direction<Real> const & d,
+    Acceptance<Real> const & a)
   {
     // Update primal and dual variables
     z.x += a.p*d.x ;
@@ -837,18 +1077,26 @@ namespace Pipal
     if (i.nI > 0) {z.lI += a.d*d.lI;}
   }
 
-  // Feasibility violation evaluator
-  inline Real evalViolation(Input const & i, Array const & cE, Array const & cI)
+  /**
+   * \brief Compute the 1-norm feasibility violation from equality/inequality values.
+   * \tparam Real Floating-point type used by the algorithm.
+   * \param[in] i Problem input structure.
+   * \param[in] cE Equality constraint values.
+   * \param[in] cI Inequality constraint values.
+   * \return The 1-norm feasibility violation.
+   */
+  template <typename Real>
+  inline Real evalViolation(Input<Real> const & i, Array<Real> const & cE, Array<Real> const & cI)
   {
     // Initialize violation vector
-    Vector vec;
+    Vector<Real> vec;
 
     // Update vector for constraint values
     if (i.nE > 0) {vec = cE;}
     if (i.nI > 0) {
-      Vector cIpos(cI.cwiseMax(0.0));
+      Vector<Real> cIpos(cI.cwiseMax(0.0));
       if (vec.size() > 0) {
-        Vector tmp(vec.size() + cIpos.size());
+        Vector<Real> tmp(vec.size() + cIpos.size());
         tmp << vec, cIpos;
         vec = std::move(tmp);
       } else {

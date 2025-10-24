@@ -1,0 +1,953 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=9"/>
+<meta name="generator" content="Doxygen 1.14.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<!-- BEGIN opengraph metadata -->
+<meta property="og:title" content="Doxygen Awesome" />
+<meta property="og:image" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta property="og:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<meta property="og:url" content="https://jothepro.github.io/doxygen-awesome-css/" />
+<!-- END opengraph metadata -->
+<!-- BEGIN twitter metadata -->
+<meta name="twitter:image:src" content="https://repository-images.githubusercontent.com/348492097/4f16df80-88fb-11eb-9d31-4015ff22c452" />
+<meta name="twitter:title" content="Doxygen Awesome" />
+<meta name="twitter:description" content="Custom CSS theme for doxygen html-documentation with lots of customization parameters." />
+<!-- END twitter metadata -->
+<title>Pipal: Pipal::Parameter&lt; Real &gt; Struct Template Reference</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<link rel="icon" type="image/svg+xml" href="logo.svg"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="doxygen-awesome-darkmode-toggle.js"></script>
+<script type="text/javascript" src="doxygen-awesome-fragment-copy-button.js"></script>
+<script type="text/javascript" src="doxygen-awesome-paragraph-link.js"></script>
+<script type="text/javascript" src="doxygen-awesome-interactive-toc.js"></script>
+<script type="text/javascript" src="doxygen-awesome-tabs.js"></script>
+<script type="text/javascript" src="toggle-alternative-theme.js"></script>
+<script type="text/javascript">
+    DoxygenAwesomeFragmentCopyButton.init()
+    DoxygenAwesomeDarkModeToggle.init()
+    DoxygenAwesomeParagraphLink.init()
+    DoxygenAwesomeInteractiveToc.init()
+    DoxygenAwesomeTabs.init()
+</script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  extensions: ["tex2jax.js"],
+  jax: ["input/TeX","output/HTML-CSS"],
+});
+</script>
+<script type="text/javascript" async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+<link href="doxygen-awesome.css" rel="stylesheet" type="text/css"/>
+<link href="custom.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only.css" rel="stylesheet" type="text/css"/>
+<link href="doxygen-awesome-sidebar-only-darkmode-toggle.css" rel="stylesheet" type="text/css"/>
+<link href="custom-alternative.css" rel="stylesheet" type="text/css"/>
+</head>
+<body>
+<!-- https://tholman.com/github-corners/ -->
+<a href="https://github.com/StoccoDavide/Pipal" class="github-corner" title="View source on GitHub" target="_blank" rel="noopener noreferrer">
+    <svg viewBox="0 0 250 250" width="40" height="40" style="position: absolute; top: 0; border: 0; right: 0; z-index: 99;" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"></path></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr style="height: 56px;">
+  <td id="projectlogo"><img alt="Logo" src="logo.svg"/></td>
+  <td id="projectalign" style="padding-left: 0.5em;">
+   <div id="projectname">Pipal
+   &#160;<span id="projectnumber">0.0.0</span>
+   </div>
+   <div id="projectbrief">Penalty Interior-Point ALgorithm</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generated by Doxygen 1.14.0 -->
+<script type="text/javascript">
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+</script>
+<script type="text/javascript">
+$(function() { codefold.init(); });
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+$(function() {
+  initMenu('',true,false,'search.php','Search',true);
+  $(function() { init_search(); });
+});
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+$(function(){initNavTree('struct_pipal_1_1_parameter.html','','struct_pipal_1_1_parameter-members'); });
+</script>
+<div id="container">
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Loading...</div>
+<div class="SRStatus" id="Searching">Searching...</div>
+<div class="SRStatus" id="NoMatches">No Matches</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Pipal::Parameter&lt; Real &gt; Struct Template Reference</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Internal parameters for the solver algorithm.  
+ <a href="#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="_types_8hh_source.html">Types.hh</a>&gt;</code></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
+Public Attributes</h2></td></tr>
+<tr class="memitem:adef54a2a4d69f6070f77dee82ea5d471" id="r_adef54a2a4d69f6070f77dee82ea5d471"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#adef54a2a4d69f6070f77dee82ea5d471">opt_err_tol</a> {1.0e-10}</td></tr>
+<tr class="memitem:a435c1e0779568d3530e53cbe937e679c" id="r_a435c1e0779568d3530e53cbe937e679c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a435c1e0779568d3530e53cbe937e679c">iter_max</a> {1000}</td></tr>
+<tr class="memitem:a1f001154d72fdafdcbc3daba7587acee" id="r_a1f001154d72fdafdcbc3daba7587acee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespace_pipal.html#a1f8ead3baed57e835e258e644131c4e0">Algorithm</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1f001154d72fdafdcbc3daba7587acee">algorithm</a> {Algorithm::ADAPTIVE}</td></tr>
+<tr class="memitem:a5a0e0f1203ad9b090615cff78176ef9d" id="r_a5a0e0f1203ad9b090615cff78176ef9d"><td class="memItemLeft" align="right" valign="top">Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a5a0e0f1203ad9b090615cff78176ef9d">mu_max_exp</a> {0.0}</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-attribs" class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
+Static Public Attributes</h2></td></tr>
+<tr class="memitem:ab3ce5d9073b8e922608026940439553d" id="r_ab3ce5d9073b8e922608026940439553d"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab3ce5d9073b8e922608026940439553d">rhs_bnd</a> {1.0e+18}</td></tr>
+<tr class="memitem:a0cecdaffd9c9a74e0cc8913aa265fd33" id="r_a0cecdaffd9c9a74e0cc8913aa265fd33"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0cecdaffd9c9a74e0cc8913aa265fd33">grad_max</a> {1.0e+02}</td></tr>
+<tr class="memitem:a81f3469318c2c8ea092b8cd03f99f931" id="r_a81f3469318c2c8ea092b8cd03f99f931"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a81f3469318c2c8ea092b8cd03f99f931">infeas_max</a> {1.0e+02}</td></tr>
+<tr class="memitem:a2a907dda1714d8a3b281650232229dd8" id="r_a2a907dda1714d8a3b281650232229dd8"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2a907dda1714d8a3b281650232229dd8">nnz_max</a> {2.0e+04}</td></tr>
+<tr class="memitem:a8c9e7b9c7f0866b21e069c792d7eba80" id="r_a8c9e7b9c7f0866b21e069c792d7eba80"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a8c9e7b9c7f0866b21e069c792d7eba80">opt_err_mem</a> {6}</td></tr>
+<tr class="memitem:a25cac1d32b88fddcde60b01571016814" id="r_a25cac1d32b88fddcde60b01571016814"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a25cac1d32b88fddcde60b01571016814">ls_factor</a> {5.0e-01}</td></tr>
+<tr class="memitem:a0853b150f86e41f713aa48be8589b7fe" id="r_a0853b150f86e41f713aa48be8589b7fe"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0853b150f86e41f713aa48be8589b7fe">ls_thresh</a> {1.0e-08}</td></tr>
+<tr class="memitem:a9e7a0e0033056fd8d4e6c350f9ed369c" id="r_a9e7a0e0033056fd8d4e6c350f9ed369c"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a9e7a0e0033056fd8d4e6c350f9ed369c">ls_frac</a> {1.0e-02}</td></tr>
+<tr class="memitem:a65a9987646dc7966238aed7d9f274021" id="r_a65a9987646dc7966238aed7d9f274021"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a65a9987646dc7966238aed7d9f274021">slack_min</a> {1.0e-20}</td></tr>
+<tr class="memitem:a7dda0b3e83df12147ce1f41eebbc3db3" id="r_a7dda0b3e83df12147ce1f41eebbc3db3"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7dda0b3e83df12147ce1f41eebbc3db3">shift_min</a> {1.0e-12}</td></tr>
+<tr class="memitem:ac73fa42efb447a4ca650bfeb454ccdf8" id="r_ac73fa42efb447a4ca650bfeb454ccdf8"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac73fa42efb447a4ca650bfeb454ccdf8">shift_factor1</a> {5.0e-01}</td></tr>
+<tr class="memitem:a15a7082d4bbc814bac17ec301193a82f" id="r_a15a7082d4bbc814bac17ec301193a82f"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a15a7082d4bbc814bac17ec301193a82f">shift_factor2</a> {6.0e-01}</td></tr>
+<tr class="memitem:a431160334b8e523e214025cbd143d263" id="r_a431160334b8e523e214025cbd143d263"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a431160334b8e523e214025cbd143d263">shift_max</a> {1.0e+08}</td></tr>
+<tr class="memitem:a609a0ef72143948a6e804557266e231a" id="r_a609a0ef72143948a6e804557266e231a"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a609a0ef72143948a6e804557266e231a">rho_init</a> {1.0e-01}</td></tr>
+<tr class="memitem:a070db3f153465a5cc8521571c99aec46" id="r_a070db3f153465a5cc8521571c99aec46"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a070db3f153465a5cc8521571c99aec46">rho_min</a> {1.0e-12}</td></tr>
+<tr class="memitem:a0a98c7be5fc714c6a158ed22b7c5b426" id="r_a0a98c7be5fc714c6a158ed22b7c5b426"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a0a98c7be5fc714c6a158ed22b7c5b426">rho_factor</a> {5.0e-01}</td></tr>
+<tr class="memitem:ad80d4acaa947366a117718bbd2e5f12a" id="r_ad80d4acaa947366a117718bbd2e5f12a"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad80d4acaa947366a117718bbd2e5f12a">rho_trials</a> {8}</td></tr>
+<tr class="memitem:a908565d1e671b5027ad6f243f0e61479" id="r_a908565d1e671b5027ad6f243f0e61479"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a908565d1e671b5027ad6f243f0e61479">mu_init</a> {1.0e-01}</td></tr>
+<tr class="memitem:a35f1a39e28806a35b188536ab1064a20" id="r_a35f1a39e28806a35b188536ab1064a20"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a35f1a39e28806a35b188536ab1064a20">mu_min</a> {1.0e-12}</td></tr>
+<tr class="memitem:ae513aea70cb5e3895df1d88f7c313eb5" id="r_ae513aea70cb5e3895df1d88f7c313eb5"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae513aea70cb5e3895df1d88f7c313eb5">mu_factor</a> {1.0e-01}</td></tr>
+<tr class="memitem:a739363d15362653975328a5e715314d8" id="r_a739363d15362653975328a5e715314d8"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a739363d15362653975328a5e715314d8">mu_factor_exp</a> {1.5}</td></tr>
+<tr class="memitem:a1dcc27758b8f8f22a0ca21cdf6ee6a0e" id="r_a1dcc27758b8f8f22a0ca21cdf6ee6a0e"><td class="memItemLeft" align="right" valign="top">static constexpr <a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a1dcc27758b8f8f22a0ca21cdf6ee6a0e">mu_trials</a> {4}</td></tr>
+<tr class="memitem:a7f6d40e1212215e714cf2581e3f19d3d" id="r_a7f6d40e1212215e714cf2581e3f19d3d"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a7f6d40e1212215e714cf2581e3f19d3d">mu_max</a> {1.0e-01}</td></tr>
+<tr class="memitem:a05a6ae82c2700a88765b69eb14a86c07" id="r_a05a6ae82c2700a88765b69eb14a86c07"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a05a6ae82c2700a88765b69eb14a86c07">mu_max_exp0</a> {0.0}</td></tr>
+<tr class="memitem:ab342bfa1b305bdbec7542794b7fc2dd3" id="r_ab342bfa1b305bdbec7542794b7fc2dd3"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab342bfa1b305bdbec7542794b7fc2dd3">update_con_1</a> {1.0e-02}</td></tr>
+<tr class="memitem:ace93dfa7cd13dd18ece0468a665e9cb5" id="r_ace93dfa7cd13dd18ece0468a665e9cb5"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ace93dfa7cd13dd18ece0468a665e9cb5">update_con_2</a> {1.0e-02}</td></tr>
+<tr class="memitem:ae44d8b932544462656b802702215d3dc" id="r_ae44d8b932544462656b802702215d3dc"><td class="memItemLeft" align="right" valign="top">static constexpr Real&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ae44d8b932544462656b802702215d3dc">update_con_3</a> {1.01}</td></tr>
+</table>
+<a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
+<div class="textblock"><div class="compoundTemplParams">template&lt;typename Real&gt;<br />
+struct Pipal::Parameter&lt; Real &gt;</div><dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Real</td><td>The real number type. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a1f001154d72fdafdcbc3daba7587acee" name="a1f001154d72fdafdcbc3daba7587acee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f001154d72fdafdcbc3daba7587acee">&#9670;&#160;</a></span>algorithm</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_pipal.html#a1f8ead3baed57e835e258e644131c4e0">Algorithm</a> <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::algorithm {Algorithm::ADAPTIVE}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p><a class="el" href="namespace_pipal.html#a1f8ead3baed57e835e258e644131c4e0" title="Enumeration for the algorithm choice.">Algorithm</a> choice. </p>
+
+</div>
+</div>
+<a id="a0cecdaffd9c9a74e0cc8913aa265fd33" name="a0cecdaffd9c9a74e0cc8913aa265fd33"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0cecdaffd9c9a74e0cc8913aa265fd33">&#9670;&#160;</a></span>grad_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::grad_max {1.0e+02}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Gradient norm limit for scaling. </p>
+
+</div>
+</div>
+<a id="a81f3469318c2c8ea092b8cd03f99f931" name="a81f3469318c2c8ea092b8cd03f99f931"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a81f3469318c2c8ea092b8cd03f99f931">&#9670;&#160;</a></span>infeas_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::infeas_max {1.0e+02}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Infeasibility limit for penalty parameter update. </p>
+
+</div>
+</div>
+<a id="a435c1e0779568d3530e53cbe937e679c" name="a435c1e0779568d3530e53cbe937e679c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a435c1e0779568d3530e53cbe937e679c">&#9670;&#160;</a></span>iter_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::iter_max {1000}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Default iteration limit. </p>
+
+</div>
+</div>
+<a id="a25cac1d32b88fddcde60b01571016814" name="a25cac1d32b88fddcde60b01571016814"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25cac1d32b88fddcde60b01571016814">&#9670;&#160;</a></span>ls_factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::ls_factor {5.0e-01}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Line search reduction factor. </p>
+
+</div>
+</div>
+<a id="a9e7a0e0033056fd8d4e6c350f9ed369c" name="a9e7a0e0033056fd8d4e6c350f9ed369c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e7a0e0033056fd8d4e6c350f9ed369c">&#9670;&#160;</a></span>ls_frac</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::ls_frac {1.0e-02}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Line search fraction-to-boundary constant. </p>
+
+</div>
+</div>
+<a id="a0853b150f86e41f713aa48be8589b7fe" name="a0853b150f86e41f713aa48be8589b7fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0853b150f86e41f713aa48be8589b7fe">&#9670;&#160;</a></span>ls_thresh</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::ls_thresh {1.0e-08}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Line search threshold value. </p>
+
+</div>
+</div>
+<a id="ae513aea70cb5e3895df1d88f7c313eb5" name="ae513aea70cb5e3895df1d88f7c313eb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae513aea70cb5e3895df1d88f7c313eb5">&#9670;&#160;</a></span>mu_factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::mu_factor {1.0e-01}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Interior-point parameter reduction factor. </p>
+
+</div>
+</div>
+<a id="a739363d15362653975328a5e715314d8" name="a739363d15362653975328a5e715314d8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a739363d15362653975328a5e715314d8">&#9670;&#160;</a></span>mu_factor_exp</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::mu_factor_exp {1.5}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Interior-point parameter reduction exponent. </p>
+
+</div>
+</div>
+<a id="a908565d1e671b5027ad6f243f0e61479" name="a908565d1e671b5027ad6f243f0e61479"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a908565d1e671b5027ad6f243f0e61479">&#9670;&#160;</a></span>mu_init</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::mu_init {1.0e-01}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Interior-point parameter initial value. </p>
+
+</div>
+</div>
+<a id="a7f6d40e1212215e714cf2581e3f19d3d" name="a7f6d40e1212215e714cf2581e3f19d3d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f6d40e1212215e714cf2581e3f19d3d">&#9670;&#160;</a></span>mu_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::mu_max {1.0e-01}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Interior-point parameter maximum value. </p>
+
+</div>
+</div>
+<a id="a5a0e0f1203ad9b090615cff78176ef9d" name="a5a0e0f1203ad9b090615cff78176ef9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a0e0f1203ad9b090615cff78176ef9d">&#9670;&#160;</a></span>mu_max_exp</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::mu_max_exp {0.0}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Interior-point parameter maximum exponent in increases. </p>
+
+</div>
+</div>
+<a id="a05a6ae82c2700a88765b69eb14a86c07" name="a05a6ae82c2700a88765b69eb14a86c07"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a05a6ae82c2700a88765b69eb14a86c07">&#9670;&#160;</a></span>mu_max_exp0</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::mu_max_exp0 {0.0}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Interior-point parameter maximum exponent in increases (default). </p>
+
+</div>
+</div>
+<a id="a35f1a39e28806a35b188536ab1064a20" name="a35f1a39e28806a35b188536ab1064a20"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a35f1a39e28806a35b188536ab1064a20">&#9670;&#160;</a></span>mu_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::mu_min {1.0e-12}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Interior-point parameter minimum value. </p>
+
+</div>
+</div>
+<a id="a1dcc27758b8f8f22a0ca21cdf6ee6a0e" name="a1dcc27758b8f8f22a0ca21cdf6ee6a0e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1dcc27758b8f8f22a0ca21cdf6ee6a0e">&#9670;&#160;</a></span>mu_trials</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::mu_trials {4}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Interior-point parameter number of trial values per iteration. </p>
+
+</div>
+</div>
+<a id="a2a907dda1714d8a3b281650232229dd8" name="a2a907dda1714d8a3b281650232229dd8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a907dda1714d8a3b281650232229dd8">&#9670;&#160;</a></span>nnz_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::nnz_max {2.0e+04}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Maximum non-zeros in (upper triangle of) Newton matrix. </p>
+
+</div>
+</div>
+<a id="a8c9e7b9c7f0866b21e069c792d7eba80" name="a8c9e7b9c7f0866b21e069c792d7eba80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c9e7b9c7f0866b21e069c792d7eba80">&#9670;&#160;</a></span>opt_err_mem</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::opt_err_mem {6}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Optimality error history length. </p>
+
+</div>
+</div>
+<a id="adef54a2a4d69f6070f77dee82ea5d471" name="adef54a2a4d69f6070f77dee82ea5d471"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adef54a2a4d69f6070f77dee82ea5d471">&#9670;&#160;</a></span>opt_err_tol</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::opt_err_tol {1.0e-10}</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Default optimality tolerance. </p>
+
+</div>
+</div>
+<a id="a0a98c7be5fc714c6a158ed22b7c5b426" name="a0a98c7be5fc714c6a158ed22b7c5b426"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a98c7be5fc714c6a158ed22b7c5b426">&#9670;&#160;</a></span>rho_factor</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::rho_factor {5.0e-01}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Penalty parameter reduction factor. </p>
+
+</div>
+</div>
+<a id="a609a0ef72143948a6e804557266e231a" name="a609a0ef72143948a6e804557266e231a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a609a0ef72143948a6e804557266e231a">&#9670;&#160;</a></span>rho_init</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::rho_init {1.0e-01}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Penalty parameter initial value. </p>
+
+</div>
+</div>
+<a id="a070db3f153465a5cc8521571c99aec46" name="a070db3f153465a5cc8521571c99aec46"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a070db3f153465a5cc8521571c99aec46">&#9670;&#160;</a></span>rho_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::rho_min {1.0e-12}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Penalty parameter minimum value. </p>
+
+</div>
+</div>
+<a id="ad80d4acaa947366a117718bbd2e5f12a" name="ad80d4acaa947366a117718bbd2e5f12a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad80d4acaa947366a117718bbd2e5f12a">&#9670;&#160;</a></span>rho_trials</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespace_pipal.html#a5614603aab2f062f05ae6b99cdbd8f72">Integer</a> <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::rho_trials {8}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Penalty parameter number of trial values per iteration. </p>
+
+</div>
+</div>
+<a id="ab3ce5d9073b8e922608026940439553d" name="ab3ce5d9073b8e922608026940439553d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3ce5d9073b8e922608026940439553d">&#9670;&#160;</a></span>rhs_bnd</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::rhs_bnd {1.0e+18}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Maximum absolute value allowed for constraint right-hand side. </p>
+
+</div>
+</div>
+<a id="ac73fa42efb447a4ca650bfeb454ccdf8" name="ac73fa42efb447a4ca650bfeb454ccdf8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac73fa42efb447a4ca650bfeb454ccdf8">&#9670;&#160;</a></span>shift_factor1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::shift_factor1 {5.0e-01}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Hessian shift update value (for decreases). </p>
+
+</div>
+</div>
+<a id="a15a7082d4bbc814bac17ec301193a82f" name="a15a7082d4bbc814bac17ec301193a82f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a15a7082d4bbc814bac17ec301193a82f">&#9670;&#160;</a></span>shift_factor2</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::shift_factor2 {6.0e-01}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Hessian shift update value (for increases). </p>
+
+</div>
+</div>
+<a id="a431160334b8e523e214025cbd143d263" name="a431160334b8e523e214025cbd143d263"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a431160334b8e523e214025cbd143d263">&#9670;&#160;</a></span>shift_max</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::shift_max {1.0e+08}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Hessian shift maximum value. </p>
+
+</div>
+</div>
+<a id="a7dda0b3e83df12147ce1f41eebbc3db3" name="a7dda0b3e83df12147ce1f41eebbc3db3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7dda0b3e83df12147ce1f41eebbc3db3">&#9670;&#160;</a></span>shift_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::shift_min {1.0e-12}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Hessian shift (non-zero) minimum value. </p>
+
+</div>
+</div>
+<a id="a65a9987646dc7966238aed7d9f274021" name="a65a9987646dc7966238aed7d9f274021"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a65a9987646dc7966238aed7d9f274021">&#9670;&#160;</a></span>slack_min</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::slack_min {1.0e-20}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Slack variable bound. </p>
+
+</div>
+</div>
+<a id="ab342bfa1b305bdbec7542794b7fc2dd3" name="ab342bfa1b305bdbec7542794b7fc2dd3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab342bfa1b305bdbec7542794b7fc2dd3">&#9670;&#160;</a></span>update_con_1</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::update_con_1 {1.0e-02}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Steering rule constant 1. </p>
+
+</div>
+</div>
+<a id="ace93dfa7cd13dd18ece0468a665e9cb5" name="ace93dfa7cd13dd18ece0468a665e9cb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ace93dfa7cd13dd18ece0468a665e9cb5">&#9670;&#160;</a></span>update_con_2</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::update_con_2 {1.0e-02}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Steering rule constant 2. </p>
+
+</div>
+</div>
+<a id="ae44d8b932544462656b802702215d3dc" name="ae44d8b932544462656b802702215d3dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae44d8b932544462656b802702215d3dc">&#9670;&#160;</a></span>update_con_3</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename Real&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Real <a class="el" href="struct_pipal_1_1_parameter.html">Pipal::Parameter</a>&lt; Real &gt;::update_con_3 {1.01}</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel constexpr">constexpr</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Adaptive interior-point rule constant. </p>
+
+</div>
+</div>
+<hr/>The documentation for this struct was generated from the following file:<ul>
+<li>include/Pipal/<a class="el" href="_types_8hh_source.html">Types.hh</a></li>
+</ul>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<div id="page-nav" class="page-nav-panel">
+<div id="page-nav-resize-handle"></div>
+<div id="page-nav-tree">
+<div id="page-nav-contents">
+</div><!-- page-nav-contents -->
+</div><!-- page-nav-tree -->
+</div><!-- page-nav -->
+</div><!-- container -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a href="namespace_pipal.html">Pipal</a></li><li class="navelem"><a href="struct_pipal_1_1_parameter.html">Parameter</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.14.0 </li>
+  </ul>
+</div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['vectorm_0',['VectorM',['../class_pipal_1_1_problem.html#a1c26f6b6cf99fc4e1475af511a6b3fdc',1,'Pipal::Problem::VectorM'],['../class_pipal_1_1_problem_wrapper.html#a60f2aef693e3ad2e8cfd47232865f8dd',1,'Pipal::ProblemWrapper::VectorM'],['../class_pipal_1_1_solver.html#a704ed0f46f86dec28ac5b22d0a1654b1',1,'Pipal::Solver::VectorM']]],
-  ['vectorn_1',['VectorN',['../class_pipal_1_1_problem.html#af7f95516dd8370795b18d41bb8750b0a',1,'Pipal::Problem::VectorN'],['../class_pipal_1_1_problem_wrapper.html#a5d9c0ac48cb53f4b83bb6bf25befb572',1,'Pipal::ProblemWrapper::VectorN'],['../class_pipal_1_1_solver.html#aefec415188e59f54778240b2e4536168',1,'Pipal::Solver::VectorN']]]
+  ['mask_0',['Mask',['../namespace_pipal.html#ac3cd5f27f7e9f5586d2bae4ef55302ad',1,'Pipal']]],
+  ['matrix_1',['Matrix',['../namespace_pipal.html#a235e107a65ec24fec67ce606ac7457ee',1,'Pipal']]],
+  ['microseconds_2',['MicroSeconds',['../class_pipal_1_1_output.html#adb85c85ffe2cc835243c6f2733e0d7a1',1,'Pipal::Output']]]
 ];

@@ -19,9 +19,9 @@
 #include "Pipal.hh"
 
 using Pipal::Integer;
-using Pipal::Real;
-using Pipal::Vector;
-using Pipal::Matrix;
+using Real   = double;
+using Vector = Pipal::Vector<Real>;
+using Matrix = Pipal::Matrix<Real>;
 
 constexpr bool VERBOSE{true};
 constexpr Real SOLVER_TOLERANCE{1.0e-9};
@@ -29,7 +29,7 @@ constexpr Real APPROX_TOLERANCE{1.0e-3};
 constexpr Integer MAX_ITERATIONS{100};
 
 TEST(Test1, ProblemWrapper) {
-  Pipal::Solver solver("test_rosenbrock_suzuki",
+  Pipal::Solver<Real> solver("test_rosenbrock_suzuki",
     [] (const Vector & x, Real & out) { // Objective function
       out = x(0)*x(0) + x(1)*x(1) + 2.0*x(2)*x(2) + x(3)*x(3) - 5.0*x(0) - 5.0*x(1) - 21.0*x(2) + 7.0*x(3);
       return std::isfinite(out);
@@ -38,12 +38,6 @@ TEST(Test1, ProblemWrapper) {
       out.resize(4);
       out << 2.0*x(0)-5.0, 2.0*x(1)-5.0, 4.0*x(2)-21.0, 2.0*x(3)+7.0;
       return out.allFinite();
-    },
-    [] (const Vector &, Matrix & out) { // Hessian of the objective function
-      out.resize(4,4);
-      out.setZero();
-      out.diagonal() << 2.0, 2.0, 4.0, 2.0;
-      return true;
     },
     [] (const Vector & x, Vector & out) { // Constraints function
       out.resize(4);

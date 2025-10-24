@@ -1,6 +1,7 @@
 var searchData=
 [
-  ['dirty_0',['Quick and dirty',['../index.html#autotoc_md2',1,'']]],
-  ['disable_5faggressive_5fmode_1',['disable_aggressive_mode',['../class_pipal_1_1_solver.html#a0db8d0ac45bdce7045404e9ba81bf159',1,'Pipal::Solver']]],
-  ['disable_5fverbose_5fmode_2',['disable_verbose_mode',['../class_pipal_1_1_solver.html#ab167a14161a186231a3dea8389273c73',1,'Pipal::Solver']]]
+  ['d_0',['d',['../struct_pipal_1_1_acceptance.html#a60895347251b63fa2337af6fbbd4a313',1,'Pipal::Acceptance']]],
+  ['direction_1',['Direction',['../struct_pipal_1_1_direction.html',1,'Pipal']]],
+  ['direction_2ehh_2',['Direction.hh',['../_direction_8hh.html',1,'']]],
+  ['dirty_3',['Quick and dirty',['../index.html#autotoc_md2',1,'']]]
 ];

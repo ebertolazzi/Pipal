@@ -1,11 +1,15 @@
 var searchData=
 [
-  ['shift_5ffactor1_0',['shift_factor1',['../struct_pipal_1_1_solver_1_1_parameter.html#a4bc04eeccb37d2b54ff015a97252a1c0',1,'Pipal::Solver::Parameter']]],
-  ['shift_5ffactor2_1',['shift_factor2',['../struct_pipal_1_1_solver_1_1_parameter.html#a6a4a6ceb5e186aad75e2bdc2eb5218ac',1,'Pipal::Solver::Parameter']]],
-  ['shift_5fmax_2',['shift_max',['../struct_pipal_1_1_solver_1_1_parameter.html#a3b5f737c72d2e771aa65a52db6fbbbf6',1,'Pipal::Solver::Parameter']]],
-  ['shift_5fmin_3',['shift_min',['../struct_pipal_1_1_solver_1_1_parameter.html#aa6deb5a11b923f5fad7e1e4e8a1f5730',1,'Pipal::Solver::Parameter']]],
-  ['slack_5fmin_4',['slack_min',['../struct_pipal_1_1_solver_1_1_parameter.html#a9f3657a80da414515e1713942c2f21ca',1,'Pipal::Solver::Parameter']]],
-  ['solve_5',['solve',['../class_pipal_1_1_solver.html#aad10f0689259a96f28cd5427f6ec8d47',1,'Pipal::Solver']]],
-  ['solver_6',['Solver',['../class_pipal_1_1_solver.html',1,'Pipal::Solver&lt; Real, N, M &gt;'],['../class_pipal_1_1_solver.html#a8bbde3312f4484e8703b32be38b7019e',1,'Pipal::Solver::Solver()'],['../class_pipal_1_1_solver.html#af40b84903b0d911c49dcf659eb7507fe',1,'Pipal::Solver::Solver(ObjectiveFunc const &amp;objective, ObjectiveGradientFunc const &amp;objective_gradient, ConstraintsFunc const &amp;constraints, ConstraintsJacobianFunc const &amp;constraints_jacobian, LagrangianHessianFunc const &amp;lagrangian_hessian)'],['../class_pipal_1_1_solver.html#a48f65cd9cc7a933c57aecc62674d4ba8',1,'Pipal::Solver::Solver(ObjectiveFunc const &amp;objective, ObjectiveGradientFunc const &amp;objective_gradient, ObjectiveHessianFunc const &amp;objective_hessian, ConstraintsFunc const &amp;constraints, ConstraintsJacobianFunc const &amp;constraints_jacobian, LagrangianHessianFunc const &amp;lagrangian_hessian)'],['../class_pipal_1_1_solver.html#a8cf9c71e6f53ae526faf092934bca725',1,'Pipal::Solver::Solver(std::unique_ptr&lt; Problem&lt; Real, N, M &gt; &gt; &amp;&amp;problem)'],['../class_pipal_1_1_solver.html#ab92b936c0c474bc05341f82d7e6ac3de',1,'Pipal::Solver::Solver(Solver const &amp;)=delete'],['../class_pipal_1_1_solver.html#a197fec97d5b8104ee3376287235960d1',1,'Pipal::Solver::Solver(Solver &amp;&amp;)=delete']]],
-  ['solver_2ehh_7',['Solver.hh',['../_solver_8hh.html',1,'']]]
+  ['r1_0',['r1',['../struct_pipal_1_1_iterate.html#a38aa83bf796837a049683139c8a69802',1,'Pipal::Iterate::r1'],['../struct_pipal_1_1_direction.html#a64de2b649c1d9b230f2edd88a1cb312f',1,'Pipal::Direction::r1']]],
+  ['r2_1',['r2',['../struct_pipal_1_1_iterate.html#aebdd41a9857717e50128ae4a25d2b7e5',1,'Pipal::Iterate::r2'],['../struct_pipal_1_1_direction.html#a51ddcb269e00b16db8cef4dc2d9f3d9a',1,'Pipal::Direction::r2']]],
+  ['resetcounter_2',['resetCounter',['../namespace_pipal.html#a42c03ca84b862f079f3e0cb8ec0bf0b7',1,'Pipal']]],
+  ['resetdirection_3',['resetDirection',['../namespace_pipal.html#a05eccf0c5ea24708692a3c3a0a1c9806',1,'Pipal']]],
+  ['resetmumaxexp_4',['resetMuMaxExp',['../namespace_pipal.html#ab21dc910318be765a3dae88a148fe6be',1,'Pipal']]],
+  ['rho_5',['rho',['../struct_pipal_1_1_iterate.html#a0ad6c63d68e7dfedee7b077bc3b62fe5',1,'Pipal::Iterate']]],
+  ['rho_5f_6',['rho_',['../struct_pipal_1_1_iterate.html#a37b249e815ebccf12756c4b47cbd56e8',1,'Pipal::Iterate']]],
+  ['rho_5ffactor_7',['rho_factor',['../struct_pipal_1_1_parameter.html#a0a98c7be5fc714c6a158ed22b7c5b426',1,'Pipal::Parameter']]],
+  ['rho_5finit_8',['rho_init',['../struct_pipal_1_1_parameter.html#a609a0ef72143948a6e804557266e231a',1,'Pipal::Parameter']]],
+  ['rho_5fmin_9',['rho_min',['../struct_pipal_1_1_parameter.html#a070db3f153465a5cc8521571c99aec46',1,'Pipal::Parameter']]],
+  ['rho_5ftrials_10',['rho_trials',['../struct_pipal_1_1_parameter.html#ad80d4acaa947366a117718bbd2e5f12a',1,'Pipal::Parameter']]],
+  ['rhs_5fbnd_11',['rhs_bnd',['../struct_pipal_1_1_parameter.html#ab3ce5d9073b8e922608026940439553d',1,'Pipal::Parameter']]]
 ];

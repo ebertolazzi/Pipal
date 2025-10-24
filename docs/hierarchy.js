@@ -1,9 +1,13 @@
 var hierarchy =
 [
-    [ "Pipal::Solver< Real, N, M >::Counter", "struct_pipal_1_1_solver_1_1_counter.html", null ],
-    [ "Pipal::Solver< Real, N, M >::Parameter", "struct_pipal_1_1_solver_1_1_parameter.html", null ],
-    [ "Pipal::Problem< Real, N, M >", "class_pipal_1_1_problem.html", [
-      [ "Pipal::ProblemWrapper< Real, N, M >", "class_pipal_1_1_problem_wrapper.html", null ]
+    [ "Pipal::Acceptance< Real >", "struct_pipal_1_1_acceptance.html", null ],
+    [ "Pipal::Direction< Real >", "struct_pipal_1_1_direction.html", null ],
+    [ "Pipal::Input< Real >", "struct_pipal_1_1_input.html", null ],
+    [ "Pipal::Iterate< Real >", "struct_pipal_1_1_iterate.html", null ],
+    [ "Pipal::Output< Real >", "class_pipal_1_1_output.html", null ],
+    [ "Pipal::Parameter< Real >", "struct_pipal_1_1_parameter.html", null ],
+    [ "Pipal::Problem< Real >", "class_pipal_1_1_problem.html", [
+      [ "Pipal::ProblemWrapper< Real >", "class_pipal_1_1_problem_wrapper.html", null ]
     ] ],
-    [ "Pipal::Solver< Real, N, M >", "class_pipal_1_1_solver.html", null ]
+    [ "Pipal::Solver< Real >", "class_pipal_1_1_solver.html", null ]
 ];

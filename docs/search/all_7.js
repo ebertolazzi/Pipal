@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['hessian_5fevals_0',['hessian_evals',['../struct_pipal_1_1_solver_1_1_counter.html#af9fc70e044e1e0b7ffdc11cd74b353ed',1,'Pipal::Solver::Counter']]]
+  ['h_0',['H',['../struct_pipal_1_1_iterate.html#a2e82a827468d5c61e0c37bfa6e4490b5',1,'Pipal::Iterate']]],
+  ['hnnz_1',['Hnnz',['../struct_pipal_1_1_iterate.html#a0e70eabf32144af150a7302f256b9fa7',1,'Pipal::Iterate']]]
 ];

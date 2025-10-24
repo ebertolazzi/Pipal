@@ -21,27 +21,21 @@ namespace Pipal
 {
 
   // Constructor
-  inline void buildInput(Input & i, Parameter & p, String const & name, ObjectiveFunc const & f_orig,
-    ConstraintsFunc const & c_orig, ObjectiveGradientFunc const & g_orig,
-    ConstraintsJacobianFunc const & J_orig, LagrangianHessianFunc const & H_orig,
-    Vector const & x0, Vector const & bl, Vector const & bu, Vector const & cl, Vector const & cu)
+  template <typename Real>
+  inline void buildInput(Input<Real> & i, Parameter<Real> & p, std::string const & name,
+    Vector<Real> const & x0, Vector<Real> const & bl, Vector<Real> const & bu, Vector<Real> const & cl,
+    Vector<Real> const & cu)
   {
     #define CMD "Pipal::resetInput(...): "
 
     // Set problem identity
-    i.id = name;
-
-    // store function pointers to original problem functions
-    i.f_fun = f_orig;
-    i.c_fun = c_orig;
-    i.g_fun = g_orig;
-    i.J_fun = J_orig;
-    i.H_fun = H_orig;
+    i.name = name;
 
     // Set number of original formulation variables
     i.n0 = static_cast<Integer>(x0.size());
 
     // Find indices sets
+    static constexpr Real EPSILON{std::numeric_limits<Real>::epsilon()};
     Mask const cond_bl(bl.array() <= -p.rhs_bnd);
     Mask const cond_bu(bu.array() >= p.rhs_bnd);
     Mask const cond_cl(cl.array() <= -p.rhs_bnd);

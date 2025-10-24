@@ -1,6 +1,28 @@
 var searchData=
 [
   ['e_20curtis_0',['License by Frank E. Curtis',['../index.html#autotoc_md6',1,'']]],
-  ['enable_5faggressive_5fmode_1',['enable_aggressive_mode',['../class_pipal_1_1_solver.html#ad40d9867b448f91df379b55b577fa643',1,'Pipal::Solver']]],
-  ['enable_5fverbose_5fmode_2',['enable_verbose_mode',['../class_pipal_1_1_solver.html#a47dbf0c99f317e36f48057e5bc77c043',1,'Pipal::Solver']]]
+  ['err_1',['err',['../struct_pipal_1_1_iterate.html#ac4f6b8218af9e6a40a31fffb5baa8f52',1,'Pipal::Iterate']]],
+  ['evaldependent_2',['evalDependent',['../namespace_pipal.html#a1cb053a0df30cdf20b5480c867ddbf43',1,'Pipal']]],
+  ['evalfunctions_3',['evalFunctions',['../namespace_pipal.html#a61f8e99ff785f183ac6ce91cbb06f7be',1,'Pipal']]],
+  ['evalgradients_4',['evalGradients',['../namespace_pipal.html#a4dfdf6cb4a37ed0141dd43a59909a9dc',1,'Pipal']]],
+  ['evalhessian_5',['evalHessian',['../namespace_pipal.html#aa092001e49a2dee40d523b9603c6bd92',1,'Pipal']]],
+  ['evalinfeasibility_6',['evalInfeasibility',['../namespace_pipal.html#a3d9caa664bd93479f108cb4a627bb7ee',1,'Pipal']]],
+  ['evalkkterror_7',['evalKKTError',['../namespace_pipal.html#a9fe22b00d96c70eafd7750b79bb09b48',1,'Pipal']]],
+  ['evalkkterrors_8',['evalKKTErrors',['../namespace_pipal.html#a3df064263dcbf42ad429fc750c27f2ce',1,'Pipal']]],
+  ['evallambdaoriginal_9',['evalLambdaOriginal',['../namespace_pipal.html#a696a675861bdfebbac1cd18020e080f6',1,'Pipal']]],
+  ['evallinearcombination_10',['evalLinearCombination',['../namespace_pipal.html#a1df224493294dbbc9ce19e4a26f1a110',1,'Pipal']]],
+  ['evalmatrices_11',['evalMatrices',['../namespace_pipal.html#af902a45da84c93846a98d94d66e498ce',1,'Pipal']]],
+  ['evalmerit_12',['evalMerit',['../namespace_pipal.html#a7081356519d46d2b6dc1fa9434674eb0',1,'Pipal']]],
+  ['evalmodels_13',['evalModels',['../namespace_pipal.html#a6ce393b95a54bd3bdd6423927fec2ab9',1,'Pipal']]],
+  ['evalnewtonmatrix_14',['evalNewtonMatrix',['../namespace_pipal.html#a371aaafe128090910ac85ce247fa2e21',1,'Pipal']]],
+  ['evalnewtonrhs_15',['evalNewtonRhs',['../namespace_pipal.html#a9fadd4960607a09b2707e3e9ef8d1e63',1,'Pipal']]],
+  ['evalnewtonstep_16',['evalNewtonStep',['../namespace_pipal.html#a33d30ae892f3aacaddb158283e88bfb7',1,'Pipal']]],
+  ['evalscalings_17',['evalScalings',['../namespace_pipal.html#a6465cd3bbba518cb74852345ca4cf2f0',1,'Pipal::evalScalings(Iterate&lt; Real &gt; &amp;z, Parameter&lt; Real &gt; &amp;p, Input&lt; Real &gt; &amp;i, Counter &amp;c, Problem&lt; Real &gt; const &amp;problem)'],['../namespace_pipal.html#a39cdc591835b4eee3f21f5f0416cf1c9',1,'Pipal::evalScalings(Iterate&lt; Real &gt; &amp;z, Parameter&lt; Real &gt; &amp;p, Input&lt; Real &gt; &amp;i, Counter &amp;c)']]],
+  ['evalslacks_18',['evalSlacks',['../namespace_pipal.html#a72e4c148dbdf3f75bd1d7be62067546b',1,'Pipal']]],
+  ['evalstep_19',['evalStep',['../namespace_pipal.html#adcb422cb1dd279c0de1a59b0f5c038cf',1,'Pipal']]],
+  ['evaltrialstep_20',['evalTrialStep',['../namespace_pipal.html#af707042f29495466132af7a0d78dadc5',1,'Pipal']]],
+  ['evaltrialstepcut_21',['evalTrialStepCut',['../namespace_pipal.html#abd4269cef64145d293e50af656b946ed',1,'Pipal']]],
+  ['evaltrialsteps_22',['evalTrialSteps',['../namespace_pipal.html#ae3261bcfc6a5cb81df1bb71213b25945',1,'Pipal']]],
+  ['evalviolation_23',['evalViolation',['../namespace_pipal.html#a2cc5c88d37859d77ae6bfc7a7529d076',1,'Pipal']]],
+  ['evalxoriginal_24',['evalXOriginal',['../namespace_pipal.html#acddc8f9a64d1e5ef8e5f0d3a3cbf0281',1,'Pipal']]]
 ];

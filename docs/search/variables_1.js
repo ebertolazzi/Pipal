@@ -1,5 +1,6 @@
 var searchData=
 [
-  ['grad_5fmax_0',['grad_max',['../struct_pipal_1_1_solver_1_1_parameter.html#a2977801c427d370c76331b0bc53f5233',1,'Pipal::Solver::Parameter']]],
-  ['gradient_5fevals_1',['gradient_evals',['../struct_pipal_1_1_solver_1_1_counter.html#a1570214204d4d79d5bd42ccaf5b9330d',1,'Pipal::Solver::Counter']]]
+  ['b_0',['b',['../struct_pipal_1_1_iterate.html#a9cd521bdb34c78d5f68d1d0e8aa0fe52',1,'Pipal::Iterate']]],
+  ['b2_1',['b2',['../struct_pipal_1_1_input.html#af3b2b79d1defcdb185b37d6ec854ab00',1,'Pipal::Input']]],
+  ['b6_2',['b6',['../struct_pipal_1_1_input.html#a81899e48dc88c1244ce1d1634677674c',1,'Pipal::Input']]]
 ];

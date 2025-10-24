@@ -1,0 +1,17 @@
+<map id="include/Pipal/Counter.hh" name="include/Pipal/Counter.hh">
+<area shape="rect" id="Node000001" title=" " alt="" coords="126,5,288,31"/>
+<area shape="rect" id="Node000002" href="$_iterate_8hh.html" title=" " alt="" coords="72,79,227,105"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,45,161,80,157,77,186,41"/>
+<area shape="rect" id="Node000004" href="$_solver_8hh.html" title=" " alt="" coords="29,300,182,326"/>
+<area shape="poly" id="edge9_Node000001_Node000004" title=" " alt="" coords="228,41,257,84,284,138,292,168,295,198,291,227,278,254,259,274,235,289,183,307,182,302,233,284,256,270,274,250,286,225,290,198,287,169,279,140,252,86,224,44"/>
+<area shape="rect" id="Node000003" href="$_acceptance_8hh.html" title=" " alt="" coords="78,226,264,252"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="182,113,199,130,212,152,215,173,208,194,185,227,181,224,203,192,209,173,207,154,194,134,178,117"/>
+<area shape="poly" id="edge8_Node000002_Node000004" title=" " alt="" coords="73,113,41,129,17,154,9,174,10,194,16,214,28,235,60,271,91,298,88,302,56,275,24,238,12,217,4,195,4,173,12,151,38,125,71,108"/>
+<area shape="rect" id="Node000006" href="$_direction_8hh.html" title=" " alt="" coords="27,153,197,178"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="139,119,121,153,116,151,134,117"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="152,265,118,301,114,298,148,261"/>
+<area shape="rect" id="Node000005" href="$_pipal_8hh.html" title=" " alt="" coords="49,374,162,399"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="108,341,108,373,103,373,103,341"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="134,189,163,224,159,228,129,192"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="90,192,77,208,68,227,66,247,73,266,96,298,91,301,68,268,61,247,63,226,73,206,86,188"/>
+</map>

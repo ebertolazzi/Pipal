@@ -25,41 +25,56 @@
 namespace Pipal
 {
 
+  /**
+   * \brief Pretty-printing and timing utilities for solver output.
+   *
+   * The Output class encapsulates console formatting and lightweight timing utilities used by the
+   * solver to display headers, iterates, directions and final summaries.
+   * \tparam Real Floating-point type used by the solver.
+   */
+  template <typename Real>
   class Output
   {
-    using Ostream      = std::ostream;
+    static_assert(std::is_floating_point_v<Real>,
+      "Pipal::Output<Real>: Real must be a floating-point type.");
+
     using MicroSeconds = std::chrono::microseconds;
     using SteadyClock  = std::chrono::steady_clock;
     using TimePoint    = SteadyClock::time_point;
 
-    Ostream &   s{std::cout}; // Output stream (reference to avoid copying std::cout)
-    std::string l; // Line break std::string
-    std::string q; // Quantities header
-    std::string n; // Footer line
-    TimePoint   t; // Timer
+    std::ostream & s{std::cout}; /*!< Output stream (reference to avoid copying std::cout). */
+    std::string    l;            /*!< Line break. */
+    std::string    q;            /*!< Quantities header. */
+    std::string    n;            /*!< Footer line. */
+    TimePoint      t;            /*!< Timer. */
 
   public:
-    // Constructor
-    Output()
-    {
+  /**
+   * \brief Default constructor.
+   */
+  Output()
+  {
       this->t = SteadyClock::now();
       this->l = "======+=========================+====================================+=========================+===========================================================================+=======================";
       this->q = "Iter. |  Objective     Infeas.  |  Pen. Par.   I.P. Par.  Opt. Error |    Merit     P.I.P. Err.|    Shift    ||P.Step||  ||D.Step||   Lin. Red.    Quad. Red.    Quality   | Pri. Step.  Dual Step.";
       this->n = "-----------  ---------- | ----------  ----------  ----------  -----------  -----------  ----------- | ----------  ----------";
     }
 
-    // Constructor
-    // FIXME Output(Ostream & stream) : Output() {this->s = &stream;}
+  /**
+   * \brief Default destructor.
+   */
+  ~Output() = default;
 
-    // Destructor closes stream
-    ~Output() = default;
-
-    // Header printing
-    void printHeader(Input const & i, Iterate const & z) const {
+  /**
+   * \brief Print problem header information.
+   * \param[in] i Problem input structure.
+   * \param[in] z Current iterate.
+   */
+  void printHeader(Input<Real> const & i, Iterate<Real> const & z) const {
       this->s
         << "Problem name" << std::endl
         << "============" << std::endl
-        << "  " << i.id << std::endl
+        << "  " << i.name << std::endl
         << std::endl;
 
       this->s
@@ -77,36 +92,65 @@ namespace Pipal
         << std::endl;
     }
 
-    // Break printing (every 20 iterations)
-    void printBreak(Counter const & c) const {
+  /**
+   * \brief Print a formatted break line and column headers periodically.
+   * \param[in] c Counters containing the current iteration index.
+   */
+  void printBreak(Counter const & c) const
+  {
       if (c.k % 20 == 0) {
-        this->s << this->l << std::endl << this->q << std::endl << this->l << std::endl;
+        this->s
+          << this->l << std::endl
+          << this->q << std::endl
+          << this->l << std::endl;
       }
     }
 
-    // Direction info
-    void printDirection(Iterate const & z, Direction const & d) const {
+  /**
+   * \brief Print a summary of the current search direction.
+   * \param[in] z Current iterate.
+   * \param[in] d Current search direction.
+   */
+  void printDirection(Iterate<Real> const & z, Direction<Real> const & d) const
+  {
       this->s
-        << std::scientific << std::setprecision(4)
-        << std::showpos << z.phi << "  " << std::noshowpos << z.kkt[2] << " | " << z.shift << "  " << d.x_norm << "  " << d.l_norm << "  "
-        << std::showpos << d.ltred << "  " << d.qtred << "  " << d.m << std::noshowpos << " | ";
+        << std::scientific << std::setprecision(4) << std::showpos << z.phi << "  " << std::noshowpos
+        << z.kkt[2] << " | " << z.shift << "  " << d.x_norm << "  " << d.l_norm << "  " << std::showpos
+        << d.ltred << "  " << d.qtred << "  " << d.m << std::noshowpos << " | ";
     }
 
-    // Iterate info
-    void printIterate(Counter const & c, Iterate const & z) const {
-      this->s << std::setw(5) << c.k << " | " << std::scientific << std::setprecision(4)
-        << std::showpos << z.f << std::noshowpos << "  " << z.v << " | " << z.rho << "  " << z.mu << "  " << z.kkt[1] << " | ";
+    /**
+    * \brief Print a single iterate row to the console table.
+    * \param[in] c Counters containing the current iteration index.
+    * \param[in] z Current iterate.
+    */
+    void printIterate(Counter const & c, Iterate<Real> const & z) const
+    {
+      this->s
+        << std::setw(5) << c.k << " | " << std::scientific << std::setprecision(4) << std::showpos << z.f
+        << std::noshowpos << "  " << z.v << " | " << z.rho << "  " << z.mu << "  " << z.kkt[1] << " | ";
     }
 
-    // Acceptance info
-    void printAcceptance(Acceptance const & a) const {
+    /**
+    * \brief Print acceptance information for the chosen trial step.
+    * \param[in] a Acceptance object containing current step fractions.
+    */
+    void printAcceptance(Acceptance<Real> const & a) const {
       this->s << std::scientific << std::setprecision(4) << a.p << "  " << a.d;
         if (a.s == 1) {this->s << " SOC";}
       this->s << std::endl;
     }
 
-    // Footer printing
-    void printFooter(Parameter const & p, Input const & i, Counter const & c, Iterate const & z) const {
+    /**
+     * \brief Print final summary footer and termination message.
+     * \param[in] p Algorithm parameters.
+     * \param[in] i Problem input structure.
+     * \param[in] c Counters used during evaluations.
+     * \param[in] z Current iterate (modified temporarily while testing points).
+     */
+    void printFooter(Parameter<Real> const & p, Input<Real> const & i, Counter const & c,
+      Iterate<Real> const & z) const
+    {
       this->printIterate(c, z);
       this->s
         << this->n << std::endl << this->l << std::endl

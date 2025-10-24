@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['constraints_0',['constraints',['../class_pipal_1_1_problem.html#aff5f40f37a12ce9c81a5d9abc56afd6d',1,'Pipal::Problem::constraints()'],['../class_pipal_1_1_problem_wrapper.html#a206e6d278c2d7362820ec2bb7af84481',1,'Pipal::ProblemWrapper::constraints() const'],['../class_pipal_1_1_problem_wrapper.html#a8fec6733888fa5e92df76a4f31986260',1,'Pipal::ProblemWrapper::constraints(ConstraintsFunc const &amp;constraints)'],['../class_pipal_1_1_problem_wrapper.html#aeda6122a36c802c8d5d9c5e4e38befad',1,'Pipal::ProblemWrapper::constraints(VectorN const &amp;x) const override']]],
-  ['constraints_5fjacobian_1',['constraints_jacobian',['../class_pipal_1_1_problem.html#adcfd7efacc6233c66e950c3859763a64',1,'Pipal::Problem::constraints_jacobian()'],['../class_pipal_1_1_problem_wrapper.html#a64c5927076fbad864e2e2c548ec8ba18',1,'Pipal::ProblemWrapper::constraints_jacobian() const'],['../class_pipal_1_1_problem_wrapper.html#a18d7cbe44aa5763e8afaf8c90bc04fa5',1,'Pipal::ProblemWrapper::constraints_jacobian(ConstraintsJacobianFunc const &amp;constraints_jacobian)'],['../class_pipal_1_1_problem_wrapper.html#a40953ef491445abc7e3e3b21e271f86e',1,'Pipal::ProblemWrapper::constraints_jacobian(VectorN const &amp;x, VectorM const &amp;z) const override']]]
+  ['backtracking_0',['backtracking',['../namespace_pipal.html#ab8d64433bbf6f4a433a2ff5f54c734af',1,'Pipal']]],
+  ['buildinput_1',['buildInput',['../namespace_pipal.html#a2d44b3f9164a684344c9c5a682eae4df',1,'Pipal']]],
+  ['builditerate_2',['buildIterate',['../namespace_pipal.html#a807c37338928f7db229371e241160eb8',1,'Pipal']]],
+  ['buildparameter_3',['buildParameter',['../namespace_pipal.html#a6e700d70ba380af92f381bfdf889456b',1,'Pipal']]]
 ];

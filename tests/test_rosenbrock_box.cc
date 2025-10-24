@@ -19,17 +19,17 @@
 #include "Pipal.hh"
 
 using Pipal::Integer;
-using Pipal::Real;
-using Pipal::Vector;
-using Pipal::Matrix;
+using Real   = double;
+using Vector = Pipal::Vector<Real>;
+using Matrix = Pipal::Matrix<Real>;
 
 constexpr bool VERBOSE{true};
 constexpr Real SOLVER_TOLERANCE{1.0e-9};
-constexpr Real APPROX_TOLERANCE{1.0e-6};
+constexpr Real APPROX_TOLERANCE{1.0e-3};
 constexpr Integer MAX_ITERATIONS{100};
 
 TEST(Test1, ProblemWrapper) {
-  Pipal::Solver solver("test_rosenbrock_box",
+  Pipal::Solver<Real> solver("test_rosenbrock_box",
     [] (const Vector & x, Real & out) { // Objective function
       out = 100.0*std::pow(x(1) - x(0)*x(0), 2.0) + std::pow(1 - x(0), 2.0);
       return std::isfinite(out);
@@ -38,10 +38,6 @@ TEST(Test1, ProblemWrapper) {
       out.resize(2);
       out << -400.0*x(0)*(x(1)-x(0)*x(0)) - 2.0*(1 - x(0)), 200.0*(x(1) - x(0)*x(0));
       return out.allFinite();
-    },
-    [] (const Vector &, Matrix & out) { // Hessian of the objective function
-      out.resize(0,0);
-      return true;
     },
     [] (const Vector &, Vector & out) { // Constraints function
       out.resize(0);

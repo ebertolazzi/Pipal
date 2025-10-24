@@ -1,7 +1,6 @@
 var searchData=
 [
-  ['linear_5fsolves_0',['linear_solves',['../struct_pipal_1_1_solver_1_1_counter.html#a2c7754186a526cbe93762a0d6f346004',1,'Pipal::Solver::Counter']]],
-  ['ls_5ffactor_1',['ls_factor',['../struct_pipal_1_1_solver_1_1_parameter.html#afa4c849ff1c37e10f7e2cdfcd94b5037',1,'Pipal::Solver::Parameter']]],
-  ['ls_5ffrac_2',['ls_frac',['../struct_pipal_1_1_solver_1_1_parameter.html#af108c969bdd3c0db2dcb2e4a49c1977a',1,'Pipal::Solver::Parameter']]],
-  ['ls_5fthresh_3',['ls_thresh',['../struct_pipal_1_1_solver_1_1_parameter.html#a95e21d52224eb3ad61b7a29bdf3c0e72',1,'Pipal::Solver::Parameter']]]
+  ['f_0',['f',['../struct_pipal_1_1_iterate.html#abdd2f8453b1e99790618f8d29a30f439',1,'Pipal::Iterate']]],
+  ['fs_1',['fs',['../struct_pipal_1_1_iterate.html#a79e8d282258a2d747b852979f57db029',1,'Pipal::Iterate']]],
+  ['fu_2',['fu',['../struct_pipal_1_1_iterate.html#a544818dcedce8a64aa8e32c7abb8696d',1,'Pipal::Iterate']]]
 ];

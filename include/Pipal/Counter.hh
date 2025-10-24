@@ -19,22 +19,40 @@
 namespace Pipal
 {
 
-  // Reset all internal counters to zero
+  /**
+   * \brief Reset all internal counters to zero.
+   * \param[out] c Counter object to reset.
+   */
   inline void resetCounter(Counter & c) {c.f = c.g = c.H = c.k = c.M = 0;}
 
-  // Matrix factorization counter incrementor
+  /**
+   * \brief Increment the matrix factorization counter.
+   * \param[in] c Counter whose matrix-factorization count is incremented.
+   */
   inline void incrementFactorizationCount(Counter & c) {++c.M;}
 
-  // Function evaluation counter incrementor
+  /**
+   * \brief Increment the function evaluation counter.
+   * \param[in] c Counter whose function-evaluation count is incremented.
+   */
   inline void incrementFunctionCount(Counter & c) {++c.f;}
 
-  // Gradient evaluation counter incrementor
+  /**
+   * \brief Increment the gradient evaluation counter.
+   * \param[in] c Counter whose gradient-evaluation count is incremented.
+   */
   inline void incrementGradientCount(Counter & c) {++c.g;}
 
-  // Hessian evaluation counter incrementor
+  /**
+   * \brief Increment the Hessian evaluation counter.
+   * \param[in] c Counter whose Hessian-evaluation count is incremented.
+   */
   inline void incrementHessianCount(Counter & c) {++c.H;}
 
-  // Iteration counter incrementor
+  /**
+   * \brief Increment the iteration counter.
+   * \param[in] c Counter whose iteration count is incremented.
+   */
   inline void incrementIterationCount(Counter & c) {++c.k;}
 
 } // namespace Pipal
