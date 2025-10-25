@@ -51,7 +51,7 @@ TEST(Test1, ProblemWrapper) {
     },
     [] (Vector const & x, SparseMatrix & out) { // Jacobian of the constraints function
       out.resize(4,4);
-      std::vector<Eigen::Triplet<Real>> triplets = {
+      std::vector<Eigen::Triplet<Real>> triplets{
         {0, 0, 2.0*x(0) + 1.0},
         {0, 1, 2.0*x(1) - 1.0},
         {0, 2, 2.0*x(2) + 1.0},
@@ -78,7 +78,7 @@ TEST(Test1, ProblemWrapper) {
     },
     [] (Vector const &, Vector const & z, SparseMatrix & out) -> bool { // Hessian of the Lagrangian
       out.resize(4,4);
-      std::vector<Eigen::Triplet<Real>> triplets = {
+      std::vector<Eigen::Triplet<Real>> triplets{
         {0, 0, 2 + z(0)*2 + z(1)*2 + z(2)*4},
         {1, 1, 2 + z(0)*2 + z(1)*4 + z(2)*2},
         {2, 2, 4 + z(0)*2 + z(1)*2 + z(2)*2},

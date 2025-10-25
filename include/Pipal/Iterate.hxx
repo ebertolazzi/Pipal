@@ -471,6 +471,9 @@ namespace Pipal {
     insert_block<Real>(z.H, H_orig(i.I5, i.I4), row_offset, col_offset);
     col_offset += i.I4.size();
     insert_block<Real>(z.H, H_orig(i.I5, i.I5), row_offset, col_offset);
+    
+    // workaround se mancano elementi sulla diagonale
+    for ( Integer i{0}; i < z.H.rows(); ++i ) (void) z.H.coeffRef(i, i);  // accede o crea H(i,i)
 
     // Rescale H
     z.H *= z.rho*z.fs;

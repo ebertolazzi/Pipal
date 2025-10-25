@@ -50,7 +50,7 @@ TEST(Test1, ProblemWrapper) {
     },
     [] (Vector const & x, Vector const &, SparseMatrix & out) ->bool { // Hessian of the Lagrangian
       out.resize(2,2);
-      std::vector<Eigen::Triplet<Real>> triplets = {
+      std::vector<Eigen::Triplet<Real>> triplets{
         {0, 0, 1200.0*x(0)*x(0) - 400.0*x(1) + 2},
         {0, 1, -400.0*x(0)},
         {1, 0, -400.0*x(0)},
