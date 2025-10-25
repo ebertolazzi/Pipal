@@ -66,7 +66,7 @@ TEST(Test1, ProblemWrapper) {
         {2, 2, 4 + z(0)*2 + z(1)*2 + z(2)*2},
         {3, 3, 2 + z(0)*2 + z(1)*4 + z(2)*0}
       };
-      out.setFromTriplets(triplets.begin(), triplets.end())
+      out.setFromTriplets(triplets.begin(), triplets.end());
       Eigen::Map<Vector> vec( out.valuePtr(), out.nonZeros() );
       return vec.allFinite();
     },

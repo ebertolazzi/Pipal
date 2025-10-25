@@ -18,18 +18,9 @@
 #include <algorithm>
 #include <type_traits>
 
-// Pipal includes
-#include "Pipal/Acceptance.hh"
-#include "Pipal/Counter.hh"
-#include "Pipal/Types.hh"
-#include "Pipal/Direction.hh"
-#include "Pipal/Input.hh"
-#include "Pipal/Iterate.hh"
 #include "Pipal/Output.hh"
-#include "Pipal/Problem.hh"
 
-namespace Pipal
-{
+namespace Pipal {
 
   /**
    * \brief Solver class for the Pipal library.
@@ -67,6 +58,204 @@ namespace Pipal
 
     // Some options for the solver
     bool m_verbose{false}; /*!< Verbosity flag. */
+    
+    // Evaluate the step
+    void buildIterate();
+    void evalStep();
+    void updateParameters();
+    void lineSearch();
+    void updateIterate();
+    void updatePoint();
+    void backtracking();
+    void evalFunctions();
+    void evalGradients();
+    void evalHessian();
+    void evalNewtonMatrix();
+    void evalScalings();
+    void evalModels();
+    void fractionToBoundary();
+    void evalNewtonRhs();
+    void evalSlacks();
+    void evalMerit();
+    void initNewtonMatrix();
+    
+    void resetDirection( Direction<Real> & d ) const;
+    void evalLambdaOriginal( Vector<Real> & l ) const;
+    Real evalViolation( Array<Real> const & cE, Array<Real> const & cI ) const;
+    void evalNewtonStep( Direction<Real> & d ) const;
+    void evalTrialStep( Direction<Real> & v ) const;
+    /**
+     * \brief Compute scaled and unscaled feasibility violations.
+     * \tparam Real Floating-point type used by the algorithm.
+     * \param[in] z Current iterate.
+     */
+    void
+    evalInfeasibility( Iterate<Real> & z ) const {
+      // Evaluate scaled and unscaled feasibility violations
+      z.v  = evalViolation(z.cE, z.cI) / std::max(1.0, z.v0);
+      z.vu = evalViolation(z.cEu, z.cIu);
+    }
+
+    /**
+     * \brief Evaluate model matrices (Hessian and Newton matrix).
+     * \tparam Real Floating-point type used by the algorithm.
+     */
+    void
+    evalMatrices() {
+      // Evaluate Hessian and Newton matrices
+      evalHessian();
+      evalNewtonMatrix();
+    }
+
+    Integer fullStepCheck();
+    Integer secondOrderCorrection();
+
+    void evalXOriginal( Vector<Real> & x );
+
+    /**
+     * \brief Reset maximum exponent used for mu increases to its default.
+     * \tparam Real Floating-point type used by the algorithm.
+     * \param[in] p Parameter object whose mu exponent limit is reset.
+     */
+    void
+    resetMuMaxExp() { m_parameter.mu_max_exp = m_parameter.mu_max_exp0; }
+
+    /**
+     * \brief Initialize algorithm parameters.
+     * \param[in] a Algorithm selection enumerator.
+     */
+    void buildParameter( Algorithm a ) { m_parameter.algorithm = a; }
+
+    /**
+     * \brief Force mu exponent increases to use zero as maximum exponent.
+     */
+    void setMuMaxExpZero() { m_parameter.mu_max_exp = 0.0; }
+
+    /**
+     * \brief Set penalty parameter rho.
+     * \tparam Real Floating-point type used by the algorithm.
+     * \param[in] z Current iterate.
+     * \param[in] rho New penalty parameter value.
+     */
+    void setRho( Real const rho ) { m_iterate.rho = rho; }
+
+    /**
+     * \brief Set last (previous) penalty parameter value.
+     * \tparam Real Floating-point type used by the algorithm.
+     * \param[in] z Current iterate.
+     * \param[in] rho New last penalty parameter value.
+     */
+    void setRhoLast( Real const rho ) { m_iterate.rho_ = rho;}
+
+    /**
+     * \brief Set interior-point parameter \p mu.
+     * \tparam Real Floating-point type used by the algorithm.
+     * \param[in] mu New interior-point parameter value.
+     */
+    void setMu( Real const mu ) { m_iterate.mu = mu; }
+
+    void evalTrialSteps( Direction<Real> & d1, Direction<Real> & d2, Direction<Real> & d3 );
+    void evalTrialStepCut();
+
+    void
+    evalLinearCombination(
+      Direction<Real> const & d1,
+      Direction<Real> const & d2,
+      Direction<Real> const & d3,
+      Real            const   a1,
+      Real            const   a2,
+      Real            const   a3
+    );
+
+    /**
+     * \brief Evaluate quantities that depend on penalty/interior parameters.
+     *
+     * Runs slack, merit and KKT-error evaluations that are functions of the current penalty and
+     * interior-point parameters.
+     */
+    void
+    evalDependent() {
+      // Evaluate quantities dependent on penalty and interior-point parameters
+      evalSlacks();
+      evalMerit();
+      evalKKTErrors();
+    }
+
+    Real evalKKTError( Real const rho, Real const mu );
+    void evalKKTErrors();
+
+    void
+    setPrimals(
+      Vector<Real> const & x,
+      Array<Real>  const & r1,
+      Array<Real>  const & r2,
+      Array<Real>  const & s1,
+      Array<Real>  const & s2,
+      Array<Real>  const & lE,
+      Array<Real>  const & lI,
+      Real         const   f,
+      Array<Real>  const & cE,
+      Array<Real>  const & cI,
+      Real         const   phi
+    );
+
+    /**
+     * \brief Reset all internal counters to zero.
+     * \param[out] c Counter object to reset.
+     */
+    void
+    resetCounter() {
+      m_counter.f =
+      m_counter.g =
+      m_counter.H =
+      m_counter.k =
+      m_counter.M = 0;
+    }
+
+    /**
+     * \brief Increment the matrix factorization counter.
+     * \param[in] c Counter whose matrix-factorization count is incremented.
+     */
+    void
+    incrementFactorizationCount() {
+      ++m_counter.M;
+    }
+
+    /**
+     * \brief Increment the function evaluation counter.
+     * \param[in] c Counter whose function-evaluation count is incremented.
+     */
+    void
+    incrementFunctionCount() {
+      ++m_counter.f;
+    }
+
+    /**
+     * \brief Increment the gradient evaluation counter.
+     * \param[in] c Counter whose gradient-evaluation count is incremented.
+     */
+    void
+    incrementGradientCount() {
+      ++m_counter.g;
+    }
+
+    /**
+     * \brief Increment the Hessian evaluation counter.
+     * \param[in] c Counter whose Hessian-evaluation count is incremented.
+     */
+    void
+    incrementHessianCount() {
+      ++m_counter.H;
+    }
+
+    /**
+     * \brief Increment the iteration counter.
+     * \param[in] c Counter whose iteration count is incremented.
+     */
+    void
+    incrementIterationCount() {
+      ++m_counter.k;
+    }
 
   public:
     /**
@@ -209,10 +398,12 @@ namespace Pipal
      *
      * \param[in] t_tolerance The convergence tolerance.
      */
-    void tolerance(Real const t_tolerance)
-    {
-      PIPAL_ASSERT(t_tolerance > 0.0,
-        "Pipal::Solver::tolerance(...): input value must be positive");
+    void
+    tolerance( Real const t_tolerance ) {
+      PIPAL_ASSERT(
+        t_tolerance > 0.0,
+        "Pipal::Solver::tolerance(...): input value must be positive"
+      );
       this->m_parameter.opt_err_tol = t_tolerance;
     }
 
@@ -230,8 +421,8 @@ namespace Pipal
      *
      * \param[in] t_max_iterations The maximum number of iterations.
      */
-    void max_iterations(Integer const t_max_iterations)
-    {
+    void
+    max_iterations(Integer const t_max_iterations) {
       PIPAL_ASSERT(
         t_max_iterations > 0,
         "Pipal::Solver::max_iterations(...): input value must be positive"
@@ -254,86 +445,31 @@ namespace Pipal
      * \param[out] x_sol Solution vector.
      * \return True if the optimization was successful, false otherwise.
      */
-    bool optimize(Vector<Real> const & x_guess, Vector<Real> & x_sol)
-    {
-      #define CMD "Pipal::Solver::optimize(...): "
+    bool optimize( Vector<Real> const & x_guess, Vector<Real> & x_sol );
 
-      // Create alias for easier access
-      Parameter<Real>  & p{this->m_parameter};
-      Counter          & c{this->m_counter};
-      Input<Real>      & i{this->m_input};
-      Iterate<Real>    & z{this->m_iterate};
-      Direction<Real>  & d{this->m_direction};
-      Acceptance<Real> & a{this->m_acceptance};
-
-      // Check that the problem is set
-      PIPAL_ASSERT(this->m_problem.get() != nullptr,
-        CMD "problem not set, use 'problem(...)' method to set it");
-
-      // Get variable bounds
-      Vector<Real> bl, bu;
-      PIPAL_ASSERT(this->m_problem->primal_lower_bounds(bl),
-        CMD "error in evaluating lower bounds on primal variables");
-      PIPAL_ASSERT(this->m_problem->primal_upper_bounds(bu),
-        CMD "error in evaluating upper bounds on primal variables");
-
-      // Get constraint bounds
-      Vector<Real> cl, cu;
-      PIPAL_ASSERT(this->m_problem->constraints_lower_bounds(cl),
-        CMD "error in evaluating lower bounds on constraints");
-      PIPAL_ASSERT(this->m_problem->constraints_upper_bounds(cu),
-        CMD "error in evaluating upper bounds on constraints");
-
-      // Reset counters
-      resetCounter(c);
-
-      // Fill input structure
-      buildInput<Real>(i, p, this->m_problem->name(), x_guess, bl, bu, cl, cu);
-      buildIterate<Real>(z, p, i, c, this->m_problem.get());
-      resetDirection<Real>(d, i);
-
-      // Print header and break line
-      if (this->m_verbose) {this->m_output.printHeader(i, z); this->m_output.printBreak(c);}
-
-      // Iterations loop
-      while (!checkTermination<Real>(z, p, i, c))
-      {
-        // Print iterate
-        if (this->m_verbose) {this->m_output.printIterate(c, z);}
-
-        // Evaluate the step
-        evalStep<Real>(d, p, i, c, z, a, this->m_problem.get());
-
-        // Print direction
-        if (this->m_verbose) {this->m_output.printDirection(z, d);}
-
-        lineSearch<Real>(a, p, i, c, z, d, this->m_problem.get());
-
-        // Print accepted
-        if (this->m_verbose) {this->m_output.printAcceptance(a);}
-
-        updateIterate<Real>(z, p, i, c, d, a, this->m_problem.get());
-
-        // Increment iteration counter
-        incrementIterationCount(c);
-
-        // Print break
-        if (this->m_verbose) {this->m_output.printBreak(c);}
-      }
-      // Print footer and terminate
-      if (this->m_verbose) {this->m_output.printFooter(p, i, c, z);}
-
-      // Get solution in original variables
-      evalXOriginal<Real>(z, i, x_sol);
-
-      // Return success if is finite
-      return x_sol.allFinite();
-
-      #undef CMD
+    /**
+     * \brief Extract a primal-dual solution in original ordering.
+     * \tparam Real Floating-point type used by the algorithm.
+     * \param[out] x Vector to store primal variables in original space.
+     * \param[out] l Vector to store multipliers in original space.
+     */
+    void
+    getSolution( Vector<Real> & x, Vector<Real> & l ) {
+      evalXOriginal(x);
+      evalLambdaOriginal(l);
     }
 
   }; // class Solver
 
 } // namespace Solver
+
+// Pipal includes
+#include "Pipal/Acceptance.hh"
+#include "Pipal/Types.hh"
+#include "Pipal/Direction.hh"
+#include "Pipal/Input.hh"
+#include "Pipal/Iterate.hh"
+#include "Pipal/Problem.hh"
+#include "Pipal/Optimize.hxx"
 
 #endif /* INCLUDE_PIPAL_SOLVER_HH */

@@ -324,24 +324,6 @@ namespace Pipal
     bool s{false}; /*!< Bool for second-order correction. */
   }; // struct Acceptance
 
-  // Function forward declarations
-  template<typename Real> inline void    fractionToBoundary(Acceptance<Real> & a, Parameter<Real> & p, Input<Real> const & i, Iterate<Real> & z, Direction<Real> & d);
-  template<typename Real> inline void    evalTrialSteps(Direction<Real> & d, Input<Real> const & i, Iterate<Real> & z, Direction<Real> & d1, Direction<Real> & d2, Direction<Real> & d3);
-  template<typename Real> inline void    evalTrialStepCut(Direction<Real> & d, Input<Real> const & i, Acceptance<Real> const & a);
-  template<typename Real> inline void    evalDependent(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i);
-  template<typename Real> inline void    evalInfeasibility(Iterate<Real> & z, Input<Real> const & i);
-  template<typename Real> inline void    initNewtonMatrix(Iterate<Real> & z, Input<Real> const & i);
-  template<typename Real> inline void    evalNewtonMatrix(Iterate<Real> & z, Parameter<Real> & p, Input<Real> const & i, Counter & c);
-  template<typename Real> inline void    evalSlacks(Iterate<Real> & z, Parameter<Real> & p, Input<Real> const & i);
-  template<typename Real> inline void    evalMerit(Iterate<Real> & z, Input<Real> const & i);
-  template<typename Real> inline void    evalKKTErrors(Iterate<Real> & z, Input<Real> const & i);
-  template<typename Real> inline void    evalXOriginal(Iterate<Real> & z, Input<Real> const & i, Vector<Real> & x);
-  template<typename Real> inline void    evalLambdaOriginal(Iterate<Real> const & z, Input<Real> const & i, Vector<Real> & l);
-  template<typename Real> inline Real    evalViolation(Input<Real> const & i, Array<Real> const & cE, Array<Real> const & cI);
-  template<typename Real> inline void    updatePoint(Iterate<Real> & z, Input<Real> const & i, Direction<Real> const & d, Acceptance<Real> const& a);
-  template<typename Real> inline Integer secondOrderCorrection(Acceptance<Real> & a, Parameter<Real> & p, Input<Real> & i, Counter & c, Iterate<Real> & z, Direction<Real> & d);
-  template<typename Real> inline Integer checkTermination(Iterate<Real> const & z, Parameter<Real> const & p, Input<Real> const& i, Counter const & c);
-
 } // namespace Pipal
 
 #endif // INCLUDE_PIPAL_DEFINES_HH

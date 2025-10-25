@@ -18,8 +18,7 @@
 #include "Pipal/Iterate.hh"
 #include "Pipal/Direction.hh"
 
-namespace Pipal
-{
+namespace Pipal {
 
   /**
    * \brief Backtracking line search.
@@ -28,28 +27,20 @@ namespace Pipal
    * primal/dual variables using the candidate direction and the current acceptance object. On success
    * the iterate is restored to the accepted trial point; otherwise the steplength is reduced until
    * the Armijo condition or the fraction-to-boundary constraint prevents further reductions.
-   * \tparam Real Floating-point type used by the algorithm.
-   * \param[in] a Acceptance object containing step lengths (updated by the routine).
-   * \param[in] p Algorithm parameters.
-   * \param[in] i Problem input structure.
-   * \param[in] c Counters used to account function/gradient/Hessian evaluations.
-   * \param[in] z Current iterate (modified temporarily while testing trial points).
-   * \param[in] d Candidate search direction (read-only).
-   * \param[in] problem Problem interface used to evaluate objective/constraints.
    */
   template <typename Real>
   inline
   void
-  backtracking(
-    Acceptance<Real>      & a,
-    Parameter<Real>       & p,
-    Input<Real>           & i,
-    Counter               & c,
-    Iterate<Real>         & z,
-    Direction<Real> const & d,
-    Problem<Real>   const * problem
-  ) {
+  Solver<Real>::backtracking() {
+
     static constexpr Real EPSILON{std::numeric_limits<Real>::epsilon()};
+
+    // Create alias for easier access
+    Parameter<Real>  & p{this->m_parameter};
+    Input<Real>      & i{this->m_input};
+    Iterate<Real>    & z{this->m_iterate};
+    Direction<Real>  & d{this->m_direction};
+    Acceptance<Real> & a{this->m_acceptance};
 
     // Store current values
     Real f{z.f}, phi{z.phi};
@@ -60,15 +51,15 @@ namespace Pipal
     while (a.p >= EPSILON)
     {
       // Set trial point
-      updatePoint<Real>(z, i, d, a);
-      evalFunctions<Real>(z, i, c, problem);
+      updatePoint();
+      evalFunctions();
 
       // Check for function evaluation error
       if (z.err == 0)
       {
         // Set remaining trial values
-        evalSlacks<Real>(z, p, i);
-        evalMerit<Real>(z, i);
+        evalSlacks();
+        evalMerit();
 
         // Check for nonlinear fraction-to-boundary violation
         Integer ftb{0};
@@ -84,19 +75,19 @@ namespace Pipal
         if (ftb == 0 && z.phi - phi <= -p.ls_thresh*a.p*std::max(d.qtred, 0.0))
         {
           // Reset variables and return
-          setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
+          setPrimals( x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
           return;
         }
         else
         {
           // Reset variables
-          setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
+          setPrimals( x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
         }
       }
       else
       {
         // Reset variables
-        setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
+        setPrimals( x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
       }
 
       // Reduce step length
@@ -120,13 +111,15 @@ namespace Pipal
   template <typename Real>
   inline
   void
-  fractionToBoundary(
-    Acceptance<Real>  & a,
-    Parameter<Real>   & p,
-    Input<Real> const & i,
-    Iterate<Real>     & z,
-    Direction<Real>   & d
-  ) {
+  Solver<Real>::fractionToBoundary() {
+
+    // Create alias for easier access
+    Parameter<Real>  & p{this->m_parameter};
+    Input<Real>      & i{this->m_input};
+    Iterate<Real>    & z{this->m_iterate};
+    Direction<Real>  & d{this->m_direction};
+    Acceptance<Real> & a{this->m_acceptance};
+    
     // Initialize primal fraction-to-boundary
     a.p0 = 1.0;
 
@@ -194,15 +187,15 @@ namespace Pipal
   template <typename Real>
   inline
   Integer
-  fullStepCheck(
-    Acceptance<Real> const & a,
-    Parameter<Real>        & p,
-    Input<Real>            & i,
-    Counter                & c,
-    Iterate<Real>          & z,
-    Direction<Real>  const & d,
-    Problem<Real>    const * problem
-  ) {
+  Solver<Real>::fullStepCheck() {
+
+    // Create alias for easier access
+    Parameter<Real>  & p{this->m_parameter};
+    Input<Real>      & i{this->m_input};
+    Iterate<Real>    & z{this->m_iterate};
+    Direction<Real>  & d{this->m_direction};
+    Acceptance<Real> & a{this->m_acceptance};
+
     // Set current and last penalty parameters
     Real rho{z.rho}, rho_temp{z.rho_};
 
@@ -210,10 +203,10 @@ namespace Pipal
     while (rho < rho_temp)
     {
       // Set penalty parameter
-      setRho<Real>(z, rho_temp);
+      setRho(rho_temp);
 
       // Evaluate merit
-      evalMerit<Real>(z, i);
+      evalMerit();
 
       // Store current values
       Real phi{z.phi}, f{z.f};
@@ -221,15 +214,15 @@ namespace Pipal
       Vector<Real> x(z.x);
 
       // Set trial point
-      updatePoint<Real>(z, i, d, a);
-      evalFunctions<Real>(z, i, c, problem);
+      updatePoint();
+      evalFunctions();
 
       // Check for function evaluation error
       if (z.err == 0)
       {
         // Set remaining trial values
-        evalSlacks<Real>(z, p, i);
-        evalMerit<Real>(z, i);
+        evalSlacks();
+        evalMerit();
 
         // Check for nonlinear fraction-to-boundary violation
         Integer ftb{0};
@@ -245,19 +238,19 @@ namespace Pipal
         if (ftb == 0 && z.phi - phi <= -p.ls_thresh*a.p*std::max(d.qtred, 0.0))
         {
           // Reset variables, set boolean, and return
-          setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
+          setPrimals( x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
           return 1;
         }
         else
         {
           // Reset variables
-          setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
+          setPrimals( x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
         }
       }
       else
       {
         // Reset variables
-        setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
+        setPrimals( x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
       }
 
       // Decrease rho
@@ -265,10 +258,10 @@ namespace Pipal
     }
 
     // Set rho
-    setRho<Real>(z, rho);
+    setRho(rho);
 
     // Evaluate merit
-    evalMerit<Real>(z, i);
+    evalMerit();
 
     return 0;
   }
@@ -291,29 +284,25 @@ namespace Pipal
   template <typename Real>
   inline
   void
-  lineSearch(
-    Acceptance<Real>    & a,
-    Parameter<Real>     & p,
-    Input<Real>         & i,
-    Counter             & c,
-    Iterate<Real>       & z,
-    Direction<Real>     & d,
-    Problem<Real> const * problem
-  ) {
+  Solver<Real>::lineSearch() {
+
+    // Create alias for easier access
+    Acceptance<Real> & a{this->m_acceptance};
+
     // Check fraction-to-boundary rule
-    fractionToBoundary<Real>(a, p, i, z, d);
+    fractionToBoundary();
 
     // Check for full step for trial penalty parameters
-    Integer b{fullStepCheck<Real>(a, p, i, c, z, d, problem)};
+    Integer b{ fullStepCheck() };
     // Run second-order correction
     a.s = false;
     if (b == 0) {
-      b = secondOrderCorrection<Real>(a, p, i, c, z, d, problem);
+      b = secondOrderCorrection();
       if (b == 2) {a.s = true;}
     }
 
     // Run backtracking line search
-    if (b == 0) {backtracking<Real>(a, p, i, c, z, d, problem);}
+    if (b == 0) backtracking();
   }
 
   /**
@@ -335,30 +324,30 @@ namespace Pipal
   template <typename Real>
   inline
   Integer
-  secondOrderCorrection(
-    Acceptance<Real>    & a,
-    Parameter<Real>     & p,
-    Input<Real>         & i,
-    Counter             & c,
-    Iterate<Real>       & z,
-    Direction<Real>     & d,
-    Problem<Real> const * problem
-  ) {
+  Solver<Real>::secondOrderCorrection() {
+
+    // Create alias for easier access
+    Parameter<Real>  & p{this->m_parameter};
+    Input<Real>      & i{this->m_input};
+    Iterate<Real>    & z{this->m_iterate};
+    Direction<Real>  & d{this->m_direction};
+    Acceptance<Real> & a{this->m_acceptance};
+
     // Store current iterate values
     Real f{z.f}, phi{z.phi}, v{z.v};
     Array<Real> cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE), cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);
     Vector<Real> x(z.x);
 
     // Set trial point
-    updatePoint<Real>(z, i, d, a);
-    evalFunctions<Real>(z, i, c, problem);
+    updatePoint();
+    evalFunctions();
 
     // Check for function evaluation error
     if (z.err == 0)
     {
       // Set remaining trial values
-      evalSlacks<Real>(z, p, i);
-      evalMerit<Real>(z, i);
+      evalSlacks();
+      evalMerit();
 
       // Check for nonlinear fraction-to-boundary violation
       Integer ftb{0};
@@ -374,40 +363,40 @@ namespace Pipal
       if (ftb == 0 && z.phi - phi <= -p.ls_thresh*a.p*std::max(d.qtred, 0.0))
       {
         // Reset variables, set flag, and return
-        setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
+        setPrimals( x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
         return 1;
       }
-      else if (evalViolation<Real>(i, z.cE, z.cI) < v)
+      else if ( evalViolation(z.cE, z.cI) < v )
       {
         // Reset variables and return
-        setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
+        setPrimals( x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
         return 0;
       }
       else
       {
         // Reset variables (but leave constraint values for second-order correction)
-        setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, f, z.cE, z.cI, phi);
+        setPrimals( x, r1, r2, s1, s2, lE, lI, f, z.cE, z.cI, phi);
       }
     }
     else
     {
       // Reset variables and return
-      setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
+      setPrimals( x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
       return 0;
     }
 
     // Recompute slacks for second order correction
-    evalSlacks<Real>(z, p, i);
+    evalSlacks();
 
     // Evaluate trial primal-dual right-hand side vector
-    evalNewtonRhs<Real>(z, i);
+    evalNewtonRhs();
 
     // Store current direction values
     Vector<Real> dx(d.x), dr1(d.r1), dr2(d.r2), dlE(d.lE), ds1(d.s1), ds2(d.s2), dlI(d.lI);
     Real dx_norm{d.x_norm}, dl_norm{d.l_norm};
 
     // Evaluate search direction
-    evalNewtonStep<Real>(d, i, z);
+    evalNewtonStep(d);
 
     // Set trial direction
     setDirection<Real>(d, i, a.p*dx+d.x, a.p*dr1+d.r1.matrix(), a.p*dr2+d.r2.matrix(), a.p*ds1+d.s1.matrix(),
@@ -415,15 +404,15 @@ namespace Pipal
       std::sqrt((a.d*dlE+d.lE.matrix()).matrix().squaredNorm() + (a.d*dlI+d.lI.matrix()).squaredNorm()));
 
     // Set trial point
-    updatePoint<Real>(z, i, d, a);
-    evalFunctions<Real>(z, i, c, problem);
+    updatePoint();
+    evalFunctions();
 
     // Check for function evaluation error
     if (z.err == 0)
     {
       // Set remaining trial values
-      evalSlacks<Real>(z, p, i);
-      evalMerit<Real>(z, i);
+      evalSlacks();
+      evalMerit();
 
       // Check for nonlinear fraction-to-boundary violation
       Integer ftb{0};
@@ -439,19 +428,19 @@ namespace Pipal
       if (ftb == 0 && z.phi - phi <= -p.ls_thresh*a.p*std::max(d.qtred, 0.0))
       {
         // Reset variables, set flag, and return
-        setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
+        setPrimals( x, r1, r2, s1, s2, lE, lI, z.f, z.cE, z.cI, z.phi);
         return 2;
       }
       else
       {
         // Reset variables
-        setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
+        setPrimals( x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
       }
     }
     else
     {
       // Reset variables
-      setPrimals<Real>(z, i, x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
+      setPrimals( x, r1, r2, s1, s2, lE, lI, f, cE, cI, phi);
     }
 
     // Reset direction

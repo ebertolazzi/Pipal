@@ -505,12 +505,6 @@ namespace Pipal {
 
   }; // class ProblemWrapper
 
-  // Forward declarations of evaluation functions
-  template<typename Real> inline void evalFunctions(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const * problem);
-  template<typename Real> inline void evalGradients(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const * problem);
-  template<typename Real> inline void evalHessian(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const * problem);
-  template<typename Real> inline void evalScalings(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c, Problem<Real> const * problem);
-
 } // namespace Pipal
 
 #endif /* INCLUDE_PIPAL_PROBLEM_HH */
