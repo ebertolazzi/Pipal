@@ -23,9 +23,9 @@ using Real   = double;
 using Vector = Pipal::Vector<Real>;
 using Matrix = Pipal::Matrix<Real>;
 
-constexpr bool VERBOSE{true};
-constexpr Real SOLVER_TOLERANCE{1.0e-10};
-constexpr Real APPROX_TOLERANCE{1.0e-3};
+constexpr bool    VERBOSE{false};
+constexpr Real    SOLVER_TOLERANCE{1.0e-10};
+constexpr Real    APPROX_TOLERANCE{1.0e-3};
 constexpr Integer MAX_ITERATIONS{100};
 
 TEST(Test1, ProblemWrapper) {

@@ -23,9 +23,9 @@ using Real   = double;
 using Vector = Pipal::Vector<Real>;
 using Matrix = Pipal::Matrix<Real>;
 
-constexpr bool VERBOSE{true};
-constexpr Real SOLVER_TOLERANCE{1.0e-10};
-constexpr Real APPROX_TOLERANCE{1.0e-3};
+constexpr bool    VERBOSE{false};
+constexpr Real    SOLVER_TOLERANCE{1.0e-10};
+constexpr Real    APPROX_TOLERANCE{1.0e-3};
 constexpr Integer MAX_ITERATIONS{100};
 
 TEST(Test1, ProblemWrapper) {
@@ -78,8 +78,6 @@ TEST(Test1, ProblemWrapper) {
   Vector x_sol(4), x_guess(4), x_opt(4);
   x_guess << -4000.0, 1.0, 1.0, 1.0;
   x_opt << 0.287054, 1.44787, 2.16978, 1.09530;
-  std::cout << "Initial guess: " << x_guess.transpose() << std::endl;
   EXPECT_TRUE(solver.optimize(x_guess, x_sol));
-  std::cout << "Optimal solution: " << x_sol.transpose() << std::endl;
   EXPECT_TRUE(x_sol.isApprox(x_opt, APPROX_TOLERANCE));
 }
