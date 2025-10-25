@@ -10,15 +10,10 @@
 
 #pragma once
 
-#ifndef INCLUDE_PIPAL_DIRECTION_HH
-#define INCLUDE_PIPAL_DIRECTION_HH
+#ifndef INCLUDE_PIPAL_DIRECTION_HXX
+#define INCLUDE_PIPAL_DIRECTION_HXX
 
-// Pipal includes
-#include "Pipal/Types.hh"
-#include "Pipal/Iterate.hh"
-
-namespace Pipal
-{
+namespace Pipal {
 
   /**
    * \brief Reset a search direction to zero and initialize norms.
@@ -184,10 +179,11 @@ namespace Pipal
   template<typename Real>
   inline
   void
-  Solver<Real>::evalNewtonStep( Direction<Real> & d ) const {
+  Solver<Real>::evalNewtonStep() {
     // Create alias for easier access
     Input<Real>   const & i{this->m_input};
     Iterate<Real> const & z{this->m_iterate};
+    Direction<Real>     & d{this->m_direction};
 
     // Evaluate direction
     SparseVector<Real> dir(z.ldlt.solve(-z.b));
@@ -390,7 +386,7 @@ namespace Pipal
     evalNewtonRhs();
 
     // Evaluate search direction
-    evalNewtonStep(d);
+    evalNewtonStep();
 
     // Evaluate models
     evalModels();
@@ -455,7 +451,6 @@ namespace Pipal
   ) {
     // Create alias for easier access
     Iterate<Real> const & z{this->m_iterate};
-    Direction<Real>     & d{this->m_direction};
 
     // Store current penalty and interior-point parameters
     Real rho_curr{z.rho}, mu_curr{z.mu};
@@ -464,21 +459,21 @@ namespace Pipal
     setRho(rho_curr);
     setMu(mu_curr);
     evalNewtonRhs();
-    evalNewtonStep(d);
+    evalNewtonStep();
     evalTrialStep(d1);
 
     // Evaluate direction for zero interior-point parameter
     setRho(rho_curr);
     setMu(0.0);
     evalNewtonRhs();
-    evalNewtonStep(d);
+    evalNewtonStep();
     evalTrialStep(d2);
 
     // Evaluate direction for zero penalty parameter
     setRho(0.0);
     setMu(mu_curr);
     evalNewtonRhs();
-    evalNewtonStep(d);
+    evalNewtonStep();
     evalTrialStep(d3);
   }
 
@@ -500,9 +495,7 @@ namespace Pipal
   template<typename Real>
   inline
   void
-  setDirection(
-    Direction<Real>    & d,
-    Input<Real>  const & i,
+  Solver<Real>::setDirection(
     Vector<Real> const & dx,
     Vector<Real> const & dr1,
     Vector<Real> const & dr2,
@@ -513,6 +506,10 @@ namespace Pipal
     Real         const   dx_norm,
     Real         const   dl_norm
   ) {
+    // Create alias for easier access
+    Input<Real> const & i{this->m_input};
+    Direction<Real>   & d{this->m_direction};
+
     // Set primal variables
     d.x = dx;
     if (i.nE > 0) {d.r1 = dr1; d.r2 = dr2; d.lE = dlE;}

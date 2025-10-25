@@ -10,13 +10,8 @@
 
 #pragma once
 
-#ifndef INCLUDE_PIPAL_ACCEPTANCE_HH
-#define INCLUDE_PIPAL_ACCEPTANCE_HH
-
-// Pipal includes
-#include "Pipal/Types.hh"
-#include "Pipal/Iterate.hh"
-#include "Pipal/Direction.hh"
+#ifndef INCLUDE_PIPAL_ACCEPTANCE_HXX
+#define INCLUDE_PIPAL_ACCEPTANCE_HXX
 
 namespace Pipal {
 
@@ -396,12 +391,21 @@ namespace Pipal {
     Real dx_norm{d.x_norm}, dl_norm{d.l_norm};
 
     // Evaluate search direction
-    evalNewtonStep(d);
+    evalNewtonStep();
 
     // Set trial direction
-    setDirection<Real>(d, i, a.p*dx+d.x, a.p*dr1+d.r1.matrix(), a.p*dr2+d.r2.matrix(), a.p*ds1+d.s1.matrix(),
-      a.p*ds2+d.s2.matrix(), a.d*dlE+d.lE.matrix(), a.d*dlI+d.lI.matrix(), (a.p*dx+d.x).norm(),
-      std::sqrt((a.d*dlE+d.lE.matrix()).matrix().squaredNorm() + (a.d*dlI+d.lI.matrix()).squaredNorm()));
+    setDirection(
+      a.p*dx+d.x,
+      a.p*dr1+d.r1.matrix(),
+      a.p*dr2+d.r2.matrix(),
+      a.p*ds1+d.s1.matrix(),
+      a.p*ds2+d.s2.matrix(),
+      a.d*dlE+d.lE.matrix(),
+      a.d*dlI+d.lI.matrix(),
+      (a.p*dx+d.x).norm(),
+      std::sqrt( (a.d*dlE+d.lE.matrix()).matrix().squaredNorm() +
+                 (a.d*dlI+d.lI.matrix()).squaredNorm() )
+    );
 
     // Set trial point
     updatePoint();
@@ -444,7 +448,7 @@ namespace Pipal {
     }
 
     // Reset direction
-    setDirection(d, i, dx, dr1, dr2, ds1, ds2, dlE, dlI, dx_norm, dl_norm);
+    setDirection(dx, dr1, dr2, ds1, ds2, dlE, dlI, dx_norm, dl_norm);
 
     // Reduce step length
     a.p *= p.ls_factor;

@@ -44,7 +44,7 @@ TEST(Test1, ProblemWrapper) {
       out.resize(0);
       return true;
     },
-    [] (Vector const &, Matrix & out) { // Jacobian of the constraints function
+    [] (Vector const &, SparseMatrix & out) { // Jacobian of the constraints function
       out.resize(0,0);
       return true;
     },

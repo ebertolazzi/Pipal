@@ -10,14 +10,21 @@
 
 #pragma once
 
-#ifndef INCLUDE_PIPAL_DEFINES_HH
-#define INCLUDE_PIPAL_DEFINES_HH
+#ifndef INCLUDE_PIPAL_DEFINES_HXX
+#define INCLUDE_PIPAL_DEFINES_HXX
 
 // Standard libraries
-#include <functional>
 #include <string>
-#include <limits>
+#include <iostream>
+#include <iomanip>
+#include <ostream>
+
+// STL
 #include <cmath>
+#include <limits>
+#include <algorithm>
+#include <functional>
+#include <type_traits>
 #include <numeric>
 #include <memory>
 
@@ -27,9 +34,6 @@
 #include <Eigen/Sparse>
 #include <Eigen/SparseCholesky>
 #endif
-
-// Pipal includes
-#include "Pipal/Problem.hh"
 
 // Print Pipal errors
 #ifndef PIPAL_ERROR

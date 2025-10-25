@@ -10,12 +10,8 @@
 
 #pragma once
 
-#ifndef INCLUDE_PIPAL_INPUT_HH
-#define INCLUDE_PIPAL_INPUT_HH
-
-// Pipal includes
-#include "Pipal/Types.hh"
-#include "Pipal/Parameter.hh"
+#ifndef INCLUDE_PIPAL_INPUT_HXX
+#define INCLUDE_PIPAL_INPUT_HXX
 
 namespace Pipal
 {
@@ -24,9 +20,7 @@ namespace Pipal
   template <typename Real>
   inline
   void
-  buildInput(
-    Input<Real>        & i,
-    Parameter<Real>    & p,
+  Solver<Real>::buildInput(
     std::string  const & name,
     Vector<Real> const & x0,
     Vector<Real> const & bl,
@@ -34,6 +28,11 @@ namespace Pipal
     Vector<Real> const & cl,
     Vector<Real> const & cu
   ) {
+
+    // Create alias for easier access
+    Parameter<Real> & p{this->m_parameter};
+    Input<Real>     & i{this->m_input};
+
     //#define CMD "Pipal::resetInput(...): "
 
     // Set problem identity

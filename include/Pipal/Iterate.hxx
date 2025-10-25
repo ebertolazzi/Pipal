@@ -10,12 +10,8 @@
 
 #pragma once
 
-#ifndef INCLUDE_PIPAL_ITERATE_HH
-#define INCLUDE_PIPAL_ITERATE_HH
-
-// Pipal includes
-#include "Pipal/Types.hh"
-#include "Pipal/Parameter.hh"
+#ifndef INCLUDE_PIPAL_ITERATE_HXX
+#define INCLUDE_PIPAL_ITERATE_HXX
 
 namespace Pipal {
 
@@ -103,26 +99,28 @@ namespace Pipal {
   template <typename Real>
   inline
   Integer
-  checkTermination(
-    Iterate<Real>   const & z,
-    Parameter<Real> const & p,
-    Input<Real>     const & i,
-    Counter         const & c
-  ) {
+  Solver<Real>::checkTermination() const {
+
+    // Create alias for easier access
+    Parameter<Real> const & p{this->m_parameter};
+    Counter         const & c{this->m_counter};
+    Input<Real>     const & i{this->m_input};
+    Iterate<Real>   const & z{this->m_iterate};
+
     // Update termination based on optimality error of nonlinear optimization problem
-    if (z.kkt(1) <= p.opt_err_tol && z.v <= p.opt_err_tol) {return 1;}
+    if (z.kkt(1) <= p.opt_err_tol && z.v <= p.opt_err_tol) return 1;
 
     // Update termination based on optimality error of feasibility problem
-    if (z.kkt(0) <= p.opt_err_tol && z.v > p.opt_err_tol) {return 2;}
+    if (z.kkt(0) <= p.opt_err_tol && z.v > p.opt_err_tol) return 2;
 
     // Update termination based on iteration count
-    if (c.k >= p.iter_max) {return 3;}
+    if (c.k >= p.iter_max) return 3;
 
     // Update termination based on invalid bounds
-    if (i.vi > 0) {return 4;}
+    if (i.vi > 0) return 4;
 
     // Update termination based on function evaluation error
-    if (z.err > 0) {return 5;}
+    if (z.err > 0) return 5;
 
     return 0;
   }
@@ -286,7 +284,9 @@ namespace Pipal {
     {
       // Evaluate AMPL gradients
       m_problem->objective_gradient(x_orig, g_orig);
-      m_problem->constraints_jacobian(x_orig, J_orig);
+      SparseMatrix<Real> J_orig_sparse;
+      m_problem->constraints_jacobian(x_orig, J_orig_sparse);
+      J_orig = J_orig_sparse;
     }
     catch (...)
     {

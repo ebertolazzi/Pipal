@@ -23,7 +23,6 @@ namespace Pipal {
     #define CMD "Pipal::Solver::optimize(...): "
 
     // Create alias for easier access
-    Parameter<Real>  & p{this->m_parameter};
     Counter          & c{this->m_counter};
     Input<Real>      & i{this->m_input};
     Iterate<Real>    & z{this->m_iterate};
@@ -62,7 +61,7 @@ namespace Pipal {
     resetCounter();
 
     // Fill input structure
-    buildInput<Real>(i, p, this->m_problem->name(), x_guess, bl, bu, cl, cu);
+    buildInput(this->m_problem->name(), x_guess, bl, bu, cl, cu);
     buildIterate();
     resetDirection(d);
 
@@ -70,8 +69,8 @@ namespace Pipal {
     if (this->m_verbose) {this->m_output.printHeader(i, z); this->m_output.printBreak(c);}
 
     // Iterations loop
-    while (!checkTermination<Real>(z, p, i, c))
-    {
+    while (!checkTermination()) {
+
       // Print iterate
       if (this->m_verbose) {this->m_output.printIterate(c, z);}
 
@@ -95,7 +94,7 @@ namespace Pipal {
       if (this->m_verbose) {this->m_output.printBreak(c);}
     }
     // Print footer and terminate
-    if (this->m_verbose) {this->m_output.printFooter(p, i, c, z);}
+    if (this->m_verbose) {this->m_output.printFooter(c, z, checkTermination() );}
 
     // Get solution in original variables
     evalXOriginal(x_sol);

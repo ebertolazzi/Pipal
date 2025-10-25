@@ -10,17 +10,8 @@
 
 #pragma once
 
-#ifndef INCLUDE_PIPAL_OUTPUT_HH
-#define INCLUDE_PIPAL_OUTPUT_HH
-
-// Standard libraries
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <ostream>
-
-// Pipal includes
-#include "Pipal/Types.hh"
+#ifndef INCLUDE_PIPAL_OUTPUT_HXX
+#define INCLUDE_PIPAL_OUTPUT_HXX
 
 namespace Pipal
 {
@@ -74,24 +65,26 @@ namespace Pipal
   void
   printHeader(Input<Real> const & i, Iterate<Real> const & z) const {
     this->s
-      << "Problem name" << std::endl
-      << "============" << std::endl
-      << "  " << i.name << std::endl
-      << std::endl;
+      << "Problem name\n"
+      << "============\n"
+      << "  " << i.name << '\n'
+      << '\n';
 
     this->s
-      << "Problem size" << std::endl << "============" << std::endl
-      << "  Number of variables....................... : " << i.nV << std::endl
-      << "  Number of equality constraints............ : " << i.nE << std::endl
-      << "  Number of inequality constraints.......... : " << i.nI << std::endl
-      << std::endl;
+      << "Problem size\n"
+      << "============\n"
+      << "  Number of variables....................... : " << i.nV << '\n'
+      << "  Number of equality constraints............ : " << i.nE << '\n'
+      << "  Number of inequality constraints.......... : " << i.nI << '\n'
+      << '\n';
 
     this->s
-      << "Problem sparsity" << std::endl << "================" << std::endl
-      << "  Nonzeros in Hessian of Lagrangian......... : " << z.Hnnz << std::endl
-      << "  Nonzeros in equality constraint Jacobian.. : " << z.JEnnz << std::endl
-      << "  Nonzeros in inequality constraint Jacobian : " << z.JInnz << std::endl
-      << std::endl;
+      << "Problem sparsity\n"
+      << "================\n"
+      << "  Nonzeros in Hessian of Lagrangian......... : " << z.Hnnz  << '\n'
+      << "  Nonzeros in equality constraint Jacobian.. : " << z.JEnnz << '\n'
+      << "  Nonzeros in inequality constraint Jacobian : " << z.JInnz << '\n'
+      << '\n';
   }
 
   /**
@@ -102,9 +95,9 @@ namespace Pipal
   printBreak(Counter const & c) const {
     if (c.k % 20 == 0) {
       this->s
-        << this->l << std::endl
-        << this->q << std::endl
-        << this->l << std::endl;
+        << this->l << '\n'
+        << this->q << '\n'
+        << this->l << '\n';
     }
   }
 
@@ -147,65 +140,64 @@ namespace Pipal
   printAcceptance( Acceptance<Real> const & a ) const {
     this->s << std::scientific << std::setprecision(4) << a.p << "  " << a.d;
     if (a.s == 1) { this->s << " SOC"; }
-    this->s << std::endl;
+    this->s << '\n';
   }
 
   /**
    * \brief Print final summary footer and termination message.
-   * \param[in] p Algorithm parameters.
-   * \param[in] i Problem input structure.
    * \param[in] c Counters used during evaluations.
    * \param[in] z Current iterate (modified temporarily while testing points).
    */
   void
   printFooter(
-    Parameter<Real> const & p,
-    Input<Real>     const & i,
-    Counter         const & c,
-    Iterate<Real>   const & z
+    Counter       const & c,
+    Iterate<Real> const & z,
+    Integer       const   b
   ) const {
     this->printIterate(c, z);
     this->s
-      << this->n << std::endl << this->l << std::endl
-      << std::endl;
-
-    const Integer b{checkTermination(z, p, i, c)};
+      << this->n << '\n' << this->l << '\n'
+      << '\n';
 
     this->s
-      << "Final result" << std::endl
-      << "============" << std::endl;
+      << "Final result\n"
+      << "============\n";
     switch (b) {
-      case 0:  this->s << "  EXIT: No termination message set" << std::endl; break;
-      case 1:  this->s << "  EXIT: Optimal solution found" << std::endl; break;
-      case 2:  this->s << "  EXIT: Infeasible stationary point found" << std::endl; break;
-      case 3:  this->s << "  EXIT: Iteration limit reached" << std::endl; break;
-      case 4:  this->s << "  EXIT: Invalid bounds" << std::endl; break;
-      case 5:  this->s << "  EXIT: Function evaluation error" << std::endl; break;
-      default: this->s << "  EXIT: Unknown termination" << std::endl; break;
+      case 0:  this->s << "  EXIT: No termination message set\n";        break;
+      case 1:  this->s << "  EXIT: Optimal solution found\n";            break;
+      case 2:  this->s << "  EXIT: Infeasible stationary point found\n"; break;
+      case 3:  this->s << "  EXIT: Iteration limit reached\n";           break;
+      case 4:  this->s << "  EXIT: Invalid bounds\n";                    break;
+      case 5:  this->s << "  EXIT: Function evaluation error\n";         break;
+      default: this->s << "  EXIT: Unknown termination\n";               break;
     }
 
     this->s
-      << "\nFinal values" << std::endl
-      << "============" << std::showpos << std::endl
-      << "  Objective function........................ : " << z.fu << std::endl
-      << "  Feasibility violation..................... : " << z.vu << std::endl
-      << "  Optimality error (feasibility)............ : " << z.kkt(0) << std::endl
-      << "  Optimality error (penalty)................ : " << z.kkt(1) << std::endl
-      << "  Optimality error (penalty-interior-point). : " << z.kkt(2) << std::endl
-      << "  Penalty parameter......................... : " << z.rho << std::endl
-      << "  Interior-point parameter.................. : " << z.mu << std::noshowpos << std::endl
-      << std::endl;
+      << '\n'
+      << "Final values\n"
+      << "============\n" << std::showpos
+      << "  Objective function........................ : " << z.fu     << '\n'
+      << "  Feasibility violation..................... : " << z.vu     << '\n'
+      << "  Optimality error (feasibility)............ : " << z.kkt(0) << '\n'
+      << "  Optimality error (penalty)................ : " << z.kkt(1) << '\n'
+      << "  Optimality error (penalty-interior-point). : " << z.kkt(2) << '\n'
+      << "  Penalty parameter......................... : " << z.rho    << '\n'
+      << "  Interior-point parameter.................. : " << z.mu     << '\n'
+      << std::noshowpos
+      << '\n';
 
     this->s
-      << "Final counters" << std::endl
-      << "==============" << std::endl
-      << "  Iterations................................ : " << c.k << std::endl
-      << "  Function evaluations...................... : " << c.f << std::endl
-      << "  Gradient evaluations...................... : " << c.g << std::endl
-      << "  Hessian evaluations....................... : " << c.H << std::endl
-      << "  Matrix factorizations..................... : " << c.M << std::endl
-      << "  CPU millseconds........................... : " << std::scientific << std::setprecision(4)
-      << std::chrono::duration_cast<MicroSeconds>(SteadyClock::now() - this->t).count()/1.0e3 << std::endl;
+      << "Final counters" << '\n'
+      << "==============" << '\n'
+      << "  Iterations................................ : " << c.k << '\n'
+      << "  Function evaluations...................... : " << c.f << '\n'
+      << "  Gradient evaluations...................... : " << c.g << '\n'
+      << "  Hessian evaluations....................... : " << c.H << '\n'
+      << "  Matrix factorizations..................... : " << c.M << '\n'
+      << "  CPU millseconds........................... : "
+      << std::scientific << std::setprecision(4)
+      << std::chrono::duration_cast<MicroSeconds>(SteadyClock::now() - this->t).count()/1.0e3
+      << '\n';
     }
   }; // class Output
 

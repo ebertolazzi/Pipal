@@ -10,15 +10,8 @@
 
 #pragma once
 
-#ifndef INCLUDE_PIPAL_SOLVER_HH
-#define INCLUDE_PIPAL_SOLVER_HH
-
-// Standard libraries
-#include <iomanip>
-#include <algorithm>
-#include <type_traits>
-
-#include "Pipal/Output.hh"
+#ifndef INCLUDE_PIPAL_SOLVER_HXX
+#define INCLUDE_PIPAL_SOLVER_HXX
 
 namespace Pipal {
 
@@ -82,8 +75,10 @@ namespace Pipal {
     void resetDirection( Direction<Real> & d ) const;
     void evalLambdaOriginal( Vector<Real> & l ) const;
     Real evalViolation( Array<Real> const & cE, Array<Real> const & cI ) const;
-    void evalNewtonStep( Direction<Real> & d ) const;
+    void evalNewtonStep();
     void evalTrialStep( Direction<Real> & v ) const;
+    Integer checkTermination() const;
+
     /**
      * \brief Compute scaled and unscaled feasibility violations.
      * \tparam Real Floating-point type used by the algorithm.
@@ -154,6 +149,19 @@ namespace Pipal {
      */
     void setMu( Real const mu ) { m_iterate.mu = mu; }
 
+    void
+    setDirection(
+      Vector<Real> const & dx,
+      Vector<Real> const & dr1,
+      Vector<Real> const & dr2,
+      Vector<Real> const & ds1,
+      Vector<Real> const & ds2,
+      Vector<Real> const & dlE,
+      Vector<Real> const & dlI,
+      Real         const   dx_norm,
+      Real         const   dl_norm
+    );
+
     void evalTrialSteps( Direction<Real> & d1, Direction<Real> & d2, Direction<Real> & d3 );
     void evalTrialStepCut();
 
@@ -197,6 +205,16 @@ namespace Pipal {
       Array<Real>  const & cE,
       Array<Real>  const & cI,
       Real         const   phi
+    );
+
+    void
+    buildInput(
+      std::string  const & name,
+      Vector<Real> const & x0,
+      Vector<Real> const & bl,
+      Vector<Real> const & bu,
+      Vector<Real> const & cl,
+      Vector<Real> const & cu
     );
 
     /**
@@ -464,12 +482,11 @@ namespace Pipal {
 } // namespace Solver
 
 // Pipal includes
-#include "Pipal/Acceptance.hh"
-#include "Pipal/Types.hh"
-#include "Pipal/Direction.hh"
-#include "Pipal/Input.hh"
-#include "Pipal/Iterate.hh"
-#include "Pipal/Problem.hh"
+#include "Pipal/Acceptance.hxx"
+#include "Pipal/Direction.hxx"
+#include "Pipal/Input.hxx"
+#include "Pipal/Iterate.hxx"
+#include "Pipal/Problem.hxx"
 #include "Pipal/Optimize.hxx"
 
 #endif /* INCLUDE_PIPAL_SOLVER_HH */
