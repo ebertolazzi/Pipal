@@ -40,10 +40,11 @@ namespace Pipal
    * \tparam Real The floating-point type used for computations (e.g., float, double).
    */
   template <typename Real>
-  class Solver
-  {
-  static_assert(std::is_floating_point_v<Real>,
-     "Pipal::Solver<Real>: Real must be a floating-point type.");
+  class Solver {
+    static_assert(
+      std::is_floating_point_v<Real>,
+      "Pipal::Solver<Real>: Real must be a floating-point type."
+    );
 
   public:
     using ProblemPtr              = typename Problem<Real>::UniquePtr;
@@ -91,14 +92,33 @@ namespace Pipal
      * \param[in] constraints_lower_bounds Lower bounds on the constraints handle.
      * \param[in] constraints_upper_bounds Upper bounds on the constraints handle.
      */
-    Solver(std::string const & name, ObjectiveFunc const & objective, ObjectiveGradientFunc const &
-      objective_gradient, ConstraintsFunc const & constraints, ConstraintsJacobianFunc const &
-      constraints_jacobian, LagrangianHessianFunc const & lagrangian_hessian, BoundsFunc const &
-      primal_lower_bounds, BoundsFunc const & primal_upper_bounds, BoundsFunc const &
-      constraints_lower_bounds, BoundsFunc const & constraints_upper_bounds)
-      : m_problem(std::make_unique<ProblemWrapper<Real>>(name, objective, objective_gradient,
-        constraints, constraints_jacobian, lagrangian_hessian, primal_lower_bounds, primal_upper_bounds,
-        constraints_lower_bounds, constraints_upper_bounds)) {}
+    Solver(
+      std::string             const & name,
+      ObjectiveFunc           const & objective,
+      ObjectiveGradientFunc   const & objective_gradient,
+      ConstraintsFunc         const & constraints,
+      ConstraintsJacobianFunc const & constraints_jacobian,
+      LagrangianHessianFunc   const & lagrangian_hessian,
+      BoundsFunc              const & primal_lower_bounds,
+      BoundsFunc              const & primal_upper_bounds,
+      BoundsFunc              const & constraints_lower_bounds,
+      BoundsFunc              const & constraints_upper_bounds
+    )
+    : m_problem(
+       std::make_unique<ProblemWrapper<Real>>(
+         name,
+         objective,
+         objective_gradient,
+         constraints,
+         constraints_jacobian,
+         lagrangian_hessian,
+         primal_lower_bounds,
+         primal_upper_bounds,
+         constraints_lower_bounds,
+         constraints_upper_bounds
+        )
+      )
+    {}
 
     /**
      * \brief Constructor for the Pipal class (with a unique pointer to a Problem object).
@@ -212,8 +232,10 @@ namespace Pipal
      */
     void max_iterations(Integer const t_max_iterations)
     {
-      PIPAL_ASSERT(t_max_iterations > 0,
-        "Pipal::Solver::max_iterations(...): input value must be positive");
+      PIPAL_ASSERT(
+        t_max_iterations > 0,
+        "Pipal::Solver::max_iterations(...): input value must be positive"
+      );
       this->m_parameter.iter_max = t_max_iterations;
     }
 

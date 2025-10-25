@@ -131,7 +131,7 @@ namespace Pipal {
      * \param[out] out The Hessian matrix of the Lagrangian function.
      * \return True if the evaluation was successful, false otherwise.
      */
-    virtual bool lagrangian_hessian(Vector<Real> const & x, Vector<Real> const & z, Matrix<Real> & out) const = 0;
+    virtual bool lagrangian_hessian(Vector<Real> const & x, Vector<Real> const & z, SparseMatrix<Real> & out) const = 0;
 
     /**
      * \brief Lower bounds on the primal variables.
@@ -178,7 +178,7 @@ namespace Pipal {
     using ObjectiveGradientFunc   = std::function<bool(Vector<Real> const &, Vector<Real> &)>;
     using ConstraintsFunc         = std::function<bool(Vector<Real> const &, Vector<Real> &)>;
     using ConstraintsJacobianFunc = std::function<bool(Vector<Real> const &, Matrix<Real> &)>;
-    using LagrangianHessianFunc   = std::function<bool(Vector<Real> const &, Vector<Real> const &, Matrix<Real> &)>;
+    using LagrangianHessianFunc   = std::function<bool(Vector<Real> const &, Vector<Real> const &, SparseMatrix<Real> &)>;
     using BoundsFunc              = std::function<bool(Vector<Real> &)>;
 
   private:
@@ -212,16 +212,29 @@ namespace Pipal {
      * \param[in] t_constraints_lower_bounds Lower bounds on the constraints function handle.
      * \param[in] t_constraints_upper_bounds Upper bounds on the constraints function handle.
      */
-    ProblemWrapper(std::string const & t_name, ObjectiveFunc const & t_objective, ObjectiveGradientFunc
-      const & t_objective_gradient, ConstraintsFunc const & t_constraints, ConstraintsJacobianFunc
-      const & t_constraints_jacobian, LagrangianHessianFunc const & t_lagrangian_hessian, BoundsFunc
-      const & t_primal_lower_bounds, BoundsFunc const & t_primal_upper_bounds, BoundsFunc const &
-      t_constraints_lower_bounds, BoundsFunc const & t_constraints_upper_bounds)
-      : Problem<Real>(t_name), m_objective(t_objective), m_objective_gradient(t_objective_gradient),
-        m_constraints(t_constraints), m_constraints_jacobian(t_constraints_jacobian),
-        m_lagrangian_hessian(t_lagrangian_hessian), m_primal_lower_bounds(t_primal_lower_bounds),
-        m_primal_upper_bounds(t_primal_upper_bounds), m_constraints_lower_bounds(t_constraints_lower_bounds),
-        m_constraints_upper_bounds(t_constraints_upper_bounds) {}
+    ProblemWrapper(
+      std::string             const & t_name,
+      ObjectiveFunc           const & t_objective,
+      ObjectiveGradientFunc   const & t_objective_gradient,
+      ConstraintsFunc         const & t_constraints,
+      ConstraintsJacobianFunc const & t_constraints_jacobian,
+      LagrangianHessianFunc   const & t_lagrangian_hessian,
+      BoundsFunc              const & t_primal_lower_bounds,
+      BoundsFunc              const & t_primal_upper_bounds,
+      BoundsFunc              const & t_constraints_lower_bounds,
+      BoundsFunc              const & t_constraints_upper_bounds
+    )
+    : Problem<Real>(t_name)
+    , m_objective(t_objective)
+    , m_objective_gradient(t_objective_gradient)
+    , m_constraints(t_constraints)
+    , m_constraints_jacobian(t_constraints_jacobian)
+    , m_lagrangian_hessian(t_lagrangian_hessian)
+    , m_primal_lower_bounds(t_primal_lower_bounds)
+    , m_primal_upper_bounds(t_primal_upper_bounds)
+    , m_constraints_lower_bounds(t_constraints_lower_bounds)
+    , m_constraints_upper_bounds(t_constraints_upper_bounds)
+    {}
 
     /**
      * \brief Default destructor for the ProblemWrapper class.
@@ -441,8 +454,12 @@ namespace Pipal {
      * \param[out] out The Hessian matrix of the Lagrangian function.
      * \return True if the evaluation was successful, false otherwise.
      */
-    bool lagrangian_hessian(Vector<Real> const & x, Vector<Real> const & z, Matrix<Real> & out) const override
-    {
+    bool
+    lagrangian_hessian(
+      Vector<Real> const & x,
+      Vector<Real> const & z,
+      SparseMatrix<Real> & out
+    ) const override {
       return this->m_lagrangian_hessian(x, z, out);
     }
 

@@ -450,7 +450,9 @@ namespace Pipal
     try
     {
       // Evaluate H_orig
-      problem->lagrangian_hessian(x_orig, l_orig, H_orig);
+      SparseMatrix<Real> H_orig_sparse;
+      problem->lagrangian_hessian(x_orig, l_orig, H_orig_sparse);
+      H_orig = H_orig_sparse;
     }
     catch (...)
     {
