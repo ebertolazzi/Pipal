@@ -303,8 +303,12 @@ namespace Pipal
       }
       // Print footer and terminate
       if (this->m_verbose) {this->m_output.printFooter(p, i, c, z);}
-      x_sol = x_guess;
-      return true;
+
+      // Get solution in original variables
+      evalXOriginal<Real>(z, i, x_sol);
+
+      // Return success if is finite
+      return x_sol.allFinite();
 
       #undef CMD
     }
