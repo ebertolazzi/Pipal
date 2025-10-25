@@ -55,9 +55,18 @@ namespace Pipal
    * \param[in] a3 Scalar multiplier for the third direction.
    */
   template<typename Real>
-  inline void evalLinearCombination(Direction<Real> & d, Input<Real> const & i, Direction<Real> const & d1,
-    Direction<Real> const & d2, Direction<Real> const & d3, Real const a1, Real const a2, Real const a3)
-  {
+  inline
+  void
+  evalLinearCombination(
+    Direction<Real> & d,
+    Input<Real>     const & i,
+    Direction<Real> const & d1,
+    Direction<Real> const & d2,
+    Direction<Real> const & d3,
+    Real            const   a1,
+    Real            const   a2,
+    Real            const   a3
+  ) {
     // Evaluate linear combinations
     d.x = a1*d1.x + a2*d2.x + a3*d3.x;
     if (i.nE > 0) {
@@ -86,8 +95,13 @@ namespace Pipal
    * \param[in] z Current iterate with model data (gradients, Jacobians, etc.).
    */
   template<typename Real>
-  inline void evalModels(Direction<Real> & d, Input<Real> const & i, Iterate<Real> & z)
-  {
+  inline
+  void
+  evalModels(
+    Direction<Real>   & d,
+    Input<Real> const & i,
+    Iterate<Real>     & z
+  ) {
     // Evaluate reduction in linear model of penalty-interior-point objective for zero penalty parameter
     d.lred0 = 0;
     if (i.nE > 0) {
@@ -165,8 +179,13 @@ namespace Pipal
    * \param[in] z Iterate containing the factorization and solution vector.
    */
   template<typename Real>
-  inline void evalNewtonStep(Direction<Real> & d, Input<Real> const & i, Iterate<Real> const & z)
-  {
+  inline
+  void
+  evalNewtonStep(
+    Direction<Real>     & d,
+    Input<Real>   const & i,
+    Iterate<Real> const & z
+  ) {
     // Evaluate direction
     SparseVector<Real> dir(z.ldlt.solve(-z.b));
 
@@ -202,9 +221,17 @@ namespace Pipal
    * \param[in] problem Problem interface used for evaluations.
    */
   template<typename Real>
-  inline void evalStep(Direction<Real> & d, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Iterate<Real> & z, Acceptance<Real> & a, Problem<Real> const * problem)
-  {
+  inline
+  void
+  evalStep(
+    Direction<Real>     & d,
+    Parameter<Real>     & p,
+    Input<Real>         & i,
+    Counter             & c,
+    Iterate<Real>       & z,
+    Acceptance<Real>    & a,
+    Problem<Real> const * problem
+  ) {
     // Reset maximum exponent for interior-point parameter increases
     resetMuMaxExp(p);
 
@@ -375,8 +402,13 @@ namespace Pipal
    * \param[out] v Destination direction that will contain the trial step.
    */
   template<typename Real>
-  inline void evalTrialStep(Direction<Real> const & d, Input<Real> const & i, Direction<Real> & v)
-  {
+  inline
+  void
+  evalTrialStep(
+    Direction<Real> const & d,
+    Input<Real>     const & i,
+    Direction<Real>       & v
+  ) {
     // Set direction components
     v.x = d.x;
     if (i.nE > 0) {v.r1 = d.r1; v.r2 = d.r2; v.lE = d.lE;}
@@ -391,8 +423,13 @@ namespace Pipal
    * \param[in] a Acceptance object containing fraction values (p and d).
    */
   template<typename Real>
-  inline void evalTrialStepCut(Direction<Real> & d, Input<Real> const & i, Acceptance<Real> const & a)
-  {
+  inline
+  void
+  evalTrialStepCut(
+    Direction<Real>        & d,
+    Input<Real>      const & i,
+    Acceptance<Real> const & a
+  ) {
     // Set direction components
     d.x = a.p*d.x ;
     if (i.nE > 0) {d.r1 = a.p*d.r1; d.r2 = a.p*d.r2; d.lE = a.d*d.lE;}
@@ -410,9 +447,16 @@ namespace Pipal
    * \param[out] d3 Direction for the third parameter combination.
    */
   template<typename Real>
-  inline void evalTrialSteps(Direction<Real> & d, Input<Real> const & i, Iterate<Real> & z,
-    Direction<Real> & d1, Direction<Real> & d2, Direction<Real> & d3)
-  {
+  inline
+  void
+  evalTrialSteps(
+    Direction<Real>   & d,
+    Input<Real> const & i,
+    Iterate<Real>     & z,
+    Direction<Real>   & d1,
+    Direction<Real>   & d2,
+    Direction<Real>   & d3
+  ) {
     // Store current penalty and interior-point parameters
     Real rho_curr{z.rho}, mu_curr{z.mu};
 
@@ -454,10 +498,21 @@ namespace Pipal
    * \param[in] dl_norm Norm of the dual direction (precomputed).
    */
   template<typename Real>
-  inline void setDirection(Direction<Real> & d, Input<Real> const & i, Vector<Real> const & dx,
-    Vector<Real> const & dr1, Vector<Real> const & dr2, Vector<Real> const & ds1, Vector<Real> const & ds2,
-    Vector<Real> const & dlE, Vector<Real> const & dlI, Real const dx_norm, Real const dl_norm)
-  {
+  inline
+  void
+  setDirection(
+    Direction<Real>    & d,
+    Input<Real>  const & i,
+    Vector<Real> const & dx,
+    Vector<Real> const & dr1,
+    Vector<Real> const & dr2,
+    Vector<Real> const & ds1,
+    Vector<Real> const & ds2,
+    Vector<Real> const & dlE,
+    Vector<Real> const & dlI,
+    Real         const   dx_norm,
+    Real         const   dl_norm
+  ) {
     // Set primal variables
     d.x = dx;
     if (i.nE > 0) {d.r1 = dr1; d.r2 = dr2; d.lE = dlE;}

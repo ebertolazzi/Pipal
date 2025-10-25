@@ -31,9 +31,15 @@ namespace Pipal
    * \param[in] problem Problem interface used for objective/constraints.
    */
   template <typename Real>
-  inline void buildIterate(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Problem<Real> const * problem)
-  {
+  inline
+  void
+  buildIterate(
+    Iterate<Real>       & z,
+    Parameter<Real>     & p,
+    Input<Real>         & i,
+    Counter             & c,
+    Problem<Real> const * problem
+  ) {
     // Safe initialization of all members
     z.f = 0;
     z.fu = 0;
@@ -97,9 +103,14 @@ namespace Pipal
    * \return An integer termination code (0 = continue, 1..5 = specific exits).
    */
   template <typename Real>
-  inline Integer checkTermination(Iterate<Real> const & z, Parameter<Real> const & p, Input<Real> const & i,
-    Counter const & c)
-  {
+  inline
+  Integer
+  checkTermination(
+    Iterate<Real>   const & z,
+    Parameter<Real> const & p,
+    Input<Real>     const & i,
+    Counter         const & c
+  ) {
     // Update termination based on optimality error of nonlinear optimization problem
     if (z.kkt(1) <= p.opt_err_tol && z.v <= p.opt_err_tol) {return 1;}
 
@@ -128,8 +139,13 @@ namespace Pipal
    * \param[in] i Problem input structure.
    */
   template <typename Real>
-  inline void evalDependent(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i)
-  {
+  inline
+  void
+  evalDependent(
+    Iterate<Real>   & z,
+    Parameter<Real> & p,
+    Input<Real>     & i
+  ) {
     // Evaluate quantities dependent on penalty and interior-point parameters
     evalSlacks<Real>(z, p, i);
     evalMerit<Real>(z, i);
@@ -145,8 +161,14 @@ namespace Pipal
    * \param[in] problem Problem interface used for objective/constraints.
    */
   template <typename Real>
-  inline void evalFunctions(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const * problem)
-  {
+  inline
+  void
+  evalFunctions(
+    Iterate<Real>       & z,
+    Input<Real>         & i,
+    Counter             & c,
+    Problem<Real> const * problem
+  ) {
     // Evaluate x in original space
     Vector<Real> x_orig;
     evalXOriginal<Real>(z, i, x_orig);
@@ -229,9 +251,14 @@ namespace Pipal
    * \param[in] col_offset Column offset in the sparse matrix.
    */
   template <typename Real, bool CheckZero = true>
-  inline void insert_block(SparseMatrix<Real> & mat_sparse, Matrix<Real> const & mat_dense,
-    Integer const row_offset, Integer const col_offset)
-  {
+  inline
+  void
+  insert_block(
+    SparseMatrix<Real> & mat_sparse,
+    Matrix<Real> const & mat_dense,
+    Integer      const   row_offset,
+    Integer      const   col_offset
+  ) {
     const Integer cols{static_cast<Integer>(mat_dense.cols())}, rows{static_cast<Integer>(mat_dense.rows())};
     for (Integer r{0}; r < rows; ++r) {
       for (Integer c{0}; c < cols; ++c) {
@@ -259,8 +286,14 @@ namespace Pipal
    * \param[in] problem Problem interface used for objective/constraints.
    */
   template <typename Real>
-  inline void evalGradients(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const * problem)
-  {
+  inline
+  void
+  evalGradients(
+    Iterate<Real>       & z,
+    Input<Real>         & i,
+    Counter             & c,
+    Problem<Real> const * problem
+  ) {
     // Evaluate x in original space
     Vector<Real> x_orig;
     evalXOriginal<Real>(z, i, x_orig);
@@ -393,8 +426,14 @@ namespace Pipal
    * \param[in] problem Problem interface used for objective/constraints.
    */
   template <typename Real>
-  inline void evalHessian(Iterate<Real> & z, Input<Real> & i, Counter & c, Problem<Real> const * problem)
-  {
+  inline
+  void
+  evalHessian(
+    Iterate<Real>       & z,
+    Input<Real>         & i,
+    Counter             & c,
+    Problem<Real> const * problem
+  ) {
     // Evaluate lambda in original space
     Vector<Real> l_orig, x_orig;
     evalLambdaOriginal<Real>(z, i, l_orig);
@@ -468,8 +507,9 @@ namespace Pipal
    * \param[in] i Problem input structure.
    */
   template <typename Real>
-  inline void evalInfeasibility(Iterate<Real> & z, Input<Real> const & i)
-  {
+  inline
+  void
+  evalInfeasibility( Iterate<Real> & z, Input<Real> const & i ) {
     // Evaluate scaled and unscaled feasibility violations
     z.v  = evalViolation<Real>(i, z.cE, z.cI) / std::max(1.0, z.v0);
     z.vu = evalViolation<Real>(i, z.cEu, z.cIu);
@@ -485,8 +525,14 @@ namespace Pipal
    * \return The infinity-norm of the KKT optimality vector.
    */
   template <typename Real>
-  inline Real evalKKTError(Iterate<Real> & z, Input<Real> const & i, Real const rho, Real const mu)
-  {
+  inline
+  Real
+  evalKKTError(
+    Iterate<Real>     & z,
+    Input<Real> const & i,
+    Real        const   rho,
+    Real        const   mu
+  ) {
     // Initialize optimality vector
     Vector<Real> kkt(i.nV+2*i.nE+2*i.nI);
     kkt.setZero();
@@ -522,8 +568,9 @@ namespace Pipal
    * \param[in] i Problem input structure.
    */
   template <typename Real>
-  inline void evalKKTErrors(Iterate<Real> & z, Input<Real> const & i)
-  {
+  inline
+  void
+  evalKKTErrors( Iterate<Real> & z, Input<Real> const & i ) {
     // Loop to compute optimality errors
     z.kkt(0) = evalKKTError<Real>(z, i, 0.0, 0.0);
     z.kkt(1) = evalKKTError<Real>(z, i, z.rho, 0.0);
@@ -538,8 +585,13 @@ namespace Pipal
    * \param[out] l Vector to store multipliers in original space.
    */
   template <typename Real>
-  inline void evalLambdaOriginal(Iterate<Real> const & z, Input<Real> const & i, Vector<Real> & l)
-  {
+  inline
+  void
+  evalLambdaOriginal(
+    Iterate<Real> const & z,
+    Input<Real>   const & i,
+    Vector<Real>        & l
+  ) {
     // Initialize multipliers in original space
     l.setZero(i.nE+i.n7+i.n8+i.n9);
 
@@ -573,9 +625,15 @@ namespace Pipal
    * \param[in] problem Problem interface used for objective/constraints.
    */
   template <typename Real>
-  inline void evalMatrices(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Problem<Real> const * problem)
-  {
+  inline
+  void
+  evalMatrices(
+    Iterate<Real>       & z,
+    Parameter<Real>     & p,
+    Input<Real>         & i,
+    Counter             & c,
+    Problem<Real> const * problem
+  ) {
     // Evaluate Hessian and Newton matrices
     evalHessian<Real>(z, i, c, problem);
     evalNewtonMatrix<Real>(z, p, i, c);
@@ -588,8 +646,9 @@ namespace Pipal
    * \param[in] i Problem input structure.
    */
   template <typename Real>
-  inline void evalMerit(Iterate<Real> & z, Input<Real> const & i)
-  {
+  inline
+  void
+  evalMerit( Iterate<Real> & z, Input<Real> const & i ) {
     // Initialize merit for objective
     z.phi = z.rho*z.f;
 
@@ -613,8 +672,14 @@ namespace Pipal
    * \param[in] c Counters used to account evaluations.
    */
   template <typename Real>
-  inline void evalNewtonMatrix(Iterate<Real> & z, Parameter<Real> & p, Input<Real> const & i, Counter & c)
-  {
+  inline
+  void
+  evalNewtonMatrix(
+    Iterate<Real>     & z,
+    Parameter<Real>   & p,
+    Input<Real> const & i,
+    Counter           & c
+  ) {
     // Check for equality constraints
     if (i.nE > 0)
     {
@@ -708,8 +773,9 @@ namespace Pipal
    * \param[in] i Problem input structure.
    */
   template <typename Real>
-  inline void evalNewtonRhs(Iterate<Real> & z, Input<Real> const & i)
-  {
+  inline
+  void
+  evalNewtonRhs( Iterate<Real> & z, Input<Real> const & i ) {
     // Initialize right-hand side vector
     z.b.setZero();
 
@@ -765,9 +831,15 @@ namespace Pipal
    * \param[in] problem Problem interface used for objective/constraints.
    */
   template <typename Real>
-  inline void evalScalings(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Problem<Real> const * problem)
-  {
+  inline
+  void
+  evalScalings(
+    Iterate<Real>       & z,
+    Parameter<Real>     & p,
+    Input<Real>         & i,
+    Counter             & c,
+    Problem<Real> const * problem
+  ) {
     // Initialize scalings
     z.fs = 1;
     z.cEs.setOnes(i.nE);
@@ -814,8 +886,13 @@ namespace Pipal
    * \param[in] i Problem input structure.
    */
   template <typename Real>
-  inline void evalSlacks(Iterate<Real> & z, Parameter<Real> & p, Input<Real> const & i)
-  {
+  inline
+  void
+  evalSlacks(
+    Iterate<Real>     & z,
+    Parameter<Real>   & p,
+    Input<Real> const & i
+  ) {
     // Check for equality constraints
     if (i.nE > 0)
     {
@@ -849,8 +926,13 @@ namespace Pipal
    * \param[out] x Vector to store primal variables in original space.
    */
   template <typename Real>
-  inline void evalXOriginal(Iterate<Real> & z, Input<Real> const & i, Vector<Real> & x)
-  {
+  inline
+  void
+  evalXOriginal(
+    Iterate<Real>     & z,
+    Input<Real> const & i,
+    Vector<Real>      & x
+  ) {
     // Initialize x in original space
     x.setZero(i.n0);
 
@@ -871,8 +953,14 @@ namespace Pipal
    * \param[out] l Vector to store multipliers in original space.
    */
   template <typename Real>
-  inline void getSolution(Iterate<Real> & z, Input<Real> & i, Vector<Real> & x, Vector<Real> & l)
-  {
+  inline
+  void
+  getSolution(
+    Iterate<Real> & z,
+    Input<Real>   & i,
+    Vector<Real>  & x,
+    Vector<Real>  & l
+  ) {
     evalXOriginal(z, i, x);
     evalLambdaOriginal(z, i, l);
   }
@@ -884,8 +972,9 @@ namespace Pipal
    * \param[in] i Problem input structure.
    */
   template <typename Real>
-  inline void initNewtonMatrix(Iterate<Real> &z, Input<Real> const &i)
-  {
+  inline
+  void
+  initNewtonMatrix( Iterate<Real> &z, Input<Real> const &i ) {
     // Allocate memory
     z.A.reserve(z.Hnnz + 5*i.nE + 5*i.nI + z.JEnnz + z.JInnz);
 
@@ -935,7 +1024,10 @@ namespace Pipal
    * \param[in] mu New interior-point parameter value.
    */
   template <typename Real>
-  inline void setMu(Iterate<Real> & z, Real const mu) {z.mu = mu;}
+  inline
+  void
+  setMu(Iterate<Real> & z, Real const mu)
+  { z.mu = mu; }
 
   /**
    * \brief Set primal/dual blocks and associated quantities on an iterate.
@@ -955,11 +1047,23 @@ namespace Pipal
    * \param[in] phi Merit function value.
    */
   template <typename Real>
-  inline void setPrimals(Iterate<Real> & z, Input<Real> const & i, Vector<Real> const & x, Array<Real>
-    const & r1, Array<Real> const & r2, Array<Real> const  & s1, Array<Real> const & s2, Array<Real>
-    const & lE, Array<Real> const & lI, Real const f, Array<Real> const  & cE, Array<Real> const & cI,
-    Real const phi)
-  {
+  inline
+  void
+  setPrimals(
+    Iterate<Real>      & z,
+    Input<Real>  const & i,
+    Vector<Real> const & x,
+    Array<Real>  const & r1,
+    Array<Real>  const & r2,
+    Array<Real>  const & s1,
+    Array<Real>  const & s2,
+    Array<Real>  const & lE,
+    Array<Real>  const & lI,
+    Real         const   f,
+    Array<Real>  const & cE,
+    Array<Real>  const & cI,
+    Real         const   phi
+  ) {
     // Set primal variables
     z.x = x; z.f = f;
     if (i.nE > 0) {z.cE = cE; z.r1 = r1; z.r2 = r2; z.lE = lE;}
@@ -1000,9 +1104,17 @@ namespace Pipal
    * \param[in] problem Problem interface used for objective/constraints.
    */
   template <typename Real>
-  inline void updateIterate(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Direction<Real> const & d, Acceptance<Real> const  & a, Problem<Real> const * problem)
-  {
+  inline
+  void
+  updateIterate(
+    Iterate<Real>          & z,
+    Parameter<Real>        & p,
+    Input<Real>            & i,
+    Counter                & c,
+    Direction<Real>  const & d,
+    Acceptance<Real> const & a,
+    Problem<Real>    const * problem
+  ) {
     // Update last quantities
     z.v_   = z.v;
     z.cut_ = (a.p < a.p0);
@@ -1029,8 +1141,13 @@ namespace Pipal
    * \param[in] i Problem input structure.
    */
   template <typename Real>
-  inline void updateParameters(Iterate<Real> & z, Parameter<Real> & p, Input<Real> & i)
-  {
+  inline
+  void
+  updateParameters(
+    Iterate<Real>   & z,
+    Parameter<Real> & p,
+    Input<Real>     & i
+  ) {
     // Check for interior-point parameter update based on optimality error
     while (z.mu > p.mu_min && z.kkt(2) <= std::max(z.mu, p.opt_err_tol-z.mu))
     {
@@ -1073,9 +1190,14 @@ namespace Pipal
    * \param[in] a Step acceptance information.
    */
   template <typename Real>
-  inline void updatePoint(Iterate<Real> & z, Input<Real> const & i, Direction<Real> const & d,
-    Acceptance<Real> const & a)
-  {
+  inline
+  void
+  updatePoint(
+    Iterate<Real>          & z,
+    Input<Real>      const & i,
+    Direction<Real>  const & d,
+    Acceptance<Real> const & a
+  ) {
     // Update primal and dual variables
     z.x += a.p*d.x ;
     if (i.nE > 0) {z.r1 += a.p*d.r1; z.r2 += a.p*d.r2;}
@@ -1093,8 +1215,13 @@ namespace Pipal
    * \return The 1-norm feasibility violation.
    */
   template <typename Real>
-  inline Real evalViolation(Input<Real> const & i, Array<Real> const & cE, Array<Real> const & cI)
-  {
+  inline
+  Real
+  evalViolation(
+    Input<Real> const & i,
+    Array<Real> const & cE,
+    Array<Real> const & cI
+  ) {
     // Initialize violation vector
     Vector<Real> vec;
 

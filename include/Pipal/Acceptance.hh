@@ -38,9 +38,17 @@ namespace Pipal
    * \param[in] problem Problem interface used to evaluate objective/constraints.
    */
   template <typename Real>
-  inline void backtracking(Acceptance<Real> & a, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Iterate<Real> & z, Direction<Real> const & d, Problem<Real> const * problem)
-  {
+  inline
+  void
+  backtracking(
+    Acceptance<Real>      & a,
+    Parameter<Real>       & p,
+    Input<Real>           & i,
+    Counter               & c,
+    Iterate<Real>         & z,
+    Direction<Real> const & d,
+    Problem<Real>   const * problem
+  ) {
     static constexpr Real EPSILON{std::numeric_limits<Real>::epsilon()};
 
     // Store current values
@@ -110,9 +118,15 @@ namespace Pipal
    * \param[in] d Candidate search direction (may be scaled by the caller).
    */
   template <typename Real>
-  inline void fractionToBoundary(Acceptance<Real> & a, Parameter<Real> & p, Input<Real> const & i,
-    Iterate<Real> & z, Direction<Real> & d)
-  {
+  inline
+  void
+  fractionToBoundary(
+    Acceptance<Real>  & a,
+    Parameter<Real>   & p,
+    Input<Real> const & i,
+    Iterate<Real>     & z,
+    Direction<Real>   & d
+  ) {
     // Initialize primal fraction-to-boundary
     a.p0 = 1.0;
 
@@ -178,9 +192,17 @@ namespace Pipal
    * \return 1 if a full step was accepted, 0 otherwise.
    */
   template <typename Real>
-  inline Integer fullStepCheck(Acceptance<Real> const & a, Parameter<Real> & p, Input<Real> & i,
-    Counter & c, Iterate<Real> & z, Direction<Real> const & d, Problem<Real> const * problem)
-  {
+  inline
+  Integer
+  fullStepCheck(
+    Acceptance<Real> const & a,
+    Parameter<Real>        & p,
+    Input<Real>            & i,
+    Counter                & c,
+    Iterate<Real>          & z,
+    Direction<Real>  const & d,
+    Problem<Real>    const * problem
+  ) {
     // Set current and last penalty parameters
     Real rho{z.rho}, rho_temp{z.rho_};
 
@@ -267,9 +289,17 @@ namespace Pipal
    * \param[in] problem Problem interface used to evaluate objective/constraints.
    */
   template <typename Real>
-  inline void lineSearch(Acceptance<Real> & a, Parameter<Real> & p, Input<Real> & i, Counter & c,
-    Iterate<Real> & z, Direction<Real> & d, Problem<Real> const * problem)
-  {
+  inline
+  void
+  lineSearch(
+    Acceptance<Real>    & a,
+    Parameter<Real>     & p,
+    Input<Real>         & i,
+    Counter             & c,
+    Iterate<Real>       & z,
+    Direction<Real>     & d,
+    Problem<Real> const * problem
+  ) {
     // Check fraction-to-boundary rule
     fractionToBoundary<Real>(a, p, i, z, d);
 
@@ -303,9 +333,17 @@ namespace Pipal
    * \return 0 if SOC not accepted, 1 if first acceptance criterion met, 2 if SOC accepted.
    */
   template <typename Real>
-  inline Integer secondOrderCorrection(Acceptance<Real> & a, Parameter<Real> & p, Input<Real> & i,
-    Counter & c, Iterate<Real> & z, Direction<Real> & d, Problem<Real> const * problem)
-  {
+  inline
+  Integer
+  secondOrderCorrection(
+    Acceptance<Real>    & a,
+    Parameter<Real>     & p,
+    Input<Real>         & i,
+    Counter             & c,
+    Iterate<Real>       & z,
+    Direction<Real>     & d,
+    Problem<Real> const * problem
+  ) {
     // Store current iterate values
     Real f{z.f}, phi{z.phi}, v{z.v};
     Array<Real> cE(z.cE), r1(z.r1), r2(z.r2), lE(z.lE), cI(z.cI), s1(z.s1), s2(z.s2), lI(z.lI);

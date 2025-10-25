@@ -16,8 +16,7 @@
 // Pipal includes
 #include "Pipal/Types.hh"
 
-namespace Pipal
-{
+namespace Pipal {
   /**
    * \brief Problem class for the Pipal library.
    *
@@ -27,10 +26,11 @@ namespace Pipal
     * \tparam Real The real number type.
    */
   template <typename Real>
-  class Problem
-  {
-    static_assert(std::is_floating_point_v<Real>,
-      "Pipal::Problem<Real>: Real must be a floating-point type.");
+  class Problem  {
+    static_assert(
+      std::is_floating_point_v<Real>,
+      "Pipal::Problem<Real>: Real must be a floating-point type."
+    );
 
     std::string m_name{"(Unnamed Pipal Problem)"}; /*!< Name of the optimization problem. */
 
