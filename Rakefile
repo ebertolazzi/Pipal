@@ -1,4 +1,16 @@
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
+
+# Maximum number of parallel compile jobs. GCC/MSVC can need a couple of GB per
+# C++20 translation unit, and an over-subscribed build is a classic source of
+# compiler crashes. PINS_MAX_CORE (or JOBS) caps it; 16 by default.
+def pins_jobs
+  cap = ENV['PINS_MAX_CORE'].to_i
+  cap = 16 if cap <= 0
+  n = ENV['JOBS'].to_i
+  n = Etc.nprocessors if n <= 0
+  [n, cap].min
+end
+
 # Copyright (c) 2025, Davide Stocco and Enrico Bertolazzi.                                        #
 #                                                                                                 #
 # The Pipal project is distributed under the MIT License.                                         #
@@ -30,7 +42,7 @@ else
   cmakeversion = %x( cmake --version ).scan(/\d+\.\d+\.\d+/).last
   mm = cmakeversion.split('.');
   if mm[0].to_i > 3 || (mm[0].to_i == 3 && mm[1].to_i >= 12) then
-    PARALLEL = "--parallel #{Etc.nprocessors} "
+    PARALLEL = "--parallel #{pins_jobs} "
     QUIET    = ""
   else
     PARALLEL = ""
@@ -38,15 +50,24 @@ else
   end
 end
 
-if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil then
-  # Linux
-  task :default => [:build_linux]
+# MSYSTEM is exported by every MSYS2 shell and is the only reliable way to
+# tell a MinGW environment from a plain POSIX one: the ruby shipped in the
+# MSYS subsystem reports its platform as "linux"/"cygwin" even when it drives
+# a UCRT64 / MINGW64 toolchain, which made this build announce itself as Linux
+# and pick the Linux library suffixes. MSYSTEM=MSYS is the POSIX shell and is
+# deliberately NOT treated as MinGW.
+PINS_MINGW_ENVS = %w(UCRT64 MINGW64 MINGW32 CLANG64 CLANG32 CLANGARM64)
+PINS_IS_MINGW   = PINS_MINGW_ENVS.include?(ENV['MSYSTEM'].to_s.upcase)
+
+# The previous dispatch was inverted: a Windows-looking RUBY_PLATFORM selected
+# :build_linux and everything else fell through to :build_windows, so a MSYS2
+# ruby (which looks like linux) built with the Windows recipe.
+if PINS_IS_MINGW || (/mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil then
+  task :default => [:build_windows]
 elsif (/darwin/ =~ RUBY_PLATFORM) != nil then
-  # OsX
   task :default => [:build_osx]
 else
-  # Windows
-  task :default => [:build_windows]
+  task :default => [:build_linux]
 end
 
 cmd_cmake_build = "-G Ninja "
@@ -131,15 +152,12 @@ end
 
 desc "Build for OsX/Linux/Windows"
 task :build do
-  if (/cygwin|mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil then
-    # Linux
-    Rake::Task["build_linux"].invoke
+  if PINS_IS_MINGW || (/mswin|mingw|bccwin|wince|emx/ =~ RUBY_PLATFORM) != nil then
+    Rake::Task["build_windows"].invoke
   elsif (/darwin/ =~ RUBY_PLATFORM) != nil then
-    # OsX
     Rake::Task["build_osx"].invoke
   else
-    # Windows
-    Rake::Task["build_windows"].invoke
+    Rake::Task["build_linux"].invoke
   end
 end
 
